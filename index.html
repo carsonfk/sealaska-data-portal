@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <title>Sealaska Land Status</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.js"></script>
+</head>
+
+<body>
+    <main>
+        <div class="topnav" id="myTopnav">
+            <a class="active" href="index.html">Map</a>
+            <a href="info.html">Info</a>
+            <a href="references.html">References</a>
+        </div>
+        <div class='map-overlay'id="side-panel">
+            <h3 id="table-title">Ratios (by OECD Country)</h3><br>
+            <button>Sort by % Change</button>
+            <table>
+                <tr>
+                    <th>Country</th>
+                    <th>2012</th>
+                    <th>2022</th>
+                    <th>% Change</th>
+                </tr>
+            </table>
+        </div>
+        <div id="map"></div>
+        <div class='map-overlay' id='features'>
+            <h2>OECD Housing Price to Income Ratios</h2>
+            <div id='text-description'>
+                <p>Hover over a data point!</p>
+            </div>
+        </div>
+        <div class='map-overlay' id='legend'></div>
+    </main>
+    <script>
+
+    </script>
+</body>
+</html>
