@@ -1,3 +1,4 @@
+<!--This page will allow users to view the land status of Sealaska, with an optional layer composed of info provided in the 'contribute' tab. -->
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -6,13 +7,27 @@
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
     <!-- <link href="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.css" rel="stylesheet"> -->
     <!-- <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.js"></script> -->
+    
+    <!-- Load Calcite components from CDN -->
+    <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/calcite-components/2.13.2/calcite.css" />
+    <script type="module" src="https://js.arcgis.com/calcite-components/2.13.2/calcite.esm.js"></script>
+
+    <!-- Load the ArcGIS Maps SDK for JavaScript from CDN -->
+    <link rel="stylesheet" href="https://js.arcgis.com/4.31/esri/themes/light/main.css" />
+    <script src="https://js.arcgis.com/4.31/"></script>
+
+    <!-- Load Map components from CDN-->
+    <script
+      type="module"
+      src="https://js.arcgis.com/map-components/4.31/arcgis-map-components.esm.js"
+    ></script>
 </head>
 
 <body>
     <main>
         <div class="topnav" id="myTopnav">
-            <a class="active" href="index.html">Map</a>
-            <a href="info.html">Info</a>
+            <a class="active" href="index.html">Land Status</a>
+            <a href="contribute.html">Contribute</a>
             <!-- <a href="references.html">References</a> -->
         </div>
         <div class='map-overlay'id="side-panel">
@@ -27,7 +42,9 @@
                 </tr>
             </table>
         </div>
-        <div id="map"></div>
+        <!-- <div id="map"></div> -->
+
+        <arcgis-map basemap="arcgis/topographic" center="-118.805, 34.027" zoom="13"></arcgis-map>
         <div class='map-overlay' id='features'>
             <h2>Sealaska Land Status map</h2>
             <div id='text-description'>
