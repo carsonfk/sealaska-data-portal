@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-export default function MapView(props) {
+export default function Map(props) {
   //let locations = props.locations;
 
   const mapContainer = useRef(null);
@@ -109,7 +109,7 @@ export default function MapView(props) {
         features: JSON.parse(`[${featureLocations}]`),
       });
     }
-  }, [featureLocations]); // everytime the featureLocations state is changes
+  }, [featureLocations]); // everytime the featureLocations state is changed
 
   //const position = [51.505, -0.09];
 

@@ -12,7 +12,6 @@ export function App(props) {
 		<Routes>
 			<Route path="/about" element={<About />} />
 			<Route path="*" element={<Home locations={props.locations}/>} />
-            <Route path="/contribute" element={<Contribute locations={props.locations}/>} />
 		</Routes>
     </>
   );
