@@ -12,4 +12,34 @@ export default function Home(props){
 	const mapRef = useRef(null);
     const [statusVC, setStatusVC] = useState("v");
 
+
+
+
+
+
+
+
+    return (
+        <>
+		<header>
+			<Hero scrollToMap={scrollToMap}/>
+		</header>
+		
+        <main>
+            
+			<div className="content">
+				<Map locations={data}/>
+				<AddFeatureForm />
+			</div>
+
+			<div className="content">
+				
+			</div>
+        </main>
+
+        <footer>
+			
+        </footer>
+        </>
+    )
 }
