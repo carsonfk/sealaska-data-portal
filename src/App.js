@@ -3,7 +3,6 @@ import NavBar from "./components/Nav";
 import { Route, Routes } from 'react-router-dom';
 import About from "./pages/About";
 import Home from "./pages/Home";
-import Contribute from "./pages/Contribute";
 
 export function App(props) {
   return (

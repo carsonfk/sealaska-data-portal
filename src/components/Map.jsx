@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-export default function Map(props) {
+export default function Map( {locations, mode, currentSelection}) {
   //let locations = props.locations;
 
   const mapContainer = useRef(null);
@@ -16,10 +16,11 @@ export default function Map(props) {
     closeOnClick: false,
   });
 
+  /*
   useEffect(() => {
-    if (props.locations) {
+    if (locations) {
       let newLocations = []; // create an empty array to add all the new geoJSON stuff
-      props.locations.forEach((row) => {
+      locations.forEach((row) => {
         // for every feature, create a geoJSON format object and add it to the newLocations arr
         const newLoc = `{"type":"Feature","properties":{"name":"${
           row.val().locationName
@@ -32,7 +33,28 @@ export default function Map(props) {
       });
       setFeatureLocations(newLocations); //setState of features to this string array of to-be-jsonified features
     }
-  }, [props.locations]); //fire this whenevery the features put into the map change
+  }, [locations]); //fire this whenever the features put into the map change
+  */
+
+  useEffect(() => {
+    let marker = new mapboxgl.Marker()
+    let coordinates = [];
+    
+    function addPoints(e) { //gets click coordinates and adds marker to map at click (needs to remove old point)
+      coordinates = e.lngLat;
+        marker.setLngLat(coordinates)
+        .addTo(map);
+      currentSelection(coordinates);
+    }
+
+    if (mode = 'c') { //stuff that happens when map is swapped to contribute mode
+      map.on('click', addPoints);
+      
+    } else { //stuff that happens when map is swapped to view mode
+      map.off('click', addPoints);
+      marker.remove()
+    }
+  }, [mode]); //fire this whenever the mode changes
 
   mapboxgl.accessToken =
     "pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw";

@@ -11,11 +11,32 @@ export default function Home(props){
 	//const [filter, setFilter] = useState('null')
 	const [reset, setReset] = useState(0);
 	const mapRef = useRef(null);
-    const [mapMode, setMapMode] = useState("v");
+    const [mapMode, setMapMode] = useState('v');
+    const [selectionCoordinates, setSelectionCoordinates] = useState([]);
 
-    const handleFormSubmit = (selectedMode) => { //this has to do with updating filter value when the filter form is submitted
+    useEffect(() =>{
+		async function contributeMode() {
+			//const db = getDatabase();
+			//const racksRef = ref(db, "racks");
+			//const orderByType = query(racksRef, orderByChild('type'), equalTo(filter)) // makes a query to the database to only return values with type=filter
+			//const querySnapshot = await get(orderByType);
+			//setData(querySnapshot)
+
+
+		}
+		if (mapMode === 'v'){ 
+			//setReset(reset + 1)
+		} else { contributeMode() } 
+	}, [mapMode]) //anytime mapMode is updated
+
+    const handleFormSubmit = (selectedMode) => { //this has to do with updating map mode value when the map mode form is submitted
 		setMapMode(selectedMode);
 	};
+
+    const handleCurrentSelection = (coordinates) => { //updates current point selection (will default to empty when mode is set to view)
+        setSelectionLat(coordinates[1]);
+        setSelectionLong(coordinates[0]);
+    }
 
 
 
@@ -32,8 +53,8 @@ export default function Home(props){
             
 			<div className="content">
                 <ViewContributeForm onSubmit={handleFormSubmit} />
-				<Map locations={data}/>
-				<AddFeatureForm />
+				<Map locations={data} mode={mapMode} currentSelection={handleCurrentSelection}/>
+				<AddFeatureForm mode={mapMode} selectionCoordinates={selectionCoordinates}/>
 			</div>
 
 			<div className="content">
