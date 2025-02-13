@@ -25,7 +25,7 @@ export default function AddFeatureForm( {mapMode, selectionCoordinates} ) {
             const newbikeRef = push(bikerackRef, newBikeRack);
         } else {
             //test error message
-            console.error("hello")
+            console.error("Error: one or more fields incomplete.")
         }
     }
 
@@ -76,10 +76,6 @@ export default function AddFeatureForm( {mapMode, selectionCoordinates} ) {
 
                 <button className="addLocation" type="submit">Add Location</button>
             </form>
-
-
-
-
         </div>
     )
 }
