@@ -18,14 +18,14 @@ export default function Home(props){
 		async function contributeMode() {
 			const db = getDatabase();
 			const Ref = ref(db, "POI");
-			const orderByType = query(racksRef, orderByChild('type'), equalTo(filter)) // makes a query to the database to only return values with type=filter
+			const orderByType = query(Ref, orderByChild('type'), equalTo(filter)) // makes a query to the database to only return values with type=filter
 			const querySnapshot = await get(orderByType);
 			setData(querySnapshot)
 
 		}
-		if (mapMode === 'v'){ 
+		if (mapMode == 'v'){ 
 			//setReset(reset + 1)
-		} else { contributeMode() } 
+		} else { contributeMode() }
 	}, [mapMode]) //anytime mapMode is updated
 
     const handleFormSubmit = (selectedMode) => { //from form jsx - this has to do with updating map mode value when the map mode form is submitted

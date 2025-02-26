@@ -49,7 +49,7 @@ export default function Map( {locations, mode, onSelect}) {
   }
 
   useEffect(() => {
-    if (mode = 'c') { //stuff that happens when map is swapped to contribute mode
+    if (mode == 'c') { //stuff that happens when map is swapped to contribute mode
       map.on('click', addPoints);
       
     } else { //stuff that happens when map is swapped to view mode
