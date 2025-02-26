@@ -10,18 +10,17 @@ export default function Home(props){
 	const [data, setData] = useState()
 	//const [filter, setFilter] = useState('null')
 	const [reset, setReset] = useState(0);
-	const mapRef = useRef(null);
+	const ref = useRef(null);
     const [mapMode, setMapMode] = useState('v');
     const [currentSelection, setCurrentSelection] = useState([]);
 
     useEffect(() =>{
 		async function contributeMode() {
-			//const db = getDatabase();
-			//const racksRef = ref(db, "racks");
-			//const orderByType = query(racksRef, orderByChild('type'), equalTo(filter)) // makes a query to the database to only return values with type=filter
-			//const querySnapshot = await get(orderByType);
-			//setData(querySnapshot)
-
+			const db = getDatabase();
+			const Ref = ref(db, "POI");
+			const orderByType = query(racksRef, orderByChild('type'), equalTo(filter)) // makes a query to the database to only return values with type=filter
+			const querySnapshot = await get(orderByType);
+			setData(querySnapshot)
 
 		}
 		if (mapMode === 'v'){ 
@@ -32,15 +31,9 @@ export default function Home(props){
     const handleFormSubmit = (selectedMode) => { //from form jsx - this has to do with updating map mode value when the map mode form is submitted
 		setMapMode(selectedMode);
 	};
-
     const handleCurrentSelection = (coordinates) => { //from map jsx - updates current point selection (will default to empty when mode is set to view)
         setCurrentSelection(coordinates);
     }
-
-
-
-
-
 
     return (
         <>
