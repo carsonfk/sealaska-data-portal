@@ -2,9 +2,9 @@ import React from "react";
 
 export default function ViewContributeForm( {onSubmit} ) {
     //returns the value that is filled in the form to Home.
-    const handleSubmit = (event) => {
+    const handleSubmit = (event) => { //change to function (e)?
         event.preventDefault();
-        const selectedMode = event.target.elements['map-mode'].value;
+        const selectedMode = event.target.elements['map-mode'].value[0];
         onSubmit(selectedMode);
     };
 

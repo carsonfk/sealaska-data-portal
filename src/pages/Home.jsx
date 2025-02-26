@@ -12,7 +12,7 @@ export default function Home(props){
 	const [reset, setReset] = useState(0);
 	const mapRef = useRef(null);
     const [mapMode, setMapMode] = useState('v');
-    const [selectionCoordinates, setSelectionCoordinates] = useState([]);
+    const [currentSelection, setCurrentSelection] = useState([]);
 
     useEffect(() =>{
 		async function contributeMode() {
@@ -29,13 +29,12 @@ export default function Home(props){
 		} else { contributeMode() } 
 	}, [mapMode]) //anytime mapMode is updated
 
-    const handleFormSubmit = (selectedMode) => { //this has to do with updating map mode value when the map mode form is submitted
+    const handleFormSubmit = (selectedMode) => { //from form jsx - this has to do with updating map mode value when the map mode form is submitted
 		setMapMode(selectedMode);
 	};
 
-    const handleCurrentSelection = (coordinates) => { //updates current point selection (will default to empty when mode is set to view)
-        setSelectionLat(coordinates[1]);
-        setSelectionLong(coordinates[0]);
+    const handleCurrentSelection = (coordinates) => { //from map jsx - updates current point selection (will default to empty when mode is set to view)
+        setCurrentSelection(coordinates);
     }
 
 
@@ -53,8 +52,8 @@ export default function Home(props){
             
 			<div className="content">
                 <ViewContributeForm onSubmit={handleFormSubmit} />
-				<Map locations={data} mode={mapMode} currentSelection={handleCurrentSelection}/>
-				<AddFeatureForm mode={mapMode} selectionCoordinates={selectionCoordinates}/>
+				<Map locations={data} mode={mapMode} onSelect={handleCurrentSelection}/>
+				<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection}/>
 			</div>
 
 			<div className="content">

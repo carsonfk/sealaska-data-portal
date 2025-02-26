@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-export default function Map( {locations, mode, currentSelection}) {
+export default function Map( {locations, mode, onSelect}) {
   //let locations = props.locations;
 
   const mapContainer = useRef(null);
@@ -36,17 +36,19 @@ export default function Map( {locations, mode, currentSelection}) {
   }, [locations]); //fire this whenever the features put into the map change
   */
 
-  useEffect(() => {
-    let marker = new mapboxgl.Marker()
-    let coordinates = [];
-    
-    function addPoints(e) { //gets click coordinates and adds marker to map at click (needs to remove old point)
-      coordinates = e.lngLat;
-        marker.setLngLat(coordinates)
-        .addTo(map);
-      currentSelection(coordinates);
-    }
+  let marker = new mapboxgl.Marker()
+  let coordinates = [];
 
+  //gets click coordinates and adds marker to map at click (needs to remove old point still)
+  const addPoints = (event) => { //change to function (e)?
+    event.preventDefault();
+    coordinates = event.lngLat;
+    marker.setLngLat(coordinates)
+      .addTo(map);
+    onSelect(coordinates);
+  }
+
+  useEffect(() => {
     if (mode = 'c') { //stuff that happens when map is swapped to contribute mode
       map.on('click', addPoints);
       
