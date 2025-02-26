@@ -15,9 +15,9 @@ import { initializeApp } from "firebase/app";
 /*
 const firebaseConfig = {
   apiKey: "temp",
-  authDomain: "sealaska-lands.firebaseapp.com",
-  projectId: "sealaska-lands",
-  storageBucket: "sealaska-lands.appspot.com",
+  authDomain: "sealaska-data-portal.firebaseapp.com",
+  projectId: "sealaska-data-portal",
+  storageBucket: "sealaska-data-portal.appspot.com",
   messagingSenderId: "10640855230",
   appId: "1:10640855230:web:d4177df4457c77b5f08eef",
 };
