@@ -34,7 +34,7 @@ export default function Home(props){
         setCurrentSelection(coordinates);
     }
 
-	useEffect(()=>{ //this is getting all of the bikeracks.
+	useEffect(()=>{ //this pulls data from the database on reset
 		//async function noFilterLoad() {
 		//	const db = getDatabase();
 		//	const racksRef = ref(db, "racks");

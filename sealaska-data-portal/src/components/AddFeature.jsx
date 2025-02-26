@@ -8,7 +8,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates} ) {
         longitude: "",
         type: "",
         details: "",
-        public: "",
+        sharing: "",
     });
 
     function updateForm(value) {
@@ -35,6 +35,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates} ) {
         }
     }
 
+    //add style to "sharing-buttons": style={{ border: "2px solid black", borderRadius: "6px", padding: "10px", display: "flex", alignItems: "center", justifyContent: "center", background: "white" }}
     return (
         <div className="add-location-form">
             <h2>Add New Location</h2>
@@ -80,7 +81,15 @@ export default function AddFeatureForm( {mode, selectionCoordinates} ) {
                     onChange={(e) => updateForm({ longitude: e.target.value })}
                 />
 
-                <button className="addLocation" type="submit">Add Location</button>
+                <div className="sharing-buttons" >
+                    <label htmlFor="sharing"><b>Sharing:</b></label>
+                    <label htmlFor="public">For Sealaska use only: </label>
+                    <input style={{width: '20px', height: '20px', marginRight: '10px' }} type="radio" id="sealaska" name="sharing-type" value="sealaska" onChange={(e) => updateForm({ type: "sealaska" })}/>
+                    <label htmlFor="uncovered">Share to public: </label>
+                    <input style={{width: '20px', height: '20px', marginRight: '10px' }} type="radio" id="public" name="sharing-type" value="public" onChange={(e) => updateForm({ type: "public" })}/>
+                </div>
+
+                <button className="addLocation" type="submit">Submit your Location</button>
             </form>
         </div>
     )

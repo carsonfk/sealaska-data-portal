@@ -7,9 +7,9 @@ export default function Map( {locations, mode, onSelect}) {
 
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const [lng, setLng] = useState(-122.308);
-  const [lat, setLat] = useState(47.655);
-  const [zoom, setZoom] = useState(14.3);
+  const [lng, setLng] = useState(-134);
+  const [lat, setLat] = useState(56);
+  const [zoom, setZoom] = useState(4.3);
   const [featureLocations, setFeatureLocations] = useState([]);
   const popup = new mapboxgl.Popup({
     closeButton: false,
@@ -144,12 +144,10 @@ export default function Map( {locations, mode, onSelect}) {
     }
   }, [featureLocations]); // everytime the featureLocations state is changed
 
-  //const position = [51.505, -0.09];
-
   return (
     <>
       <div style={{ paddingBottom: "30px" }}>
-        <div ref={mapContainer} style={{ height: "400px" }} />
+        <div ref={mapContainer} style={{ height: "700px", width: "1400px" }} />
       </div>
     </>
   );
