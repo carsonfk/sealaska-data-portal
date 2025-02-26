@@ -6,7 +6,7 @@ This code modifies and fetches from a firebase database, which contains the comm
 
 ## Developer(s)
 
-* Carson Klein
+* Carson Klein - GIS Tech @ Sealaska
 
 
 
