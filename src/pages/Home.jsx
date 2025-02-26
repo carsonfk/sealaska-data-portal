@@ -14,11 +14,11 @@ export default function Home(props){
     const [mapMode, setMapMode] = useState('v');
     const [currentSelection, setCurrentSelection] = useState([]);
 
-    useEffect(() =>{
+    useEffect(() => {
 		async function contributeMode() {
 			const db = getDatabase();
-			const Ref = ref(db, "POI");
-			const orderByType = query(Ref, orderByChild('type'), equalTo(filter)) // makes a query to the database to only return values with type=filter
+			const ref = ref(db, "POI");
+			const orderByType = query(ref, orderByChild('type'), equalTo(filter)) // makes a query to the database to only return values with type=filter
 			const querySnapshot = await get(orderByType);
 			setData(querySnapshot)
 

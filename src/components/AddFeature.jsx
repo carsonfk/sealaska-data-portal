@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { getDatabase, ref, set as firebaseSet, push } from 'firebase/database'
 //import FilterForm from './FilterForm'
 
-export default function AddFeatureForm( {mapMode, selectionCoordinates} ) {
+export default function AddFeatureForm( {mode, selectionCoordinates} ) {
     const [form, setForm] = useState({
         latitude: "",
         longitude: "",
@@ -15,6 +15,11 @@ export default function AddFeatureForm( {mapMode, selectionCoordinates} ) {
             return { ...prev, ...value}
         });
     }
+
+    useEffect(() => {
+        updateForm({ latitude: selectionCoordinates.latitude, 
+                     longitude: selectionCoordinates.longitude });
+    }, [selectionCoordinates]); //fires whenever a marker is placed
 
     async function onSubmit(e) {
         e.preventDefault();

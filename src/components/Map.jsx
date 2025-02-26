@@ -42,6 +42,9 @@ export default function Map( {locations, mode, onSelect}) {
   //gets click coordinates and adds marker to map at click (needs to remove old point still)
   const addPoints = (event) => { //change to function (e)?
     event.preventDefault();
+    if (coordinates.length != 0) {
+      map.removeLayer(marker);
+    }
     coordinates = event.lngLat;
     marker.setLngLat(coordinates)
       .addTo(map);
