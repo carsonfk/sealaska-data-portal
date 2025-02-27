@@ -12,7 +12,7 @@ export default function NavBar() {
     return (
         <nav className={`topnav ${isOpen ? 'responsive' : ''}`}>
             <div className="navbar">
-                <img className="logo" src="Sealaska-Logo.svg" alt="Sealaska Logo"/>
+                <img className="logo" src="assets/Sealaska-Logo.svg" alt="Sealaska Logo"/>
                 <div className="nav-links">
                     <NavLink to="/">Home</NavLink>
                     <NavLink to="/about">About</NavLink>
