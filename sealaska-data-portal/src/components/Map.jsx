@@ -147,7 +147,7 @@ export default function Map( {locations, mode, onSelect}) {
   return (
     <>
       <div style={{ paddingBottom: "30px" }}>
-        <div ref={mapContainer} style={{ height: "700px", width: "1400px", margin: "auto" }} />
+        <div ref={mapContainer} style={{ height: "700px", width: "1400px", margin: "auto", borderRadius: "20px", boxShadow: "0 0 20px rgba(0, 0, 0, 0.1)"}} />
       </div>
     </>
   );
