@@ -5,6 +5,8 @@ import App from './App';
 import { BrowserRouter } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
 
+//import 'libs/font-awesome/6.2.0/css/all.min.css'
+
 //import LOCATIONS from "./data/features.geojson";
 let LOCATIONS = [0];
 // Import the functions you need from the SDKs you need

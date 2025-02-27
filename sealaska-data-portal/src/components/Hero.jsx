@@ -5,7 +5,7 @@ export default function Hero( {scrollToMap} ) {
     return (
         <div className="heroContainer">
             <div className="heroContent">
-                <h1>Welcome to Sealaska's New Data Portal
+                <h1>Sealaska Data Portal
                 </h1>
                 <p></p>
                 <h2>What this tool does:</h2>
