@@ -22,9 +22,11 @@ export default function Home(props){
 			//const querySnapshot = await get(orderByType);
 			//setData(querySnapshot)
 		}
-		if (mapMode == 'v'){ 
+		if (mapMode == 'view'){ 
 			//setReset(reset + 1)
-		} else { contributeMode() }
+		} else if (mapMode == ' contribute'){
+			contributeMode()
+		}
 	}, [mapMode]) //anytime mapMode is updated
 
     const handleFormSubmit = (selectedMode) => { //from form jsx - this has to do with updating map mode value when the map mode form is submitted
