@@ -69,7 +69,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates} ) {
                     id="type"
                     name="type"
                     value={form.type}
-                    onChange={(e) => updateForm({ latitude: e.target.value })}
+                    onChange={(e) => updateForm({ type: e.target.value })}
                 />
 
                 <label htmlFor="details">Details:</label>
@@ -78,15 +78,15 @@ export default function AddFeatureForm( {mode, selectionCoordinates} ) {
                     id="details"
                     name="details"
                     value={form.details}
-                    onChange={(e) => updateForm({ longitude: e.target.value })}
+                    onChange={(e) => updateForm({ details: e.target.value })}
                 />
 
                 <div className="sharing-buttons" >
                     <label htmlFor="sharing"><b>Sharing:</b></label>
                     <label htmlFor="public">For Sealaska use only: </label>
-                    <input style={{width: '20px', height: '20px', marginRight: '10px' }} type="radio" id="sealaska" name="sharing-type" value="sealaska" onChange={(e) => updateForm({ type: "sealaska" })}/>
+                    <input style={{width: '20px', height: '20px', marginRight: '10px' }} type="radio" id="sealaska" name="sharing-type" value="sealaska" onChange={(e) => updateForm({ sharing: "sealaska" })}/>
                     <label htmlFor="uncovered">Share to public: </label>
-                    <input style={{width: '20px', height: '20px', marginRight: '10px' }} type="radio" id="public" name="sharing-type" value="public" onChange={(e) => updateForm({ type: "public" })}/>
+                    <input style={{width: '20px', height: '20px', marginRight: '10px' }} type="radio" id="public" name="sharing-type" value="public" onChange={(e) => updateForm({ sharing: "public" })}/>
                 </div>
 
                 <button className="addLocation" type="submit">Submit your Location</button>
