@@ -22,11 +22,17 @@ export default function Home(props){
 			//const querySnapshot = await get(orderByType);
 			//setData(querySnapshot)
 		}
+
+		async function viewMode() {
+
+		}
+
 		if (mapMode == 'view'){ 
-			//setReset(reset + 1)
-		} else if (mapMode == ' contribute'){
+			viewMode()
+		} else if (mapMode == 'contribute'){
 			contributeMode()
 		}
+		setReset(reset + 1)
 	}, [mapMode]) //anytime mapMode is updated
 
     const handleFormSubmit = (selectedMode) => { //from form jsx - this has to do with updating map mode value when the map mode form is submitted
@@ -65,7 +71,7 @@ export default function Home(props){
             
 			<div className="content">
                 <ViewContributeForm onSubmit={handleFormSubmit} />
-				<Map locations={data} mode={mapMode} onSelect={handleCurrentSelection}/>
+				<Map locations={data} mode={mapMode} reset = {reset} onSelect={handleCurrentSelection}/>
 				<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection}/>
 			</div>
 

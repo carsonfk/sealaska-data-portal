@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-export default function Map( {locations, mode, onSelect}) {
+export default function Map( {locations, mode, reset, onSelect}) {
   //let locations = props.locations;
 
   const mapContainer = useRef(null);
@@ -15,6 +15,23 @@ export default function Map( {locations, mode, onSelect}) {
     closeButton: false,
     closeOnClick: false,
   });
+
+  const geojson = {
+    'type': 'FeatureCollection',
+    'features': [
+      {
+        'type': 'Feature',
+        'geometry': {
+          'type': 'Point',
+          'coordinates': [-122.414, 37.776]
+        },
+        'properties': {
+          'title': 'Mapbox',
+          'description': 'San Francisco, California'
+        }
+      }
+    ]
+  };
 
   /*
   useEffect(() => {
@@ -36,31 +53,28 @@ export default function Map( {locations, mode, onSelect}) {
   }, [locations]); //fire this whenever the features put into the map change
   */
 
-  let marker = new mapboxgl.Marker()
+  let marker = new mapboxgl.Marker({id: 'marker'})
   let coordinates = [];
 
   //gets click coordinates and adds marker to map at click (needs to remove old point still)
   const addPoints = (event) => { //change to function (e)?
     event.preventDefault();
     if (coordinates.length != 0) {
-      map.removeLayer(marker);
+      map.remove(marker);
     }
     coordinates = event.lngLat;
     marker.setLngLat(coordinates)
-      .addTo(map);
+      .addTo(map.current);
     onSelect(coordinates);
   }
 
   useEffect(() => {
-      if (mode == 'c') { //stuff that happens when map is swapped to contribute mode
-        map.current.addLayer({id: 'marker'})
-        map.current.on('click', 'marker', addPoints);
+      if (mode == 'contribute') { //stuff that happens when map is swapped to contribute mode
+        map.current.on('click', addPoints);
+
         
-      } else if (mode == 'v') { //stuff that happens when map is swapped to view mode (and on start)
-        if (map.current.getLayer('marker')) {
-          map.current.removeLayer('marker');
-        }
-  
+      } else if (reset != 0 & mode == 'view') { //stuff that happens when map is swapped to view mode (and on start)
+        
         //map.off('click', addPoints);
         //marker.remove()
         //map.removeLayer(marker);

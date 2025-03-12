@@ -15,7 +15,7 @@ export default function ViewContributeForm( {onSubmit} ) {
                                                   justifyContent: "center", background: "#f2f2f2", width: "400px", margin: "auto", marginTop: "10px", marginBottom: "10px"}}>
                 <label htmlFor="map-mode"><b>Map mode: </b></label>
                 <label htmlFor="view">View</label>
-                <input type="radio" id="view" name="map-mode" value="view"/>
+                <input type="radio" id="view" name="map-mode" value="view" defaultChecked/>
                 <label htmlFor="contribute">Contribute</label>
                 <input type="radio" id="contribute" name="map-mode" value="contribute"/>
                 <input type="submit" value="Swap mode"/>
