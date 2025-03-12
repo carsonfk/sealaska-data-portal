@@ -11,7 +11,7 @@ export default function Home(props){
 	//const [filter, setFilter] = useState('null')
 	const [reset, setReset] = useState(0);
 	const ref = useRef(null);
-    const [mapMode, setMapMode] = useState('init-v');
+    const [mapMode, setMapMode] = useState('view');
     const [currentSelection, setCurrentSelection] = useState([]);
 
     useEffect(() => {
@@ -30,7 +30,10 @@ export default function Home(props){
 	}, [mapMode]) //anytime mapMode is updated
 
     const handleFormSubmit = (selectedMode) => { //from form jsx - this has to do with updating map mode value when the map mode form is submitted
-		setMapMode(selectedMode);
+		if (mapMode != selectedMode) {
+			console.log(selectedMode);
+			setMapMode(selectedMode);
+		}
 	};
     const handleCurrentSelection = (coordinates) => { //from map jsx - updates current point selection (will default to empty when mode is set to view)
         setCurrentSelection(coordinates);
