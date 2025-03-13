@@ -59,12 +59,9 @@ export default function Map( {locations, mode, reset, onSelect}) {
   //gets click coordinates and adds marker to map at click (needs to remove old point still)
   const addPoints = (event) => { //change to function (e)?
     event.preventDefault();
-    if (coordinates.length != 0) {
-      map.remove(marker);
-    }
     coordinates = event.lngLat;
-    marker.setLngLat(coordinates)
-      .addTo(map.current);
+    marker.setLngLat(coordinates).addTo(map.current);
+    console.log(coordinates);
     onSelect(coordinates);
   }
 
@@ -72,11 +69,10 @@ export default function Map( {locations, mode, reset, onSelect}) {
       if (mode == 'contribute') { //stuff that happens when map is swapped to contribute mode
         map.current.on('click', addPoints);
 
-        
-      } else if (reset != 0 & mode == 'view') { //stuff that happens when map is swapped to view mode (and on start)
-        
-        //map.off('click', addPoints);
-        //marker.remove()
+      } else if (reset != 0 && mode == 'view') { //stuff that happens when map is swapped to view mode (and on start)
+        console.log("test!");
+        //marker.removeLayer();
+        map.current.off('click', addPoints);
         //map.removeLayer(marker);
       }
   }, [mode]); //fire this whenever the mode changes

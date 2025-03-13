@@ -42,7 +42,8 @@ export default function Home(props){
 		}
 	};
     const handleCurrentSelection = (coordinates) => { //from map jsx - updates current point selection (will default to empty when mode is set to view)
-        setCurrentSelection(coordinates);
+        console.log("coordinates recieved by home.jsx!")
+		setCurrentSelection(coordinates);
     }
 
 	useEffect(()=>{ //this pulls data from the database on reset
@@ -71,7 +72,7 @@ export default function Home(props){
             
 			<div className="content">
                 <ViewContributeForm onSubmit={handleFormSubmit} />
-				<Map locations={data} mode={mapMode} reset = {reset} onSelect={handleCurrentSelection}/>
+				<Map locations={data} mode={mapMode} reset={reset} onSelect={handleCurrentSelection}/>
 				<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection}/>
 			</div>
 
