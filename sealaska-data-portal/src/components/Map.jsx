@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -11,10 +11,13 @@ export default function Map( {locations, mode, reset, onSelect}) {
   const [lat, setLat] = useState(56);
   const [zoom, setZoom] = useState(4.3);
   const [featureLocations, setFeatureLocations] = useState([]);
+  const [marker, setMarker] = useState(new mapboxgl.Marker({id: 'marker'}));
   const popup = new mapboxgl.Popup({
     closeButton: false,
     closeOnClick: false,
   });
+
+  let coordinates;
 
   const geojson = {
     'type': 'FeatureCollection',
@@ -53,27 +56,30 @@ export default function Map( {locations, mode, reset, onSelect}) {
   }, [locations]); //fire this whenever the features put into the map change
   */
 
-  let marker = new mapboxgl.Marker({id: 'marker'})
-  let coordinates = [];
-
   //gets click coordinates and adds marker to map at click (needs to remove old point still)
-  const addPoints = (event) => { //change to function (e)?
-    event.preventDefault();
-    coordinates = event.lngLat;
-    marker.setLngLat(coordinates).addTo(map.current);
-    console.log(coordinates);
-    onSelect(coordinates);
-  }
+  const addPoints = 
+    (event) => { //change to function (e)?
+      event.preventDefault();
+      coordinates = event.lngLat;
+      marker.setLngLat(coordinates).addTo(map.current);
+      setMarker(marker);
+      onSelect(coordinates);
+    }
+
+  const addPointsRef = useRef(addPoints)
 
   useEffect(() => {
       if (mode == 'contribute') { //stuff that happens when map is swapped to contribute mode
-        map.current.on('click', addPoints);
-
+        addPointsRef.current = addPoints
+        map.current.on('click', addPointsRef.current);
+        
       } else if (reset != 0 && mode == 'view') { //stuff that happens when map is swapped to view mode (and on start)
-        console.log("test!");
-        //marker.removeLayer();
-        map.current.off('click', addPoints);
-        //map.removeLayer(marker);
+        //console.log("test!");
+        
+        //console.log(marker)
+        map.current.off('click', addPointsRef.current);
+        marker.remove(map.current)
+        
       }
   }, [mode]); //fire this whenever the mode changes
 
