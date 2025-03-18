@@ -44,7 +44,11 @@ export default function Home(props){
     const handleCurrentSelection = (coordinates) => { //from map jsx - updates current point selection (will default to empty when mode is set to view)
         console.log("map coordinates received by home.jsx!")
 		console.log(coordinates)
-		setCurrentSelection(coordinates);
+		if (coordinates != []) {
+			setCurrentSelection([coordinates.lat, coordinates.lng]);
+		} else {
+			setCurrentSelection([]);
+		}
     }
 	const handleEdits = (coordinate, prev) => { //from addfeature jsx - updates current point selection (will default to empty when mode is set to view)
         console.log("addfeature coordinates received by home.jsx!")

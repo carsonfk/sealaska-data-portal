@@ -76,11 +76,12 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
       } else if (reset != 0 && mode == 'view') { //stuff that happens when map is swapped to view mode (and on start)
         map.current.off('click', addPointsRef.current);
         marker.remove();
+        onSelect([]);
       }
   }, [mode]); //fire this whenever the mode changes
 
   useEffect(() => {
-    console.log('hello!')
+    //console.log('hello!')
     if (selectionCoordinates[0] != null && selectionCoordinates[1] != null) {
       marker.setLngLat({lng: selectionCoordinates[1], lat: selectionCoordinates[0]}).addTo(map.current);
     }

@@ -11,20 +11,21 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
         sharing: "",
     });
 
-    function updateForm(value, temp) {
-        if (temp == 'lat') {
-            onEdit(value, form.longitude)
-        } else if (temp == 'long') {
-            onEdit(value, form.latitude)
-        }
+    function updateForm(value) {
         return setForm((prev) => {
             return { ...prev, ...value}
         });
     }
 
     useEffect(() => {
-        updateForm({ latitude: selectionCoordinates.lat, 
-                     longitude: selectionCoordinates.lng });
+        console.log(selectionCoordinates)
+        if (selectionCoordinates == []) {
+            updateForm({ latitude: "", 
+                         longitude: "" });
+        } else {
+        updateForm({ latitude: selectionCoordinates[0], 
+                     longitude: selectionCoordinates[1] });
+        }
     }, [selectionCoordinates]); //fires whenever a marker is placed/moved
 
     async function onSubmit(e) {
@@ -54,7 +55,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
                     id="latitude"
                     name="latitude"
                     value={form.latitude}
-                    onChange={(e) => updateForm({ latitude: e.target.value }, 'lat')}
+                    onChange={(e) => updateForm({ latitude: e.target.value })}
                 />
 
                 <label htmlFor="longitude">Longitude:</label>
@@ -66,7 +67,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
                     id="longitude"
                     name="longitude"
                     value={form.longitude}
-                    onChange={(e) => updateForm({ longitude: e.target.value }, 'lng')}
+                    onChange={(e) => updateForm({ longitude: e.target.value })}
                 />
                 <label htmlFor="type">Type:</label>
                 <input
