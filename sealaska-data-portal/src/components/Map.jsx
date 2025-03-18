@@ -63,7 +63,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
       coordinates = event.lngLat;
       marker.setLngLat(coordinates).addTo(map.current);
       setMarker(marker);
-      onSelect(coordinates);
+      onSelect([coordinates.lat, coordinates.lng]);
     }
 
   const addPointsRef = useRef(addPoints)
@@ -81,7 +81,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
   }, [mode]); //fire this whenever the mode changes
 
   useEffect(() => {
-    //console.log('hello!')
+    console.log(selectionCoordinates)
     if (selectionCoordinates[0] != null && selectionCoordinates[1] != null) {
       marker.setLngLat({lng: selectionCoordinates[1], lat: selectionCoordinates[0]}).addTo(map.current);
     }
