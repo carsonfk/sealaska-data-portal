@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 //import { getDatabase, ref, set as firebaseSet, push } from 'firebase/database'
 //import FilterForm from './FilterForm'
 
-export default function AddFeatureForm( {mode, selectionCoordinates} ) {
+export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
     const [form, setForm] = useState({
         latitude: "",
         longitude: "",
@@ -11,16 +11,21 @@ export default function AddFeatureForm( {mode, selectionCoordinates} ) {
         sharing: "",
     });
 
-    function updateForm(value) {
+    function updateForm(value, temp) {
+        if (temp == 'lat') {
+            onEdit(value, form.longitude)
+        } else if (temp == 'long') {
+            onEdit(value, form.latitude)
+        }
         return setForm((prev) => {
             return { ...prev, ...value}
         });
     }
 
     useEffect(() => {
-        updateForm({ latitude: selectionCoordinates.latitude, 
-                     longitude: selectionCoordinates.longitude });
-    }, [selectionCoordinates]); //fires whenever a marker is placed
+        updateForm({ latitude: selectionCoordinates.lat, 
+                     longitude: selectionCoordinates.lng });
+    }, [selectionCoordinates]); //fires whenever a marker is placed/moved
 
     async function onSubmit(e) {
         e.preventDefault();
@@ -49,7 +54,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates} ) {
                     id="latitude"
                     name="latitude"
                     value={form.latitude}
-                    onChange={(e) => updateForm({ latitude: e.target.value })}
+                    onChange={(e) => updateForm({ latitude: e.target.value }, 'lat')}
                 />
 
                 <label htmlFor="longitude">Longitude:</label>
@@ -61,7 +66,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates} ) {
                     id="longitude"
                     name="longitude"
                     value={form.longitude}
-                    onChange={(e) => updateForm({ longitude: e.target.value })}
+                    onChange={(e) => updateForm({ longitude: e.target.value }, 'lng')}
                 />
                 <label htmlFor="type">Type:</label>
                 <input
@@ -69,7 +74,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates} ) {
                     id="type"
                     name="type"
                     value={form.type}
-                    onChange={(e) => updateForm({ type: e.target.value })}
+                    onChange={(e) => updateForm({ type: e.target.value }, '')}
                 />
 
                 <label htmlFor="details">Details:</label>
@@ -78,7 +83,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates} ) {
                     id="details"
                     name="details"
                     value={form.details}
-                    onChange={(e) => updateForm({ details: e.target.value })}
+                    onChange={(e) => updateForm({ details: e.target.value }, '')}
                 />
 
                 <div className="sharing-buttons" >

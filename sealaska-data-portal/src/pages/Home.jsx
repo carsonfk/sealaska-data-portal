@@ -42,8 +42,17 @@ export default function Home(props){
 		}
 	};
     const handleCurrentSelection = (coordinates) => { //from map jsx - updates current point selection (will default to empty when mode is set to view)
-        console.log("coordinates recieved by home.jsx!")
+        console.log("map coordinates received by home.jsx!")
+		console.log(coordinates)
 		setCurrentSelection(coordinates);
+    }
+	const handleEdits = (coordinate, prev) => { //from addfeature jsx - updates current point selection (will default to empty when mode is set to view)
+        console.log("addfeature coordinates received by home.jsx!")
+		if (currentSelection[0] = prev) {
+			setCurrentSelection([prev, coordinate])
+		} else {
+			setCurrentSelection([coordinate, prev]);
+		}
     }
 
 	useEffect(()=>{ //this pulls data from the database on reset
@@ -72,8 +81,8 @@ export default function Home(props){
             
 			<div className="content">
                 <ViewContributeForm onSubmit={handleFormSubmit} />
-				<Map locations={data} mode={mapMode} reset={reset} onSelect={handleCurrentSelection}/>
-				<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection}/>
+				<Map locations={data} mode={mapMode} reset={reset} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection}/>
+				<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits}/>
 			</div>
 
 			<div className="content">

@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, useCallback } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-export default function Map( {locations, mode, reset, onSelect}) {
+export default function Map( {locations, mode, reset, selectionCoordinates, onSelect}) {
   //let locations = props.locations;
 
   const mapContainer = useRef(null);
@@ -74,14 +74,17 @@ export default function Map( {locations, mode, reset, onSelect}) {
         map.current.on('click', addPointsRef.current);
         
       } else if (reset != 0 && mode == 'view') { //stuff that happens when map is swapped to view mode (and on start)
-        //console.log("test!");
-        
-        //console.log(marker)
         map.current.off('click', addPointsRef.current);
-        marker.remove(map.current)
-        
+        marker.remove();
       }
   }, [mode]); //fire this whenever the mode changes
+
+  useEffect(() => {
+    console.log('hello!')
+    if (selectionCoordinates[0] != null && selectionCoordinates[1] != null) {
+      marker.setLngLat({lng: selectionCoordinates[1], lat: selectionCoordinates[0]}).addTo(map.current);
+    }
+  }, [selectionCoordinates]); //fires whenever a coordinate is changed
 
   mapboxgl.accessToken =
     "pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw";
