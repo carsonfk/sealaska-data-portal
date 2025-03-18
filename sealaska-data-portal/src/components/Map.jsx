@@ -82,8 +82,8 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
 
   useEffect(() => {
     console.log(selectionCoordinates)
-    if (selectionCoordinates[0] != null && selectionCoordinates[1] != null) {
-      marker.setLngLat({lng: selectionCoordinates[1], lat: selectionCoordinates[0]}).addTo(map.current);
+    if (selectionCoordinates[0][0] != null && selectionCoordinates[0][1] != null) {
+      marker.setLngLat({lng: selectionCoordinates[0][1], lat: selectionCoordinates[0][0]}).addTo(map.current);
     }
   }, [selectionCoordinates]); //fires whenever a coordinate is changed
 

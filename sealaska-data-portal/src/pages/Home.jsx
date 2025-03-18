@@ -12,7 +12,7 @@ export default function Home(props){
 	const [reset, setReset] = useState(0);
 	const ref = useRef(null);
     const [mapMode, setMapMode] = useState('view');
-    const [currentSelection, setCurrentSelection] = useState([]);
+    const [currentSelection, setCurrentSelection] = useState([[], 'none']);
 
     useEffect(() => {
 		async function contributeMode() {
@@ -45,13 +45,13 @@ export default function Home(props){
         console.log("map coordinates received by home.jsx!")
 		console.log(coordinates)
 		if (coordinates.length == 0) {
-			setCurrentSelection([]);
+			setCurrentSelection([[], 'map']);
 		} else {
-			setCurrentSelection(coordinates);
+			setCurrentSelection([coordinates, 'map']);
 		}
     }
 	const handleEdits = (coordinates) => { //from addfeature jsx - updates current point selection (will default to empty when mode is set to view)
-        setCurrentSelection(coordinates)
+        setCurrentSelection([coordinates, 'box'])
     }
 
 	useEffect(()=>{ //this pulls data from the database on reset
