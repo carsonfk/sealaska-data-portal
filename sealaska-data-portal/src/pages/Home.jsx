@@ -50,13 +50,8 @@ export default function Home(props){
 			setCurrentSelection(coordinates);
 		}
     }
-	const handleEdits = (coordinate, prev) => { //from addfeature jsx - updates current point selection (will default to empty when mode is set to view)
-        console.log("addfeature coordinates received by home.jsx!")
-		if (currentSelection[0] = prev) {
-			setCurrentSelection([prev, coordinate])
-		} else {
-			setCurrentSelection([coordinate, prev]);
-		}
+	const handleEdits = (coordinates) => { //from addfeature jsx - updates current point selection (will default to empty when mode is set to view)
+        setCurrentSelection(coordinates)
     }
 
 	useEffect(()=>{ //this pulls data from the database on reset

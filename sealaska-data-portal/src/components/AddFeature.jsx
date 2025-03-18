@@ -23,8 +23,8 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
             updateForm({ latitude: "", 
                          longitude: "" });
         } else {
-        updateForm({ latitude: selectionCoordinates[0], 
-                     longitude: selectionCoordinates[1] });
+            updateForm({ latitude: selectionCoordinates[0], 
+                         longitude: selectionCoordinates[1] });
         }
     }, [selectionCoordinates]); //fires whenever a marker is placed/moved
 
@@ -49,25 +49,31 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
                 <label htmlFor="latitude">Latitude:</label>
                 <input
                     type="number"
-                    min="-90"
-                    max="90"
+                    //min="-90"
+                    //max="90"
                     step="any"
                     id="latitude"
                     name="latitude"
                     value={form.latitude}
-                    onChange={(e) => updateForm({ latitude: e.target.value })}
+                    onChange={(e) => {
+                        updateForm({ latitude: e.target.value })
+                        onEdit([form.latitude, form.longitude]);
+                    }}
                 />
 
                 <label htmlFor="longitude">Longitude:</label>
                 <input
                     type="number"
-                    min="-180"
-                    max="180"
+                    //min="-180"
+                    //max="180"
                     step="any"
                     id="longitude"
                     name="longitude"
                     value={form.longitude}
-                    onChange={(e) => updateForm({ longitude: e.target.value })}
+                    onChange={(e) => {
+                        updateForm({ longitude: e.target.value })
+                        onEdit([form.latitude, form.longitude]);
+                    }}
                 />
                 <label htmlFor="type">Type:</label>
                 <input
