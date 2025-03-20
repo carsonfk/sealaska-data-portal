@@ -51,8 +51,8 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
                 <label htmlFor="latitude">Latitude:</label>
                 <input
                     type="number"
-                    //min="-90"
-                    //max="90"
+                    min="-90"
+                    max="90"
                     step="any"
                     id="latitude"
                     name="latitude"
@@ -66,8 +66,8 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
                 <label htmlFor="longitude">Longitude:</label>
                 <input
                     type="number"
-                    //min="-180"
-                    //max="180"
+                    min="-180"
+                    max="180"
                     step="any"
                     id="longitude"
                     name="longitude"
