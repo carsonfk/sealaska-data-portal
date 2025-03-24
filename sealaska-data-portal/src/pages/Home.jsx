@@ -27,16 +27,16 @@ export default function Home(props){
 
 		}
 
-		if (mapMode == 'view'){ 
+		if (mapMode === 'view'){ 
 			viewMode()
-		} else if (mapMode == 'contribute'){
+		} else if (mapMode === 'contribute'){
 			contributeMode()
 		}
 		setReset(reset + 1)
 	}, [mapMode]) //anytime mapMode is updated
 
     const handleFormSubmit = (selectedMode) => { //from form jsx - this has to do with updating map mode value when the map mode form is submitted
-		if (mapMode != selectedMode) {
+		if (mapMode !== selectedMode) {
 			console.log(selectedMode);
 			setMapMode(selectedMode);
 		}
@@ -44,14 +44,14 @@ export default function Home(props){
     const handleCurrentSelection = (coordinates) => { //from map jsx - updates current point selection (will default to empty when mode is set to view)
         console.log("map coordinates received by home.jsx!")
 		console.log(coordinates)
-		if (coordinates.length == 0) {
+		if (coordinates.length === 0) {
 			setCurrentSelection([[], 'map']);
 		} else {
 			setCurrentSelection([coordinates, 'map']);
 		}
     }
 	const handleEdits = (coordinates) => { //from addfeature jsx - updates current point selection (will default to empty when mode is set to view)
-        setCurrentSelection([coordinates, 'box'])
+        setCurrentSelection([coordinates, 'box']);
     }
 
 	useEffect(()=>{ //this pulls data from the database on reset
@@ -62,7 +62,7 @@ export default function Home(props){
 		//	setData(first)
 		//}
 		//noFilterLoad()
-	}, [, reset])
+	}, [reset])
 
 	const scrollToMap = () => {
 		if (ref.current) {

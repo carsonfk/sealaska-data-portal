@@ -69,11 +69,11 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
   const addPointsRef = useRef(addPoints)
 
   useEffect(() => {
-      if (mode == 'contribute') { //stuff that happens when map is swapped to contribute mode
+      if (mode === 'contribute') { //stuff that happens when map is swapped to contribute mode
         addPointsRef.current = addPoints
         map.current.on('click', addPointsRef.current);
         
-      } else if (reset != 0 && mode == 'view') { //stuff that happens when map is swapped to view mode (and on start)
+      } else if (reset !== 0 && mode === 'view') { //stuff that happens when map is swapped to view mode (and on start)
         map.current.off('click', addPointsRef.current);
         marker.remove();
         onSelect([]);
@@ -88,7 +88,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
   }, [selectionCoordinates]); //fires whenever a coordinate is changed
 
   mapboxgl.accessToken =
-    "pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw";
+    "pk.eyJ1IjoiY2Fyc29uZmsiLCJhIjoiY204bmt6YnQzMDF4YjJqcTRlNzJrYnpnOSJ9.UHG3jstXVFRQ6ihxSuTwcg";
   useEffect(() => {
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
