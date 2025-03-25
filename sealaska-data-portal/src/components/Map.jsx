@@ -88,7 +88,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
   }, [selectionCoordinates]); //fires whenever a coordinate is changed
 
   mapboxgl.accessToken =
-    "pk.eyJ1IjoiY2Fyc29uZmsiLCJhIjoiY204bmt6YnQzMDF4YjJqcTRlNzJrYnpnOSJ9.UHG3jstXVFRQ6ihxSuTwcg";
+    "pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw";
   useEffect(() => {
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({

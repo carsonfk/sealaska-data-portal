@@ -51,30 +51,30 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
                 <label htmlFor="latitude">Latitude:</label>
                 <input
                     type="number"
-                    min="-90"
-                    max="90"
-                    step="any"
+                    min="54.5"
+                    max="60"
+                    step="0.5"
                     id="latitude"
                     name="latitude"
                     value={form.latitude}
                     onChange={(e) => {
-                        updateForm({ latitude: e.target.value })
-                        onEdit([form.latitude, form.longitude]);
+                        onEdit([e.target.value, form.longitude]);
+                        updateForm({ latitude: e.target.value });
                     }}
                 />
 
                 <label htmlFor="longitude">Longitude:</label>
                 <input
                     type="number"
-                    min="-180"
-                    max="180"
-                    step="any"
+                    min="-140"
+                    max="-130"
+                    step="0.5"
                     id="longitude"
                     name="longitude"
                     value={form.longitude}
                     onChange={(e) => {
-                        updateForm({ longitude: e.target.value })
-                        onEdit([form.latitude, form.longitude]);
+                        onEdit([form.latitude, e.target.value]);
+                        updateForm({ longitude: e.target.value });
                     }}
                 />
                 <label htmlFor="type">Type:</label>

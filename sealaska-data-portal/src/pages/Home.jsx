@@ -43,7 +43,6 @@ export default function Home(props){
 	}
     const handleCurrentSelection = (coordinates) => { //from map jsx - updates current point selection (will default to empty when mode is set to view)
         console.log("map coordinates received by home.jsx!")
-		console.log(coordinates)
 		if (coordinates.length === 0) {
 			setCurrentSelection([[], 'map']);
 		} else {
@@ -51,6 +50,7 @@ export default function Home(props){
 		}
     }
 	const handleEdits = (coordinates) => { //from addfeature jsx - updates current point selection (will default to empty when mode is set to view)
+		console.log("box coordinates received by home.jsx!")
         setCurrentSelection([coordinates, 'box']);
     }
 
