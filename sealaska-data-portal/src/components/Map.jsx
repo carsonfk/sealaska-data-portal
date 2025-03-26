@@ -59,6 +59,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
   }, [locations]); //fire this whenever the features put into the map change
   */
 
+  //updates coordinates when marker dropped
   function onDragEnd() {
     const lngLat = marker.getLngLat();
     onSelect([lngLat.lat, lngLat.lng]);
