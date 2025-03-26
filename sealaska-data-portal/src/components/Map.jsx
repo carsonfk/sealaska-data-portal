@@ -11,7 +11,10 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
   const [lat, setLat] = useState(56);
   const [zoom, setZoom] = useState(4.3);
   const [featureLocations, setFeatureLocations] = useState([]);
-  const [marker, setMarker] = useState(new mapboxgl.Marker({id: 'marker'}));
+  const [marker, setMarker] = useState(new mapboxgl.Marker({
+    id: 'marker',
+    draggable: true
+  }));
   const popup = new mapboxgl.Popup({
     closeButton: false,
     closeOnClick: false,
@@ -56,12 +59,18 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
   }, [locations]); //fire this whenever the features put into the map change
   */
 
+  function onDragEnd() {
+    const lngLat = marker.getLngLat();
+    onSelect([lngLat.lat, lngLat.lng]);
+  }
+
   //gets click coordinates and adds marker to map at click (needs to remove old point still)
   const addPoints = 
     (event) => { //change to function (e)?
       event.preventDefault();
       coordinates = event.lngLat;
       marker.setLngLat(coordinates).addTo(map.current);
+      marker.on('dragend', onDragEnd);
       setMarker(marker);
       onSelect([coordinates.lat, coordinates.lng]);
     }
