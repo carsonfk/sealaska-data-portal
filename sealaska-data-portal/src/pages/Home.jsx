@@ -74,16 +74,20 @@ export default function Home(props){
     return (
         <>
 		<header>
-			<Hero scrollToMap={scrollToMap}/>
 		</header>
 		
         <main>
             
 			<div className="content">
-                <ViewContributeForm onSubmit={handleFormSubmit} />
-				<Map locations={data} mode={mapMode} reset={reset} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection}/>
-				<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits}/>
-				<ListFeatures/>
+				<div className = "sidebar">
+					<Hero scrollToMap={scrollToMap}/>
+					<ViewContributeForm onSubmit={handleFormSubmit} />
+					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits}/>
+					<ListFeatures mode={mapMode}/>
+				</div>
+				<div className="map">
+					<Map locations={data} mode={mapMode} reset={reset} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection}/>
+				</div>
 			</div>
 
 			<div className="content">

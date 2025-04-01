@@ -24,10 +24,10 @@ nav {
   height: 40px;
 }
 
-#map {
-  height: 400px;
-  margin-left: 50px;
-  margin-right: 50px;
+.map {
+  float: right;
+  width: 60%;
+  height: 100vh;
 }
 
 .mapboxgl-popup {
@@ -42,6 +42,13 @@ nav {
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+/* sidebar */
+.sidebar {
+  float: left;
+  width: 40%;
+  height: 100vh;
 }
 
 /* menu */

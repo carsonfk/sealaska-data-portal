@@ -8,7 +8,11 @@ export default function ListFeatures( {mode} ) {
     
     if (mode === 'view') {
         return (
-            <div></div>
+            <>
+            <div>
+                <p>view!</p>
+            </div>
+            </>
         )
     }
 }
