@@ -54,7 +54,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
                         type="number"
                         min="54.5"
                         max="60"
-                        step="0.25"
+                        step="any"
                         id="latitude"
                         name="latitude"
                         value={form.latitude}
@@ -69,7 +69,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
                         type="number"
                         min="-140"
                         max="-130"
-                        step="0.25"
+                        step="any"
                         id="longitude"
                         name="longitude"
                         value={form.longitude}

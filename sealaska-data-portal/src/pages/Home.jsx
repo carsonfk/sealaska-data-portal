@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef} from "react";
-import AddFeatureForm from "../components/AddFeature";
+import AddFeatureForm from "../components/AddFeatureForm";
 import Map from "../components/Map";
+import ListFeatures from "../components/ListFeatures";
 //import FilterForm from "../components/FilterForm";
 //import {getDatabase, ref, onValue, get, orderByChild, equalTo, query } from 'firebase/database'
 import Hero from "../components/Hero";
@@ -82,6 +83,7 @@ export default function Home(props){
                 <ViewContributeForm onSubmit={handleFormSubmit} />
 				<Map locations={data} mode={mapMode} reset={reset} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection}/>
 				<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits}/>
+				<ListFeatures/>
 			</div>
 
 			<div className="content">

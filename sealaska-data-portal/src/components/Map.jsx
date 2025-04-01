@@ -59,19 +59,19 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
   }, [locations]); //fire this whenever the features put into the map change
   */
 
-  //updates coordinates when marker dropped
+  //updates marker coordinates to drop location
   function onDragEnd() {
     const lngLat = marker.getLngLat();
     onSelect([lngLat.lat, lngLat.lng]);
   }
+  marker.on('dragend', onDragEnd);
 
-  //gets click coordinates and adds marker to map at click (needs to remove old point still)
+  //adds or updates marker coordinates to click location
   const addPoints = 
     (event) => { //change to function (e)?
       event.preventDefault();
       coordinates = event.lngLat;
       marker.setLngLat(coordinates).addTo(map.current);
-      marker.on('dragend', onDragEnd);
       setMarker(marker);
       onSelect([coordinates.lat, coordinates.lng]);
     }
@@ -83,22 +83,26 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
         addPointsRef.current = addPoints
         map.current.on('click', addPointsRef.current);
         
-      } else if (reset !== 0 && mode === 'view') { //stuff that happens when map is swapped to view mode (and on start)
+      } else if (reset !== 0 && mode === 'view') { //stuff that happens when map is swapped to view mode
         map.current.off('click', addPointsRef.current);
         marker.remove();
-        onSelect([]);
+        onSelect([[], 'none']);
       }
   }, [mode]); //fire this whenever the mode changes
 
   useEffect(() => {
     console.log(selectionCoordinates)
-    if (selectionCoordinates[0][0] != null && selectionCoordinates[0][1] != null) {
+    if (selectionCoordinates[1] == 'box') {
       marker.setLngLat({lng: selectionCoordinates[0][1], lat: selectionCoordinates[0][0]}).addTo(map.current);
     }
   }, [selectionCoordinates]); //fires whenever a coordinate is changed
 
   mapboxgl.accessToken =
     "pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw";
+  const bounds = [
+    [-140, 54.5], // southwest coordinates
+    [-130.250481, 60] // northeast coordinates
+  ];
   useEffect(() => {
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
@@ -106,6 +110,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
       style: "mapbox://styles/mapbox/streets-v12",
       center: [lng, lat],
       zoom: zoom,
+      maxBounds: bounds
     });
 
     map.current.on("load", () => {
