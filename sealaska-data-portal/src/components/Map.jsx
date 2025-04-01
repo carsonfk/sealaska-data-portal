@@ -7,9 +7,9 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
 
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const [lng, setLng] = useState(-134);
-  const [lat, setLat] = useState(56);
-  const [zoom, setZoom] = useState(4.3);
+  const [lng, setLng] = useState(-134.5);
+  const [lat, setLat] = useState(57.2);
+  const [zoom, setZoom] = useState(6.4);
   const [featureLocations, setFeatureLocations] = useState([]);
   const [marker, setMarker] = useState(new mapboxgl.Marker({
     id: 'marker',
@@ -99,10 +99,10 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
 
   mapboxgl.accessToken =
     "pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw";
-  const bounds = [
-    [-140, 54.5], // southwest coordinates
-    [-130.250481, 60] // northeast coordinates
-  ];
+  //const bounds = [
+  //  [-140, 54.5], // southwest coordinates
+  //  [-130.250481, 60] // northeast coordinates
+  //];
   useEffect(() => {
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
@@ -110,7 +110,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
       style: "mapbox://styles/mapbox/streets-v12",
       center: [lng, lat],
       zoom: zoom,
-      maxBounds: bounds
+      //maxBounds: bounds
     });
 
     map.current.on("load", () => {

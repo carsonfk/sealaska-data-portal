@@ -25,8 +25,8 @@ nav {
 }
 
 .map {
-  float: right;
-  width: 60%;
+  float: left;
+  width: 50%;
   height: 100vh;
 }
 
@@ -44,11 +44,20 @@ nav {
   height: 100%;
 }
 
-/* sidebar */
-.sidebar {
+/* list */
+.list {
   float: left;
-  width: 40%;
+  width: 25%;
   height: 100vh;
+  overflow-y: scroll;
+}
+
+/* contribute */
+.contribute {
+  float: right;
+  width: 25%;
+  height: 100vh;
+  overflow-y: scroll;
 }
 
 /* menu */
