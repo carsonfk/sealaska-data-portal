@@ -62,7 +62,17 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
   //updates marker coordinates to drop location
   function onDragEnd() {
     const lngLat = marker.getLngLat();
-    onSelect([lngLat.lat, lngLat.lng]);
+    if (lngLat.lat >= 54.5 && lngLat.lat <= 60 && 
+        lngLat.lng >= -140 && lngLat.lng <= 130.25) {
+      console.log([selectionCoordinates[0][1], selectionCoordinates[0][0]])
+      onSelect([lngLat.lat, lngLat.lng]);
+    } else {
+      console.log([selectionCoordinates[0][1], selectionCoordinates[0][0]])
+      marker.setLngLat([selectionCoordinates[0][1], selectionCoordinates[0][0]]).addTo(map.current);
+      setMarker(marker);
+      onSelect([selectionCoordinates[0][0], selectionCoordinates[0][1]]);
+    }
+    
   }
   marker.on('dragend', onDragEnd);
 
@@ -71,9 +81,12 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
     (event) => { //change to function (e)?
       event.preventDefault();
       coordinates = event.lngLat;
-      marker.setLngLat(coordinates).addTo(map.current);
-      setMarker(marker);
-      onSelect([coordinates.lat, coordinates.lng]);
+      if (coordinates.lat >= 54.5 && coordinates.lat <= 60 && 
+         coordinates.lng >= -140 && coordinates.lng <= 130.25) {
+          marker.setLngLat(coordinates).addTo(map.current);
+          setMarker(marker);
+          onSelect([coordinates.lat, coordinates.lng]);
+         }
     }
 
   const addPointsRef = useRef(addPoints)
@@ -101,7 +114,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
     "pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw";
   //const bounds = [
   //  [-140, 54.5], // southwest coordinates
-  //  [-130.250481, 60] // northeast coordinates
+  //  [-130.25, 60] // northeast coordinates
   //];
   useEffect(() => {
     if (map.current) return; // initialize map only once
