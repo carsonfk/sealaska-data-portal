@@ -11,7 +11,7 @@ export default function ViewContributeForm( {onSubmit} ) {
 
     return (
         <form onSubmit={handleSubmit}>
-            <div className="select-type" style={{ border: "2px solid green", borderRadius: "6px", padding: "10px", display: "flex", alignItems: "center",
+            <div className="select-type" style={{ border: "2px solid #CD202D", borderRadius: "6px", padding: "10px", display: "flex", alignItems: "center",
                                                   justifyContent: "center", background: "#f2f2f2", width: "400px", margin: "auto", marginTop: "10px", marginBottom: "10px"}}>
                 <label htmlFor="map-mode"><b>Map mode: </b></label>
                 <label htmlFor="view">View</label>
