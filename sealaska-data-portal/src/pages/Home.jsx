@@ -29,9 +29,9 @@ export default function Home(props){
 		}
 
 		if (mapMode === 'view'){ 
-			viewMode()
+			viewMode();
 		} else if (mapMode === 'contribute'){
-			contributeMode()
+			contributeMode();
 		}
 		setReset(reset + 1)
 	}, [mapMode]) //anytime mapMode is updated

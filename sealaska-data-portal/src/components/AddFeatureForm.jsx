@@ -68,7 +68,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
                     <input
                         type="number"
                         min="-140"
-                        max="-130"
+                        max="-130.25"
                         step="any"
                         id="longitude"
                         name="longitude"

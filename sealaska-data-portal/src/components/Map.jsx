@@ -59,55 +59,66 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
   }, [locations]); //fire this whenever the features put into the map change
   */
 
-  //updates marker coordinates to drop location
-  function onDragEnd() {
-    const lngLat = marker.getLngLat();
-    if (lngLat.lat >= 54.5 && lngLat.lat <= 60 && 
-        lngLat.lng >= -140 && lngLat.lng <= 130.25) {
-      console.log([selectionCoordinates[0][1], selectionCoordinates[0][0]])
-      onSelect([lngLat.lat, lngLat.lng]);
-    } else {
-      console.log([selectionCoordinates[0][1], selectionCoordinates[0][0]])
-      marker.setLngLat([selectionCoordinates[0][1], selectionCoordinates[0][0]]).addTo(map.current);
-      setMarker(marker);
-      onSelect([selectionCoordinates[0][0], selectionCoordinates[0][1]]);
+  //updates marker coordinates to drop location, or rejects drop and returns marker to existing selection
+  const onDragEnd = 
+    () => {
+      const lngLat = marker.getLngLat();
+      if (lngLat.lat >= 54.5 && lngLat.lat <= 60 && 
+          lngLat.lng >= -140 && lngLat.lng <= -130.25) {
+        //setMarker(marker);
+        onSelect([lngLat.lat, lngLat.lng]);
+      } else {
+        marker.remove();
+        onSelect([]);
+      }
     }
-    
-  }
-  marker.on('dragend', onDragEnd);
+
+  const dragEndRef = useRef(onDragEnd);
 
   //adds or updates marker coordinates to click location
   const addPoints = 
     (event) => { //change to function (e)?
+      console.log("hi!");
       event.preventDefault();
       coordinates = event.lngLat;
       if (coordinates.lat >= 54.5 && coordinates.lat <= 60 && 
-         coordinates.lng >= -140 && coordinates.lng <= 130.25) {
+         coordinates.lng >= -140 && coordinates.lng <= -130.25) {
           marker.setLngLat(coordinates).addTo(map.current);
-          setMarker(marker);
+          //setMarker(marker);
           onSelect([coordinates.lat, coordinates.lng]);
          }
     }
 
-  const addPointsRef = useRef(addPoints)
-
+  const addPointsRef = useRef(addPoints);
+  
   useEffect(() => {
       if (mode === 'contribute') { //stuff that happens when map is swapped to contribute mode
-        addPointsRef.current = addPoints
+        addPointsRef.current = addPoints;
         map.current.on('click', addPointsRef.current);
+        dragEndRef.current = onDragEnd
+        marker.on('dragend', dragEndRef.current);
+        //setMarker(marker);
         
       } else if (reset !== 0 && mode === 'view') { //stuff that happens when map is swapped to view mode
         map.current.off('click', addPointsRef.current);
+        marker.off('dragend', dragEndRef.current);
         marker.remove();
-        onSelect([[], 'none']);
+        //setMarker(marker);
+        onSelect([]);
       }
   }, [mode]); //fire this whenever the mode changes
 
   useEffect(() => {
-    console.log(selectionCoordinates)
     if (selectionCoordinates[1] == 'box') {
-      marker.setLngLat({lng: selectionCoordinates[0][1], lat: selectionCoordinates[0][0]}).addTo(map.current);
+      if (selectionCoordinates[0][0] >= 54.5 && selectionCoordinates[0][0] <= 60 && 
+        selectionCoordinates[0][1] >= -140 && selectionCoordinates[0][1] <= -130.25) {
+          marker.setLngLat([selectionCoordinates[0][1], selectionCoordinates[0][0]]).addTo(map.current);
+        } else {
+          marker.remove();
+        }
+      console.log("wiwi")
     }
+    console.log("wawa")
   }, [selectionCoordinates]); //fires whenever a coordinate is changed
 
   mapboxgl.accessToken =
