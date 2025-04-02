@@ -18,9 +18,9 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
     }
 
     useEffect(() => {
-        if (selectionCoordinates[1] == "map") {
+        if (selectionCoordinates[1] === "map") {
             console.log(selectionCoordinates)
-            if (selectionCoordinates == []) {
+            if (selectionCoordinates[0].length === 0) {
                 updateForm({ latitude: "", 
                             longitude: "" });
             } else {
@@ -28,11 +28,12 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
                             longitude: selectionCoordinates[0][1] });
             }
         }
+        console.log(selectionCoordinates);
     }, [selectionCoordinates]); //fires whenever a marker is placed/moved
 
     async function onSubmit(e) {
         e.preventDefault();
-        if (form.latitude != "" && form.longitude != "" && form.type != "" && form.details != "") {
+        if (form.latitude !== "" && form.longitude !== "" && form.type !== "" && form.details !== "") {
             //const db = getDatabase();
             //const bikerackRef = ref(db, "racks")
             //const newBikeRack = { ...form };
