@@ -9,7 +9,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
   const map = useRef(null);
   const [lng, setLng] = useState(-134.5);
   const [lat, setLat] = useState(57.2);
-  const [zoom, setZoom] = useState(6.4);
+  const [zoom, setZoom] = useState(5.9);
   const [featureLocations, setFeatureLocations] = useState([]);
   const [marker, setMarker] = useState(new mapboxgl.Marker({
     id: 'marker',
@@ -137,6 +137,16 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
       //maxBounds: bounds
     });
 
+    map.current.on('mousemove', (e) => {
+      document.getElementById('info').innerHTML =
+          // `e.point` is the x, y coordinates of the `mousemove` event
+          // relative to the top-left corner of the map.
+          JSON.stringify(e.point) +
+          '<br />' +
+          // `e.lngLat` is the longitude, latitude geographical position of the event.
+          JSON.stringify(e.lngLat.wrap());
+    });
+
     map.current.on("load", () => {
       map.current.addSource("locations", {
         type: "geojson",
@@ -205,7 +215,10 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
 
   return (
     <>
-      <div ref={mapContainer} style={{ height: "100%", width: "100%"}} />
+      <div className="map">
+        <div ref={mapContainer} style={{ height: "100%", width: "100%"}} />
+        <pre id="info"></pre>
+      </div>
     </>
   );
 }

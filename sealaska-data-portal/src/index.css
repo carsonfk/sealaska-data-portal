@@ -12,6 +12,9 @@ nav {
   background-color: black;
   color: #fff;
   padding: 7px 20px;
+  z-index:5;
+  position:fixed;
+  width:100vw;
 }
 
 .navbar {
@@ -27,14 +30,43 @@ nav {
 /* content */
 .content {
   width: 100%;
+  display:flex;
+  top:70px;
+  left:0;
+  right:0;
+  bottom:0;
+  position:fixed
 }
 
 /* map */
 .map {
-  float: left;
-  width: 50%;
-  height: 100vh;
+  display: flex;
+  flex:1;
+  flex-direction: row;
+  height:100vh;
+  width:100vw;
+  background:#ddd;
+  z-index:1;
+  display: flex;
+  justify-content: center;
 
+}
+
+#info {
+  display: table;
+  position: fixed;
+  margin: 10px auto;
+  word-wrap: anywhere;
+  white-space: pre-wrap;
+  padding: 10px;
+  border: none;
+  border-radius: 3px;
+  font-size: 12px;
+  text-align: center;
+  color: #222;
+  background: #fff;
+  z-index: 5;
+  box-shadow:0 0 2px #000c;
 }
 
 .mapboxgl-popup {
@@ -53,18 +85,34 @@ nav {
 
 /* options */
 .options {
-  float: right;
+  display:flex;
+  flex:1;
+  flex-direction: column;
+  bottom: 0;
+  right: 0;
   width: 350px;
+  max-width: 350px;
   height: 100vh;
   overflow-y: scroll;
+  background:#f4f4f4;
+  box-shadow:0 0 5px #000c;
+  z-index:2
 }
 
 /* contribute */
 .contribute {
-  float: left;
+  display:flex;
+  flex:1;
+  flex-direction: column;
+  bottom: 0;
+  left: 0;
   width: 350px;
+  max-width: 350px;
   height: 100vh;
   overflow-y: scroll;
+  background:#f4f4f4;
+  box-shadow:0 0 5px #000c;
+  z-index:5
 }
 
 /* menu */
