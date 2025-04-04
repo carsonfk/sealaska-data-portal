@@ -9,9 +9,15 @@ export default function ListFeatures( {mode} ) {
     if (mode === 'view') {
         return (
             <>
-            <div>
-                <p>view!</p>
-            </div>
+                <div>
+                    <h3 id="table-title"></h3>
+                    <button>Filter by type</button>
+                    <table>
+                        <tr>
+                            <th></th>
+                        </tr>
+                    </table>
+                </div>
             </>
         )
     }
