@@ -7,9 +7,9 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
 
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const [lng, setLng] = useState(-134.5);
-  const [lat, setLat] = useState(57.2);
-  const [zoom, setZoom] = useState(5.8);
+  const [lng, setLng] = useState(-103);
+  const [lat, setLat] = useState(27);
+  const [zoom, setZoom] = useState(2);
   const [featureLocations, setFeatureLocations] = useState([]);
   const [marker, setMarker] = useState(new mapboxgl.Marker({
     id: 'marker',
@@ -139,12 +139,26 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
 
     map.current.on('mousemove', (e) => {
       document.getElementById('info').innerHTML =
-          // `e.point` is the x, y coordinates of the `mousemove` event
-          // relative to the top-left corner of the map.
-          JSON.stringify(e.point) +
-          '<br />' +
-          // `e.lngLat` is the longitude, latitude geographical position of the event.
-          JSON.stringify(e.lngLat.wrap());
+          // displays latitude, longitude of click/hover
+          parseFloat(JSON.stringify(e.lngLat.lat)).toFixed(7) + ", " + parseFloat(JSON.stringify(e.lngLat.lng)).toFixed(7);
+    });
+    
+    map.current.on('style.load', () => {
+      // Custom atmosphere styling
+      map.current.setFog({
+          'color': 'rgb(220, 159, 159)', // Pink fog / lower atmosphere
+          'high-color': 'rgb(36, 92, 223)' // Blue sky / upper atmosphere
+      });
+
+      map.current.addSource('mapbox-dem', {
+          'type': 'raster-dem',
+          'url': 'mapbox://mapbox.terrain-rgb'
+      });
+
+      map.current.setTerrain({
+          'source': 'mapbox-dem',
+          'exaggeration': 1.5
+      });
     });
 
     map.current.on("load", () => {
@@ -210,6 +224,14 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
       const url = `https://www.google.com/maps/search/?api=1&query=${coordinates[1]},${coordinates[0]}`;
       window.open(url, "_blank");
     })
+
+    setTimeout(() => {
+      map.current.flyTo({zoom: 5.5, center: [-134.5, 57.2],
+        essential: true, duration: 6000})
+      setLng(-134.5);
+      setLat(57.2);
+      setZoom(5.5);
+    }, 1000);
   }, []);
 
   useEffect(() => {
@@ -227,7 +249,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
     <>
       <div className="map">
         <div ref={mapContainer} style={{ height: "100%", width: "100%"}} />
-        <pre id="info"></pre>
+        <pre id="info">Hover to see coordinates!</pre>
       </div>
     </>
   );
