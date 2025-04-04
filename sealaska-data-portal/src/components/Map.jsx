@@ -9,7 +9,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
   const map = useRef(null);
   const [lng, setLng] = useState(-134.5);
   const [lat, setLat] = useState(57.2);
-  const [zoom, setZoom] = useState(5.9);
+  const [zoom, setZoom] = useState(5.8);
   const [featureLocations, setFeatureLocations] = useState([]);
   const [marker, setMarker] = useState(new mapboxgl.Marker({
     id: 'marker',
@@ -131,7 +131,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: "mapbox://styles/mapbox/streets-v12",
+      style: "mapbox://styles/mapbox/outdoors-v12",
       center: [lng, lat],
       zoom: zoom,
       //maxBounds: bounds
@@ -148,6 +148,16 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
     });
 
     map.current.on("load", () => {
+
+      //add center for map animation
+      map.current.addSource('center', {
+        'type': 'geojson',
+        'data': {
+            'type': 'Point',
+            'coordinates': [-94, 40]
+        }
+      });
+
       map.current.addSource("locations", {
         type: "geojson",
         data: {

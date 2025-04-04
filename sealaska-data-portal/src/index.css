@@ -94,9 +94,17 @@ nav {
   max-width: 350px;
   height: 100vh;
   overflow-y: scroll;
-  background:#f4f4f4;
+  color: black;
   box-shadow:0 0 5px #000c;
-  z-index:2
+  z-index:2;
+
+  background: linear-gradient(to bottom, beige, white);
+  padding: 10px;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  display: flex; /* Add flex display */
+  align-items: center; /* Vertically center content */
 }
 
 /* contribute */
@@ -110,9 +118,17 @@ nav {
   max-width: 350px;
   height: 100vh;
   overflow-y: scroll;
-  background:#f4f4f4;
   box-shadow:0 0 5px #000c;
-  z-index:5
+  z-index:5;
+
+  background: linear-gradient(to bottom, beige, white);
+  padding: 10px;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  display: flex; /* Add flex display */
+  align-items: center; /* Vertically center content */
+  
 }
 
 /* menu */
@@ -135,24 +151,4 @@ input[type=checkbox]:checked + label {
   display:inline-block;
   padding: 0 0 0 0px;
   background-image: url("../public/assets/close.svg")
-}
-
-/* hero */
-
-.heroContainer {
-  background: linear-gradient(to bottom, beige, white);
-  color: black;
-  padding: 40px;
-  text-align: center;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  display: flex; /* Add flex display */
-  align-items: center; /* Vertically center content */
-  justify-content: center; /* Horizontally center content */
-}
-
-.heroImage {
-  display:none;
-  max-width: 500px;
-  height: 600px;
 }
