@@ -62,7 +62,6 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
   //adds or updates marker coordinates to click location
   const addPoints = 
     (event) => { //change to function (e)?
-      console.log("hi!");
       event.preventDefault();
       coordinates = event.lngLat;
       if (coordinates.lat >= 54.5 && coordinates.lat <= 60 && 
@@ -100,9 +99,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
         } else {
           marker.remove();
         }
-      console.log("wiwi")
     }
-    console.log("wawa")
   }, [selectionCoordinates]); //fires whenever a coordinate is changed
 
   mapboxgl.accessToken =

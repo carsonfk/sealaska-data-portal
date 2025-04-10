@@ -19,7 +19,6 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
 
     useEffect(() => {
         if (selectionCoordinates[1] === "map") {
-            console.log(selectionCoordinates)
             if (selectionCoordinates[0].length === 0) {
                 updateForm({ latitude: "", 
                             longitude: "" });
@@ -28,7 +27,6 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
                             longitude: selectionCoordinates[0][1] });
             }
         }
-        console.log(selectionCoordinates);
     }, [selectionCoordinates]); //fires whenever a marker is placed/moved
 
     async function onSubmit(e) {
