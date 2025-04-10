@@ -7,8 +7,8 @@ import reportWebVitals from './reportWebVitals';
 
 //import 'libs/font-awesome/6.2.0/css/all.min.css'
 
-//import LOCATIONS from "./data/features.geojson";
-let LOCATIONS = [0];
+import LOCATIONS from "./data/locations.geojson";
+
 // Import the functions you need from the SDKs you need
 //import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
