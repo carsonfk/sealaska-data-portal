@@ -38,12 +38,10 @@ export default function Home(props){
 
     const handleFormSubmit = (selectedMode) => { //from form jsx - this has to do with updating map mode value when the map mode form is submitted
 		if (mapMode !== selectedMode) {
-			console.log(selectedMode);
 			setMapMode(selectedMode);
 		}
 	}
     const handleCurrentSelection = (coordinates) => { //from map jsx - updates current point selection (will default to empty when mode is set to view)
-        console.log("map coordinates received by home.jsx!")
 		if (coordinates.length === 0) {
 			setCurrentSelection([[], 'map']);
 		} else {
@@ -51,7 +49,6 @@ export default function Home(props){
 		}
     }
 	const handleEdits = (coordinates) => { //from addfeature jsx - updates current point selection (will default to empty when mode is set to view)
-		console.log("box coordinates received by home.jsx!")
         setCurrentSelection([coordinates, 'box']);
     }
 
