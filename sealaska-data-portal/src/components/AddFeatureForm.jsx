@@ -58,13 +58,13 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
                         step="any"
                         id="latitude"
                         name="latitude"
-                        value={form.latitude}
+                        value={parseFloat(form.latitude).toFixed(6)}
                         onChange={(e) => {
                             onEdit([e.target.value, form.longitude]);
                             updateForm({ latitude: e.target.value });
                         }}
                     />
-
+                    <br></br>
                     <label htmlFor="longitude">Longitude:</label>
                     <input
                         type="number"
@@ -73,12 +73,13 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
                         step="any"
                         id="longitude"
                         name="longitude"
-                        value={form.longitude}
+                        value={parseFloat(form.longitude).toFixed(6)}
                         onChange={(e) => {
                             onEdit([form.latitude, e.target.value]);
                             updateForm({ longitude: e.target.value });
                         }}
                     />
+                    <br></br>
                     <label htmlFor="type">Type:</label>
                     <input
                         type="text"
@@ -87,7 +88,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
                         value={form.type}
                         onChange={(e) => updateForm({ type: e.target.value }, '')}
                     />
-
+                    <br></br>
                     <label htmlFor="details">Details:</label>
                     <input
                         type="text"
@@ -96,7 +97,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
                         value={form.details}
                         onChange={(e) => updateForm({ details: e.target.value }, '')}
                     />
-
+                    <br></br>
                     <div className="sharing-buttons" >
                         <label htmlFor="sharing"><b>Sharing:</b></label>
                         <label htmlFor="uncovered">Share to public: </label>

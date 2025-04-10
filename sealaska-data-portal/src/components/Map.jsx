@@ -22,33 +22,17 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
 
   let coordinates;
 
-  const geojson = {
-    'type': 'FeatureCollection',
-    'features': [
-      {
-        'type': 'Feature',
-        'geometry': {
-          'type': 'Point',
-          'coordinates': [-122.414, 37.776]
-        },
-        'properties': {
-          'title': 'Mapbox',
-          'description': 'San Francisco, California'
-        }
-      }
-    ]
-  };
-
-  /*
   useEffect(() => {
     if (locations) {
       let newLocations = []; // create an empty array to add all the new geoJSON stuff
       locations.forEach((row) => {
         // for every feature, create a geoJSON format object and add it to the newLocations arr
-        const newLoc = `{"type":"Feature","properties":{"name":"${
-          row.val().locationName
+        const newLoc = `{"type":"Feature","properties":{"subtype":"${
+          row.val().subtype
         }","type":"${
-          row.val().type
+          row.val().details
+        }","image":"${
+          row.val().image
         }"},"geometry":{"type":"Point","coordinates":[${row.val().longitude},${
           row.val().latitude
         }]}}`;
@@ -57,7 +41,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
       setFeatureLocations(newLocations); //setState of features to this string array of to-be-jsonified features
     }
   }, [locations]); //fire this whenever the features put into the map change
-  */
+  
 
   //updates marker coordinates to drop location, or rejects drop and returns marker to existing selection
   const onDragEnd = 
@@ -140,14 +124,16 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
     map.current.on('mousemove', (e) => {
       document.getElementById('info').innerHTML =
           // displays latitude, longitude of click/hover
-          parseFloat(JSON.stringify(e.lngLat.lat)).toFixed(7) + ", " + parseFloat(JSON.stringify(e.lngLat.lng)).toFixed(7);
+          parseFloat(JSON.stringify(e.lngLat.lat)).toFixed(6) +
+            ", " + parseFloat(JSON.stringify(e.lngLat.lng)).toFixed(6);
     });
     
     map.current.on('style.load', () => {
       // Custom atmosphere styling
       map.current.setFog({
           'color': 'rgb(220, 159, 159)', // Pink fog / lower atmosphere
-          'high-color': 'rgb(36, 92, 223)' // Blue sky / upper atmosphere
+          'high-color': 'rgb(36, 92, 223)', // Blue sky / upper atmosphere
+          'horizon-blend': 0.1 // Exaggerate atmosphere (default is .1)
       });
 
       map.current.addSource('mapbox-dem', {
@@ -159,6 +145,14 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
           'source': 'mapbox-dem',
           'exaggeration': 1.5
       });
+
+      setTimeout(() => {
+        map.current.flyTo({zoom: 5.5, center: [-134.5, 57.2],
+          essential: true, duration: 8000})
+        setLng(-134.5);
+        setLat(57.2);
+        setZoom(5.5);
+      }, 1000);
     });
 
     map.current.on("load", () => {
@@ -224,14 +218,6 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
       const url = `https://www.google.com/maps/search/?api=1&query=${coordinates[1]},${coordinates[0]}`;
       window.open(url, "_blank");
     })
-
-    setTimeout(() => {
-      map.current.flyTo({zoom: 5.5, center: [-134.5, 57.2],
-        essential: true, duration: 6000})
-      setLng(-134.5);
-      setLat(57.2);
-      setZoom(5.5);
-    }, 1000);
   }, []);
 
   useEffect(() => {
