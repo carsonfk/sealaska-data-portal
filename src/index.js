@@ -10,12 +10,12 @@ import reportWebVitals from './reportWebVitals';
 import LOCATIONS from "./data/locations.geojson";
 
 // Import the functions you need from the SDKs you need
-//import { initializeApp } from "firebase/app";
+import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-/*
+
 const firebaseConfig = {
   apiKey: "temp",
   authDomain: "sealaska-data-portal.firebaseapp.com",
@@ -24,10 +24,9 @@ const firebaseConfig = {
   messagingSenderId: "10640855230",
   appId: "1:10640855230:web:d4177df4457c77b5f08eef",
 };
-*/
 
 // Initialize Firebase
-//const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

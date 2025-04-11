@@ -53,7 +53,7 @@ export default function Home(props){
 
 	useEffect(()=>{ //this pulls data from the database on reset
 		async function initialLoad() {
-			setData(props.locations);
+			//setData(props.locations);
 			//const db = getDatabase();
 			//const racksRef = ref(db, "racks");
 			//const first = await get(racksRef);
