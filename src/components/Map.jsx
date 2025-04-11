@@ -144,11 +144,11 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
       });
 
       setTimeout(() => {
-        map.current.flyTo({zoom: 5.5, center: [-134.5, 57.2],
+        map.current.flyTo({zoom: 6.0, center: [-134.5, 57.2],
           essential: true, duration: 8000})
         setLng(-134.5);
         setLat(57.2);
-        setZoom(5.5);
+        setZoom(6.0);
       }, 1000);
     });
 
