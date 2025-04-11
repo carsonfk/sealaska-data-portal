@@ -11,22 +11,25 @@ import LOCATIONS from "./data/locations.geojson";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 
 const firebaseConfig = {
-  apiKey: "temp",
+  apiKey: "AIzaSyCqqzFtIBrtnZIMhUonX1wovD5ugYbQ5U0",
   authDomain: "sealaska-data-portal.firebaseapp.com",
   projectId: "sealaska-data-portal",
-  storageBucket: "sealaska-data-portal.appspot.com",
-  messagingSenderId: "10640855230",
-  appId: "1:10640855230:web:d4177df4457c77b5f08eef",
+  storageBucket: "sealaska-data-portal.firebasestorage.app",
+  messagingSenderId: "322330606070",
+  appId: "1:322330606070:web:41393bb74d9fc5a8306fd7",
+  measurementId: "G-9TWKWJBQ98"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
