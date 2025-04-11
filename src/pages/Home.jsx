@@ -2,7 +2,6 @@ import React, {useState, useEffect, useRef} from "react";
 import AddFeatureForm from "../components/AddFeatureForm";
 import Map from "../components/Map";
 import ListFeatures from "../components/ListFeatures";
-//import FilterForm from "../components/FilterForm";
 //import {getDatabase, ref, onValue, get, orderByChild, equalTo, query } from 'firebase/database'
 import Hero from "../components/Hero";
 import ViewContributeForm from "../components/ViewContributeForm";
@@ -53,14 +52,15 @@ export default function Home(props){
     }
 
 	useEffect(()=>{ //this pulls data from the database on reset
-		//async function noFilterLoad() {
-		//	const db = getDatabase();
-		//	const racksRef = ref(db, "racks");
-		//	const first = await get(racksRef);
-		//	setData(first)
-		//}
-		//noFilterLoad()
-	}, [reset])
+		async function initialLoad() {
+			setData(props.locations);
+			//const db = getDatabase();
+			//const racksRef = ref(db, "racks");
+			//const first = await get(racksRef);
+			//setData(first)
+		}
+		initialLoad();
+	}, [, reset])
 
 	const scrollToMap = () => {
 		if (ref.current) {
