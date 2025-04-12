@@ -13,9 +13,16 @@ export default function ListFeatures( {mode} ) {
                     <h3 id="table-title"></h3>
                     <button>Filter by type</button>
                     <table>
-                        <tr>
-                            <th></th>
-                        </tr>
+                        <thead>
+                            <tr>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th></th>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
             </>

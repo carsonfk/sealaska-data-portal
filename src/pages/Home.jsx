@@ -17,7 +17,7 @@ export default function Home(props){
     useEffect(() => {
 		async function contributeMode() {
 			const db = getDatabase();
-			const ref = ref(db, "locations");
+			const ref = ref(db, "features");
 			const orderByType = query(ref, orderByChild('type')) // makes a query to the database
 			const querySnapshot = await get(orderByType);
 			setData(querySnapshot)
@@ -53,9 +53,8 @@ export default function Home(props){
 
 	useEffect(()=>{ //this pulls data from the database on reset
 		async function initialLoad() {
-			setData(props.locations);
 			const db = getDatabase();
-			const ref = ref(db, "locations");
+			const ref = ref(db, "features");
 			const first = await get(ref);
 			setData(first)
 		}

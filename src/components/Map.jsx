@@ -27,14 +27,14 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
       let newLocations = []; // create an empty array to add all the new geoJSON stuff
       locations.forEach((row) => {
         // for every feature, create a geoJSON format object and add it to the newLocations arr
-        const newLoc = `{"type":"Feature","properties":{"subtype":"${
-          row.val().subtype
+        const newLoc = `{"type":"Feature","properties":{"type":"${
+          row.val().type
         }","type":"${
           row.val().details
         }","image":"${
           row.val().image
-        }"},"geometry":{"type":"Point","coordinates":[${row.val().longitude},${
-          row.val().latitude
+        }"},"geometry":{"type":"Point","coordinates":[${row.val().lat},${
+          row.val().long
         }]}}`;
         newLocations.push(newLoc);
       });
