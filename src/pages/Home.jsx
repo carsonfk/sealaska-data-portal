@@ -54,6 +54,7 @@ export default function Home(props){
 	useEffect(()=>{ //this pulls data from the database on reset
 		async function initialLoad() {
 			const db = getDatabase();
+			console.log(db);
 			const ref = ref(db, "features");
 			const first = await get(ref);
 			setData(first)
