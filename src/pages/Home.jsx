@@ -16,11 +16,11 @@ export default function Home(props){
 
     useEffect(() => {
 		async function contributeMode() {
-			const db = getDatabase();
-			const ref = ref(db, "features");
-			const orderByType = query(ref, orderByChild('type')) // makes a query to the database
-			const querySnapshot = await get(orderByType);
-			setData(querySnapshot)
+			//const db = getDatabase();
+			//const locRef = ref(db, "features");
+			//const orderByType = query(locRef, orderByChild('type')) // makes a query to the database
+			//const querySnapshot = await get(orderByType);
+			//setData(querySnapshot)
 		}
 
 		async function viewMode() {
@@ -55,9 +55,9 @@ export default function Home(props){
 		async function initialLoad() {
 			const db = getDatabase();
 			console.log(db);
-			const ref = ref(db, "features");
-			const first = await get(ref);
-			setData(first)
+			const locRef = ref(db, "features");
+			const first = await get(locRef);
+			setData(first);
 		}
 		initialLoad();
 	}, [, reset])

@@ -33,8 +33,8 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
           row.val().details
         }","image":"${
           row.val().image
-        }"},"geometry":{"type":"Point","coordinates":[${row.val().lat},${
-          row.val().long
+        }"},"geometry":{"type":"Point","coordinates":[${row.val().coordinates[1]},${
+          row.val().coordinates[0]
         }]}}`;
         newLocations.push(newLoc);
       });
