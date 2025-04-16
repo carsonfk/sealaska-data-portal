@@ -15,12 +15,18 @@ export default function Home(props){
 	const mapRef = useRef(null);
 
     useEffect(() => {
+		console.log("hi")
 		async function contributeMode() {
 			//const db = getDatabase();
 			//const locRef = ref(db, "features");
 			//const orderByType = query(locRef, orderByChild('type')) // makes a query to the database
 			//const querySnapshot = await get(orderByType);
 			//setData(querySnapshot)
+
+			const db = getDatabase();
+			const locRef = ref(db, "features");
+			const first = await get(locRef);
+			setData(first);
 		}
 
 		async function viewMode() {
@@ -30,8 +36,14 @@ export default function Home(props){
 			setData(first);
 		}
 
-		if (mapMode === 'view'){ 
-			viewMode();
+		if (mapMode === 'view'){
+			if (reset === 0) {
+				setTimeout(() => {
+					viewMode();
+				}, 2000);
+			} else {
+				viewMode();
+			}
 		} else if (mapMode === 'contribute'){
 			contributeMode();
 		}
@@ -55,15 +67,14 @@ export default function Home(props){
     }
 
 	useEffect(()=>{ //this pulls data from the database on reset
-		async function initialLoad() {
+		async function swapLoad() {
 			const db = getDatabase();
-			console.log(db);
 			const locRef = ref(db, "features");
-			const first = await get(locRef);
-			setData(first);
+			const swap = await get(locRef);
+			setData(swap);
 		}
-		initialLoad();
-	}, [, reset])
+		swapLoad();
+	}, [reset])
 
 	const scrollToMap = () => {
 		if (mapRef.current) {

@@ -178,7 +178,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
         paint: {
           "circle-radius": 8,
           "circle-stroke-width": 2,
-          "circle-color": "#67d339",
+          "circle-color": "orange",
           "circle-stroke-color": "white",
         },
       });

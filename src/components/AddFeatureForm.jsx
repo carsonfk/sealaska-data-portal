@@ -33,9 +33,9 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
         e.preventDefault();
         if (form.latitude !== "" && form.longitude !== "" && form.type !== "" && form.details !== "") {
             const db = getDatabase();
-            const bikerackRef = ref(db, "features")
-            const newBikeRack = { ...form };
-            const newbikeRef = push(bikerackRef, newBikeRack);
+            const locRef = ref(db, "features")
+            const newLoc = { ...form };
+            const newbikeRef = push(locRef, newLoc);
         } else {
             //test error message
             console.error("Error: one or more fields incomplete.")
