@@ -29,12 +29,12 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
         // for every feature, create a geoJSON format object and add it to the newLocations arr
         const newLoc = `{"type":"Feature","properties":{"type":"${
           row.val().type
-        }","type":"${
+        }","details":"${
           row.val().details
         }","image":"${
           row.val().image
-        }"},"geometry":{"type":"Point","coordinates":[${row.val().coordinates[1]},${
-          row.val().coordinates[0]
+        }"},"geometry":{"type":"Point","coordinates":[${row.val().coordinates[0]},${
+          row.val().coordinates[1]
         }]}}`;
         newLocations.push(newLoc);
       });
@@ -189,7 +189,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
       map.current.getCanvas().style.cursor = "pointer";
 
       const coordinates = point.features[0].geometry.coordinates.slice();
-      const name = point.features[0].properties.name;
+      const details = point.features[0].properties.details;
       const type = point.features[0].properties.type.charAt(0).toUpperCase()
         + point.features[0].properties.type.slice(1);
 
@@ -199,7 +199,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
 
       popup
         .setLngLat(coordinates)
-        .setHTML("<strong><h2>" + name + "</h2></strong> Type: " + type)
+        .setHTML("<strong><h2>" + type + "</h2></strong> Type: " + details)
         .addTo(map.current);
     });
 

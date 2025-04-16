@@ -24,7 +24,10 @@ export default function Home(props){
 		}
 
 		async function viewMode() {
-		
+			const db = getDatabase();
+			const locRef = ref(db, "features");
+			const first = await get(locRef);
+			setData(first);
 		}
 
 		if (mapMode === 'view'){ 
