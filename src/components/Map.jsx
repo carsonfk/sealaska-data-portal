@@ -31,10 +31,10 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
           row.val().type
         }","details":"${
           row.val().details
-        }","image":"${
-          row.val().image
-        }"},"geometry":{"type":"Point","coordinates":[${row.val().coordinates[0]},${
-          row.val().coordinates[1]
+        //}","image":"${
+          //row.val().image
+        }"},"geometry":{"type":"Point","coordinates":[${row.val().longitude},${
+          row.val().latitude
         }]}}`;
         newLocations.push(newLoc);
       });

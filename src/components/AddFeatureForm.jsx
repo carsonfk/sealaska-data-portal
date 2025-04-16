@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-//import { getDatabase, ref, set as firebaseSet, push } from 'firebase/database'
+import { getDatabase, ref, set as firebaseSet, push } from 'firebase/database'
 //import FilterForm from './FilterForm'
 
 export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
@@ -8,7 +8,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
         longitude: "",
         type: "",
         details: "",
-        sharing: "",
+        sharing: "public",
     });
 
     function updateForm(value) {
@@ -32,10 +32,10 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
     async function onSubmit(e) {
         e.preventDefault();
         if (form.latitude !== "" && form.longitude !== "" && form.type !== "" && form.details !== "") {
-            //const db = getDatabase();
-            //const bikerackRef = ref(db, "racks")
-            //const newBikeRack = { ...form };
-            //const newbikeRef = push(bikerackRef, newBikeRack);
+            const db = getDatabase();
+            const bikerackRef = ref(db, "features")
+            const newBikeRack = { ...form };
+            const newbikeRef = push(bikerackRef, newBikeRack);
         } else {
             //test error message
             console.error("Error: one or more fields incomplete.")
