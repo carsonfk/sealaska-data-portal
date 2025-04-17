@@ -9,6 +9,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
         type: "",
         details: "",
         sharing: "public",
+        reviewed: false
     });
 
     function updateForm(value) {
@@ -35,7 +36,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
             const db = getDatabase();
             const locRef = ref(db, "features")
             const newLoc = { ...form };
-            const newbikeRef = push(locRef, newLoc);
+            const newLocRef = push(locRef, newLoc);
         } else {
             //test error message
             console.error("Error: one or more fields incomplete.")

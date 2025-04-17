@@ -199,7 +199,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
 
       popup
         .setLngLat(coordinates)
-        .setHTML("<strong><h2>" + type + "</h2></strong> Type: " + details)
+        .setHTML("<strong><h2>" + type + "</h2></strong>" + details)
         .addTo(map.current);
     });
 
