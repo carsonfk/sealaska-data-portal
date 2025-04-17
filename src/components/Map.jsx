@@ -189,18 +189,31 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
       map.current.getCanvas().style.cursor = "pointer";
 
       const coordinates = point.features[0].geometry.coordinates.slice();
-      const details = point.features[0].properties.details;
       const type = point.features[0].properties.type.charAt(0).toUpperCase()
         + point.features[0].properties.type.slice(1);
+      const details = point.features[0].properties.details;
+      const reviewed = point.features[0].properties.reviewed;
+
 
       while (Math.abs(point.lngLat.lng - coordinates[0]) > 180) {
         coordinates[0] += point.lngLat.lng > coordinates[0] ? 360 : -360;
       }
 
-      popup
-        .setLngLat(coordinates)
-        .setHTML("<strong><h2>" + type + "</h2></strong>" + details)
-        .addTo(map.current);
+      if (reviewed) {
+        popup
+          .setLngLat(coordinates)
+          .setHTML("<strong><h2>" + type + "</h2></strong>" + details)
+          .addTo(map.current);
+      } else {
+        //popup
+          //.setLngLat(coordinates)
+          //.setHTML("<strong><p>This POI is awaiting manual review</p></strong>")
+          //.addTo(map.current);
+          popup
+          .setLngLat(coordinates)
+          .setHTML("<strong><h2>" + type + "</h2></strong>" + details)
+          .addTo(map.current);
+      }
     });
 
     //remove popup when cursor leaves feature
