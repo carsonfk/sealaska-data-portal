@@ -40,7 +40,7 @@ export default function Home(props){
 			if (reset === 0) {
 				setTimeout(() => {
 					viewMode();
-				}, 2000);
+				}, 3000);
 			} else {
 				viewMode();
 			}

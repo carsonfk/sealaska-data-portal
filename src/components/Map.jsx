@@ -33,6 +33,10 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
           row.val().details
         //}","image":"${
           //row.val().image
+        }","sharing":"${
+          row.val().sharing
+        }","reviewed":"${
+          row.val().reviewed
         }"},"geometry":{"type":"Point","coordinates":[${row.val().longitude},${
           row.val().latitude
         }]}}`;
@@ -200,18 +204,16 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
       }
 
       if (reviewed) {
+        console.log(reviewed);
         popup
           .setLngLat(coordinates)
           .setHTML("<strong><h2>" + type + "</h2></strong>" + details)
           .addTo(map.current);
       } else {
-        //popup
-          //.setLngLat(coordinates)
-          //.setHTML("<strong><p>This POI is awaiting manual review</p></strong>")
-          //.addTo(map.current);
-          popup
+        console.log(reviewed);
+        popup
           .setLngLat(coordinates)
-          .setHTML("<strong><h2>" + type + "</h2></strong>" + details)
+          .setHTML("<strong><p>This POI is awaiting manual review</p></strong>")
           .addTo(map.current);
       }
     });
