@@ -55,6 +55,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
                         min="54.5"
                         max="60"
                         step="any"
+                        className="location"
                         id="latitude"
                         name="latitude"
                         value={parseFloat(form.latitude).toFixed(6)}
@@ -70,6 +71,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
                         min="-140"
                         max="-130.25"
                         step="any"
+                        className="location"
                         id="longitude"
                         name="longitude"
                         value={parseFloat(form.longitude).toFixed(6)}
@@ -100,9 +102,9 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
                     <div className="sharing-buttons" >
                         <label htmlFor="sharing"><b>Sharing:</b></label>
                         <label htmlFor="uncovered">Share to public: </label>
-                        <input style={{width: '20px', height: '20px', marginRight: '10px' }} type="radio" id="public" name="sharing-type" value="public" defaultChecked onChange={(e) => updateForm({ sharing: "public" })}/>
+                        <input style={{width: '20px', height: '20px', marginRight: '10px' }} type="radio" className="sharing" id="public" name="sharing-type" value="public" defaultChecked onChange={(e) => updateForm({ sharing: "public" })}/>
                         <label htmlFor="public">For Sealaska use only: </label>
-                        <input style={{width: '20px', height: '20px', marginRight: '10px' }} type="radio" id="sealaska" name="sharing-type" value="sealaska" onChange={(e) => updateForm({ sharing: "sealaska" })}/>
+                        <input style={{width: '20px', height: '20px', marginRight: '10px' }} type="radio" className="sharing" id="sealaska" name="sharing-type" value="sealaska" onChange={(e) => updateForm({ sharing: "sealaska" })}/>
                     </div>
 
                     <button className="addLocation" type="submit">Submit your Location</button>

@@ -45,7 +45,6 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
       setFeatureLocations(newLocations); //setState of features to this string array of to-be-jsonified features
     }
   }, [locations]); //fire this whenever the features put into the map change
-  
 
   //updates marker coordinates to drop location, or rejects drop and returns marker to existing selection
   const onDragEnd = 
@@ -65,9 +64,9 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
 
   //adds or updates marker coordinates to click location
   const addPoints = 
-    (event) => { //change to function (e)?
-      event.preventDefault();
-      coordinates = event.lngLat;
+    (e) => {
+      e.preventDefault();
+      coordinates = e.lngLat;
       if (coordinates.lat >= 54.5 && coordinates.lat <= 60 && 
          coordinates.lng >= -140 && coordinates.lng <= -130.25) {
           marker.setLngLat(coordinates).addTo(map.current);
@@ -77,6 +76,17 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
     }
 
   const addPointsRef = useRef(addPoints);
+
+  //right click removes marker
+  const onRightClick = 
+    () => {
+      console.log("hello world!");
+      marker.remove();
+      onSelect([]);
+    }
+
+  const onRightClickRef = useRef(onRightClick);
+
   
   useEffect(() => {
       if (mode === 'contribute') { //stuff that happens when map is swapped to contribute mode
@@ -84,6 +94,8 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
         map.current.on('click', addPointsRef.current);
         dragEndRef.current = onDragEnd
         marker.on('dragend', dragEndRef.current);
+        onRightClickRef.current = onRightClick;
+        marker.on('contextmenu', onRightClickRef.current);
         //setMarker(marker);
         
       } else if (reset !== 0 && mode === 'view') { //stuff that happens when map is swapped to view mode
@@ -229,7 +241,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
       const coordinates = point.features[0].geometry.coordinates.slice();
       const url = `https://www.google.com/maps/search/?api=1&query=${coordinates[1]},${coordinates[0]}`;
       window.open(url, "_blank");
-    })
+    });
   }, []);
 
   useEffect(() => {

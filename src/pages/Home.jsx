@@ -15,7 +15,6 @@ export default function Home(props){
 	const mapRef = useRef(null);
 
     useEffect(() => {
-		console.log("hi")
 		async function contributeMode() {
 			//const db = getDatabase();
 			//const locRef = ref(db, "features");

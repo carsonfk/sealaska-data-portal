@@ -5,7 +5,6 @@ export default function ViewContributeForm( {onSubmit} ) {
     //returns the value that is filled in the form to Home.
     document.querySelectorAll('input[type="radio"][name="map-mode"]').forEach(e => {
         e.addEventListener('change', function() {
-            console.log(this.value);
             onSubmit(this.value);
         })
       })
@@ -13,9 +12,9 @@ export default function ViewContributeForm( {onSubmit} ) {
     return (
         <form>
             <div className="select-type">
-                <input type="radio" id="view" name="map-mode" value="view" defaultChecked/>
+                <input type="radio" className="mode-input" id="view" name="map-mode" value="view" defaultChecked/>
                 <label className="mode" for="view">View</label>
-                <input type="radio" id="contribute" name="map-mode" value="contribute"/>
+                <input type="radio" className="mode-input" id="contribute" name="map-mode" value="contribute"/>
                 <label className="mode" for="contribute">Contribute</label>
             </div>
         </form>
