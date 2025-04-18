@@ -13,7 +13,8 @@ export default function Hero( {scrollToMap} ) {
                 <li>Leave the map in View mode and view the updated status of Sealaska lands</li>
                 <li>Swap over to Contribute mode to let us know about something you found</li>
             </ul>
-            <button className="heroButton" onClick={scrollToMap}>Get Started</button>
         </div>
     )
 }
+
+//<button className="heroButton" onClick={scrollToMap}>Get Started</button>

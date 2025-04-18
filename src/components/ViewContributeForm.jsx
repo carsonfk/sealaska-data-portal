@@ -3,23 +3,25 @@ import React from "react";
 export default function ViewContributeForm( {onSubmit} ) {
     
     //returns the value that is filled in the form to Home.
-    const handleSubmit = (event) => { //change to function (e)?
-        event.preventDefault();
-        const selectedMode = event.target.elements['map-mode'].value;
-        onSubmit(selectedMode);
-    };
+    document.querySelectorAll('input[type="radio"][name="map-mode"]').forEach(e => {
+        e.addEventListener('change', function() {
+            console.log(this.value);
+            onSubmit(this.value);
+        })
+      })
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div className="select-type" style={{ border: "2px solid #CD202D", borderRadius: "6px", padding: "10px", display: "flex", alignItems: "center",
-                                                  justifyContent: "center", background: "#f2f2f2", width: "300px", margin: "auto", marginTop: "10px", marginBottom: "10px"}}>
-                <label htmlFor="map-mode"><b>Map mode: </b></label>
-                <label htmlFor="view">View</label>
+        <form>
+            <div className="select-type">
                 <input type="radio" id="view" name="map-mode" value="view" defaultChecked/>
-                <label htmlFor="contribute">Contribute</label>
+                <label className="mode" for="view">View</label>
                 <input type="radio" id="contribute" name="map-mode" value="contribute"/>
-                <input type="submit" value="Swap mode"/>
+                <label className="mode" for="contribute">Contribute</label>
             </div>
-      </form>
+        </form>
     )
 }
+
+
+//style={{ border: "2px solid #CD202D", borderRadius: "6px", padding: "10px", display: "flex", alignItems: "center",
+//justifyContent: "center", background: "#f2f2f2", width: "250px", margin: "auto", marginTop: "10px", marginBottom: "10px"}}

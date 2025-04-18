@@ -90,14 +90,13 @@ nav {
   flex-direction: column;
   bottom: 0;
   right: 0;
-  width: 350px;
-  max-width: 350px;
+  width: 320px;
+  max-width: 320px;
   height: 100vh;
   overflow-y: scroll;
   color: black;
   box-shadow:0 0 5px #000c;
   z-index:2;
-
   background: linear-gradient(to bottom, beige, white);
   padding: 10px;
   text-align: center;
@@ -114,13 +113,12 @@ nav {
   flex-direction: column;
   bottom: 0;
   left: 0;
-  width: 350px;
-  max-width: 350px;
+  width: 320px;
+  max-width: 320px;
   height: 100vh;
   overflow-y: scroll;
   box-shadow:0 0 5px #000c;
   z-index:5;
-
   background: linear-gradient(to bottom, beige, white);
   padding: 10px;
   text-align: center;
@@ -128,11 +126,56 @@ nav {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   display: flex; /* Add flex display */
   align-items: center; /* Vertically center content */
-  
 }
 
-/* menu */
+/* map mode */
+.select-type{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+input[type="radio"]{
+  display: none;
+}
 
+.mode {
+  position: relative;
+  color: #CD202D;
+  border: 2px solid #CD202D;
+  border-radius: 5px;
+  padding: 10px 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.mode:before{
+  content: "";
+  height: 20px;
+  width: 20px;
+  border: 3px solid #CD202D;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+input[type="radio"]:checked + .mode{
+  background-color: #CD202D;
+  color: white;
+}
+
+input[type="radio"]:checked + .mode:before{
+  height: 20px;
+  width: 20px;
+  border: 5px solid white;
+  background-color: #CD202D;
+}
+
+/* add-location */
+
+
+/* menu */
 input[type=checkbox] {
   display:none;
 }
