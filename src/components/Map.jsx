@@ -141,12 +141,15 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
             ", " + parseFloat(JSON.stringify(e.lngLat.lng)).toFixed(6);
     });
     
-    map.current.on('style.load', () => {
+    //map.current.on('style.load', () => {
+    //});
+
+    map.current.on("style.load", () => {
       // Custom atmosphere styling
       map.current.setFog({
-          'color': 'rgb(220, 159, 159)', // Pink fog / lower atmosphere
-          'high-color': 'rgb(36, 92, 223)', // Blue sky / upper atmosphere
-          'horizon-blend': 0.1 // Exaggerate atmosphere (default is .1)
+        'color': 'rgb(220, 159, 159)', // Pink fog / lower atmosphere
+        'high-color': 'rgb(36, 92, 223)', // Blue sky / upper atmosphere
+        'horizon-blend': 0.1 // Exaggerate atmosphere (default is .1)
       });
 
       map.current.addSource('mapbox-dem', {
@@ -161,14 +164,11 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
 
       setTimeout(() => {
         map.current.flyTo({zoom: 6.0, center: [-134.5, 57.2],
-          essential: true, duration: 8000})
+          essential: true, duration: 10000})
         setLng(-134.5);
         setLat(57.2);
         setZoom(6.0);
       }, 1000);
-    });
-
-    map.current.on("load", () => {
 
       //add center for map animation
       map.current.addSource('center', {

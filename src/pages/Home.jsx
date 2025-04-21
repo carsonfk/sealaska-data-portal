@@ -36,13 +36,7 @@ export default function Home(props){
 		}
 
 		if (mapMode === 'view'){
-			if (reset === 0) {
-				setTimeout(() => {
-					viewMode();
-				}, 3000);
-			} else {
-				viewMode();
-			}
+			viewMode();
 		} else if (mapMode === 'contribute'){
 			contributeMode();
 		}
@@ -92,7 +86,7 @@ export default function Home(props){
 				<div className="contribute">
 					<Hero scrollToMap={scrollToMap}/>
 					<ViewContributeForm onSubmit={handleFormSubmit} />
-					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits}/>
+					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits} temp={handleFormSubmit}/>
 					<ListFeatures mode={mapMode}/>
 				</div>
 				<Map locations={data} mode={mapMode} reset={reset} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection}/>
