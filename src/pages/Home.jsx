@@ -59,14 +59,18 @@ export default function Home(props){
         setCurrentSelection([coordinates, 'box']);
     }
 
+	const handleReset = () => {
+		setReset(reset + 1);
+	}
+
 	useEffect(()=>{ //this pulls data from the database on reset
-		async function swapLoad() {
+		async function resetLoad() {
 			const db = getDatabase();
 			const locRef = ref(db, "features");
 			const swap = await get(locRef);
 			setData(swap);
 		}
-		swapLoad();
+		resetLoad();
 	}, [reset])
 
 	const scrollToMap = () => {
@@ -86,7 +90,7 @@ export default function Home(props){
 				<div className="contribute">
 					<Hero scrollToMap={scrollToMap}/>
 					<ViewContributeForm onSubmit={handleFormSubmit} />
-					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits} temp={handleFormSubmit}/>
+					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits} onReset={handleReset}/>
 					<ListFeatures mode={mapMode}/>
 				</div>
 				<Map locations={data} mode={mapMode} reset={reset} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection}/>

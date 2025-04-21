@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getDatabase, ref, set as firebaseSet, push } from 'firebase/database'
 //import FilterForm from './FilterForm'
 
-export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
+export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onReset} ) {
     const [form, setForm] = useState({
         latitude: "",
         longitude: "",
@@ -17,6 +17,12 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
             return { ...prev, ...value}
         });
     }
+
+    useEffect(() => {
+          if (mode === 'view') { //clears form when swapped to view mode
+            updateForm({ type: "", details: "" });
+          }
+      }, [mode]); //fire this whenever the mode changes
 
     useEffect(() => {
         if (selectionCoordinates[1] === "map") {
@@ -37,6 +43,10 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit} ) {
             const locRef = ref(db, "features")
             const newLoc = { ...form };
             const newLocRef = push(locRef, newLoc);
+            updateForm({ latitude: "", longitude: "",
+                type: "", details: "" });
+            onEdit(["", ""]);
+            onReset();
         } else {
             //test error message
             console.error("Error: one or more fields incomplete.")
