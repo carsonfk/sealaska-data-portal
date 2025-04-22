@@ -40,7 +40,7 @@ export default function Home(props){
 		} else if (mapMode === 'contribute'){
 			contributeMode();
 		}
-		setReset(reset + 1)
+		setReset((reset) => reset + 1);
 	}, [mapMode]) //anytime mapMode is updated
 
     const handleFormSubmit = (selectedMode) => { //from form jsx - this has to do with updating map mode value when the map mode form is submitted
@@ -60,17 +60,8 @@ export default function Home(props){
     }
 
 	const handleReset = () => {
-		setReset(reset + 1);
+		setReset((reset) => reset + 1)
 	}
-
-	useEffect(() => { //WIP
-        const interval = setInterval(() => {
-			let prev = reset;
-            setReset((prev) => prev + 1); // Correct way to update state
-			console.log(reset);
-        }, 5000);
-        return () => clearInterval(interval); // Cleanup function
-    }, []); // Empty dependency array ensures it runs only once
 	
 	useEffect(()=>{ //this pulls data from the database on reset
 		async function resetLoad() {
@@ -81,6 +72,13 @@ export default function Home(props){
 		}
 		resetLoad();
 	}, [reset])
+
+	useEffect(() => { //WIP
+        const interval = setInterval(() => {
+            setReset((reset) => reset + 1); // Correct way to update state
+			console.log(reset);
+        }, 5000);
+    }, []); // Empty dependency array ensures it runs only once
 
 	const scrollToMap = () => { //no longer functional or needed
 		if (mapRef.current) {

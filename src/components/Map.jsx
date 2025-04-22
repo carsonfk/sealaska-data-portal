@@ -107,7 +107,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
   }, [mode]); //fire this whenever the mode changes
 
   useEffect(() => {
-    if (selectionCoordinates[1] == 'box') {
+    if (selectionCoordinates[1] === 'box') {
       if (selectionCoordinates[0][0] >= 54.5 && selectionCoordinates[0][0] <= 60 && 
         selectionCoordinates[0][1] >= -140 && selectionCoordinates[0][1] <= -130.25) {
           marker.setLngLat([selectionCoordinates[0][1], selectionCoordinates[0][0]]).addTo(map.current);
