@@ -87,7 +87,6 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
 
   const onRightClickRef = useRef(onRightClick);
 
-  
   useEffect(() => {
       if (mode === 'contribute') { //stuff that happens when map is swapped to contribute mode
         addPointsRef.current = addPoints;
@@ -221,8 +220,6 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
           .setHTML("<strong><h2>" + type + "</h2></strong>" + details)
           .addTo(map.current);
       } else {
-        console.log(reviewed);
-        console.log(typeof reviewed);
         popup
           .setLngLat(coordinates)
           .setHTML("<strong><p>This POI is awaiting manual review</p></strong>")
