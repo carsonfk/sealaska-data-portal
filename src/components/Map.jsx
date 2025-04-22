@@ -208,7 +208,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
       const type = point.features[0].properties.type.charAt(0).toUpperCase()
         + point.features[0].properties.type.slice(1);
       const details = point.features[0].properties.details;
-      const reviewed = point.features[0].properties.reviewed;
+      const reviewed = point.features[0].properties.reviewed === "true";
 
 
       while (Math.abs(point.lngLat.lng - coordinates[0]) > 180) {
@@ -216,13 +216,13 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
       }
 
       if (reviewed) {
-        console.log(reviewed);
         popup
           .setLngLat(coordinates)
           .setHTML("<strong><h2>" + type + "</h2></strong>" + details)
           .addTo(map.current);
       } else {
         console.log(reviewed);
+        console.log(typeof reviewed);
         popup
           .setLngLat(coordinates)
           .setHTML("<strong><p>This POI is awaiting manual review</p></strong>")

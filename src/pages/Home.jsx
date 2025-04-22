@@ -63,6 +63,15 @@ export default function Home(props){
 		setReset(reset + 1);
 	}
 
+	useEffect(() => { //WIP
+        const interval = setInterval(() => {
+			let prev = reset;
+            setReset((prev) => prev + 1); // Correct way to update state
+			console.log(reset);
+        }, 5000);
+        return () => clearInterval(interval); // Cleanup function
+    }, []); // Empty dependency array ensures it runs only once
+	
 	useEffect(()=>{ //this pulls data from the database on reset
 		async function resetLoad() {
 			const db = getDatabase();
@@ -73,7 +82,7 @@ export default function Home(props){
 		resetLoad();
 	}, [reset])
 
-	const scrollToMap = () => {
+	const scrollToMap = () => { //no longer functional or needed
 		if (mapRef.current) {
 		  mapRef.current.scrollIntoView({ behavior: 'smooth' });
 		}

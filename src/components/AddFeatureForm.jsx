@@ -42,6 +42,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
             const db = getDatabase();
             const locRef = ref(db, "features")
             const newLoc = { ...form };
+            console.log(newLoc);
             const newLocRef = push(locRef, newLoc);
             updateForm({ latitude: "", longitude: "",
                 type: "", details: "" });
