@@ -128,9 +128,9 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
                     <br></br>
                     <div className="sharing-buttons" >
                         <label htmlFor="sharing"><b>Sharing:</b></label>
-                        <label htmlFor="uncovered">Share to public: </label>
+                        <label htmlFor="public">Share to public: </label>
                         <input style={{width: '20px', height: '20px', marginRight: '10px' }} type="radio" className="sharing" id="public" name="sharing-type" value="public" defaultChecked onChange={(e) => updateForm({ sharing: "public" })}/>
-                        <label htmlFor="public">For Sealaska use only: </label>
+                        <label htmlFor="sealaska">For Sealaska use only: </label>
                         <input style={{width: '20px', height: '20px', marginRight: '10px' }} type="radio" className="sharing" id="sealaska" name="sharing-type" value="sealaska" onChange={(e) => updateForm({ sharing: "sealaska" })}/>
                     </div>
 
