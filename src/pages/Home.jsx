@@ -136,7 +136,7 @@ export default function Home(props){
         <main>
             
 			<div className="content">
-				<div className="contribute">
+				<div className="features">
 					<Hero scrollToMap={scrollToMap}/>
 					<ViewContributeForm onSubmit={handleFormSubmit} />
 					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits} onReset={handleReset}/>

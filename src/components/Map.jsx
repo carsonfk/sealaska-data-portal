@@ -121,7 +121,7 @@ export default function Map( {locations, mode, selectionCoordinates, onSelect}) 
           parseFloat(JSON.stringify(e.lngLat.lat)).toFixed(6) +
             ", " + parseFloat(JSON.stringify(e.lngLat.lng)).toFixed(6);
     });
-    
+
     //map.current.on('style.load', () => {
     //});
 
@@ -240,6 +240,7 @@ export default function Map( {locations, mode, selectionCoordinates, onSelect}) 
       <div className="map">
         <div ref={mapContainer} style={{ height: "100%", width: "100%"}} />
         <pre id="info">Hover to see coordinates!</pre>
+        <div id="update">Locations Updated</div>
       </div>
     </>
   );

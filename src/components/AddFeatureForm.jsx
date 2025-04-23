@@ -77,6 +77,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
                 <h2>Add New Location</h2>
                 <form id="newLocationForm" onSubmit={onSubmit}>
                     <label htmlFor="latitude">Latitude:</label>
+                    <br></br>
                     <input
                         type="number"
                         min="54.5"
@@ -93,6 +94,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
                     />
                     <br></br>
                     <label htmlFor="longitude">Longitude:</label>
+                    <br></br>
                     <input
                         type="number"
                         min="-140"
@@ -118,10 +120,10 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
                     />
                     <br></br>
                     <label htmlFor="details">Details:</label>
-                    <input
-                        type="text"
+                    <textarea
                         id="details"
                         name="details"
+                        rows="3"
                         value={form.details}
                         onChange={(e) => updateForm({ details: e.target.value }, '')}
                     />
