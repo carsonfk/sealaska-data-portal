@@ -13,6 +13,29 @@ export default function Home(props){
     const [mapMode, setMapMode] = useState('view');
     const [currentSelection, setCurrentSelection] = useState([[], 'none']);
 	const mapRef = useRef(null);
+	const timerRef = useRef();
+
+	function useInterval(callback, delay) {
+		// Remember the latest callback.
+		useEffect(() => {
+		    timerRef.current = callback;
+		}, [callback]);
+
+		// Set up the interval.
+		useEffect(() => {
+		    function tick() {
+			    timerRef.current();
+		    }
+		    if (delay !== null) {
+			    let id = setInterval(tick, delay);
+			    return () => clearInterval(id);
+		    }
+		}, [delay]);
+	}
+
+	useInterval(() => {
+		setReset((reset) => reset + 1);
+	}, 60000);
 
     useEffect(() => {
 		async function contributeMode() {
@@ -22,17 +45,17 @@ export default function Home(props){
 			//const querySnapshot = await get(orderByType);
 			//setData(querySnapshot)
 
-			const db = getDatabase();
-			const locRef = ref(db, "features");
-			const first = await get(locRef);
-			setData(first);
+			//const db = getDatabase();
+			//const locRef = ref(db, "features");
+			//const first = await get(locRef);
+			//setData(first);
 		}
 
 		async function viewMode() {
-			const db = getDatabase();
-			const locRef = ref(db, "features");
-			const first = await get(locRef);
-			setData(first);
+			//const db = getDatabase();
+			//const locRef = ref(db, "features");
+			//const first = await get(locRef);
+			//setData(first);
 		}
 
 		if (mapMode === 'view'){
@@ -40,7 +63,6 @@ export default function Home(props){
 		} else if (mapMode === 'contribute'){
 			contributeMode();
 		}
-		setReset((reset) => reset + 1);
 	}, [mapMode]) //anytime mapMode is updated
 
     const handleFormSubmit = (selectedMode) => { //from form jsx - this has to do with updating map mode value when the map mode form is submitted
@@ -60,7 +82,7 @@ export default function Home(props){
     }
 
 	const handleReset = () => {
-		setReset((reset) => reset + 1)
+		setReset((reset) => reset + 1);
 	}
 	
 	useEffect(()=>{ //this pulls data from the database on reset
@@ -71,14 +93,8 @@ export default function Home(props){
 			setData(swap);
 		}
 		resetLoad();
+		console.log(reset);
 	}, [reset])
-
-	useEffect(() => { //WIP
-        const interval = setInterval(() => {
-            setReset((reset) => reset + 1); // Correct way to update state
-			console.log(reset);
-        }, 5000);
-    }, []); // Empty dependency array ensures it runs only once
 
 	const scrollToMap = () => { //no longer functional or needed
 		if (mapRef.current) {
