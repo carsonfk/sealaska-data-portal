@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, useCallback } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-export default function Map( {locations, mode, reset, selectionCoordinates, onSelect}) {
+export default function Map( {locations, mode, selectionCoordinates, onSelect}) {
   //let locations = props.locations;
 
   const mapContainer = useRef(null);
@@ -24,25 +24,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
 
   useEffect(() => {
     if (locations) {
-      let newLocations = []; // create an empty array to add all the new geoJSON stuff
-      locations.forEach((row) => {
-        // for every feature, create a geoJSON format object and add it to the newLocations arr
-        const newLoc = `{"type":"Feature","properties":{"type":"${
-          row.val().type
-        }","details":"${
-          row.val().details
-        //}","image":"${
-          //row.val().image
-        }","sharing":"${
-          row.val().sharing
-        }","reviewed":"${
-          row.val().reviewed
-        }"},"geometry":{"type":"Point","coordinates":[${row.val().longitude},${
-          row.val().latitude
-        }]}}`;
-        newLocations.push(newLoc);
-      });
-      setFeatureLocations(newLocations); //setState of features to this string array of to-be-jsonified features
+      setFeatureLocations(locations); //setState of features to this string array of to-be-jsonified features
     }
   }, [locations]); //fire this whenever the features put into the map change
 
@@ -97,7 +79,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
         marker.on('contextmenu', onRightClickRef.current);
         //setMarker(marker);
         
-      } else if (reset !== 0 && mode === 'view') { //stuff that happens when map is swapped to view mode
+      } else if (map.current && mode === 'view') { //stuff that happens when map is swapped to view mode
         map.current.off('click', addPointsRef.current);
         marker.off('dragend', dragEndRef.current);
         marker.remove();
@@ -244,6 +226,7 @@ export default function Map( {locations, mode, reset, selectionCoordinates, onSe
   useEffect(() => {
     if (map.current.getSource("locations")) {
       //update the source of the features on the map
+      console.log(featureLocations);
       const source = map.current.getSource("locations");
       source.setData({
         type: "FeatureCollection",

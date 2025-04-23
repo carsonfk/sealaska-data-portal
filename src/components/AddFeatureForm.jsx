@@ -7,10 +7,25 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
         latitude: "",
         longitude: "",
         type: "",
+        image: "",
         details: "",
         sharing: "public",
         reviewed: false
     });
+
+    function getTimestampAK() {
+        const timestamp = new Date(); // Current date and time
+
+        // Format the date and time in a specific time zone
+        const formattedTimestamp = new Intl.DateTimeFormat('en-US', {
+            timeZone: 'America/Juneau',
+            dateStyle: 'short',
+            timeStyle: 'short'
+        }).format(timestamp);
+
+        let timestampSplit = formattedTimestamp.split(', ');
+        return {date: timestampSplit[0], time: timestampSplit[1]};
+    }
 
     function updateForm(value) {
         return setForm((prev) => {
@@ -37,11 +52,12 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
     }, [selectionCoordinates]); //fires whenever a marker is placed/moved
 
     async function onSubmit(e) {
+        console.log(getTimestampAK());
         e.preventDefault();
         if (form.latitude !== "" && form.longitude !== "" && form.type !== "" && form.details !== "") {
             const db = getDatabase();
             const locRef = ref(db, "features")
-            const newLoc = { ...form };
+            const newLoc = { ...form, timestamp: getTimestampAK()};
             console.log(newLoc);
             const newLocRef = push(locRef, newLoc);
             updateForm({ latitude: "", longitude: "",

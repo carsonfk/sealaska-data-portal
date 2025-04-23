@@ -89,8 +89,34 @@ export default function Home(props){
 		async function resetLoad() {
 			const db = getDatabase();
 			const locRef = ref(db, "features");
-			const swap = await get(locRef);
-			setData(swap);
+			const dbFeatures = await get(locRef);
+
+			let jsonFeatures = []; // create an empty array to add all the new geoJSON stuff
+			dbFeatures.forEach((row) => {
+				// for every feature, create a geoJSON format object and add it to the newLocations arr
+				const newLoc = `{"type":"Feature","properties":{"type":"${
+				row.val().type
+				}","details":"${
+				row.val().details
+				}","image":"${
+				row.val().image
+				}","sharing":"${
+				row.val().sharing
+				}","reviewed":"${
+				row.val().reviewed
+				}","timestamp":{"date":"${
+					row.val().timestamp.date
+					}","time":"${
+					row.val().timestamp.time
+				}"}},"geometry":{"type":"Point","coordinates":[${
+					row.val().longitude},${
+					row.val().latitude
+				}]}}`;
+				console.log(newLoc);
+				jsonFeatures.push(newLoc);
+			});
+
+			setData(jsonFeatures);
 		}
 		resetLoad();
 		console.log(reset);
@@ -114,9 +140,9 @@ export default function Home(props){
 					<Hero scrollToMap={scrollToMap}/>
 					<ViewContributeForm onSubmit={handleFormSubmit} />
 					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits} onReset={handleReset}/>
-					<ListFeatures mode={mapMode}/>
+					<ListFeatures locations={data} mode={mapMode}/>
 				</div>
-				<Map locations={data} mode={mapMode} reset={reset} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection}/>
+				<Map locations={data} mode={mapMode} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection}/>
 				<div className="options">
 					
 				</div>
