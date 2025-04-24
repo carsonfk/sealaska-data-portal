@@ -2,9 +2,8 @@ import React, { useRef, useState, useEffect, useCallback } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-export default function Map( {locations, mode, selectionCoordinates, onSelect}) {
+export default function Map( {locations, locations2, mode, selectionCoordinates, onSelect}) {
   //let locations = props.locations;
-
   const mapContainer = useRef(null);
   const map = useRef(null);
   const [lng, setLng] = useState(-103);
@@ -27,9 +26,10 @@ export default function Map( {locations, mode, selectionCoordinates, onSelect}) 
       let update = document.getElementById("update");
       update.classList.toggle("hide");
       setTimeout(() => {
-        update.classList.toggle("hide");
+        if (!update.classList.contains("hide")) {
+          update.classList.toggle("hide");
+        }
       }, 5000);
-
       setFeatureLocations(locations); //setState of features to jsonified features
     }
   }, [locations]); //fire this whenever the features put into the map change
@@ -112,6 +112,12 @@ export default function Map( {locations, mode, selectionCoordinates, onSelect}) 
   //  [-130.25, 60] // northeast coordinates
   //];
   useEffect(() => {
+    let temp = document.getElementById("location-close");
+    temp.addEventListener("click", () => {
+      let update = document.getElementById("update");
+      update.classList.toggle("hide");
+    });
+
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
@@ -161,19 +167,28 @@ export default function Map( {locations, mode, selectionCoordinates, onSelect}) 
 
       //add center for map animation
       map.current.addSource('center', {
-        'type': 'geojson',
-        'data': {
-            'type': 'Point',
-            'coordinates': [-94, 40]
+        type: 'geojson',
+        data: {
+            type: 'Point',
+            coordinates: [-94, 40]
         }
       });
+      
+      //map.current.addSource('locations2', {
+      //  type: 'geojson',
+      //  data: {
+      //      type: 'FeatureCollection',
+      //      features: JSON.parse(`[${locations2}]`),
+      //  }
+      //});
+
 
       map.current.addSource("locations", {
         type: "geojson",
         data: {
           type: "FeatureCollection",
           features: JSON.parse(`[${featureLocations}]`),
-        },
+        }
       });
 
       map.current.addLayer({
@@ -183,7 +198,15 @@ export default function Map( {locations, mode, selectionCoordinates, onSelect}) 
         paint: {
           "circle-radius": 7,
           "circle-stroke-width": 2,
-          "circle-color": "orange",
+          'circle-color': [
+                        'match',
+                        ['get', 'reviewed'],
+                        'true',
+                        'orange',
+                        'false',
+                        '#ccc',
+                        'white'
+                    ],
           "circle-stroke-color": "white",
         },
       });

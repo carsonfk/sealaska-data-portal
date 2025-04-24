@@ -11,21 +11,19 @@ export default function ListFeatures( {locations, mode} ) {
         let unreviewedCount = 0;
         let json = JSON.parse(`[${locations}]`)
         let table = document.getElementsByTagName("table")[0];
-        let row, cell1, cell2, cell3;
+        let row, cell1, cell2;
         if (table.childElementCount !== 0) {
             $("#feature-list tr").remove();
         }
-        for (let i = 0; i < json.length; i++) {
+        for (let i = json.length - 1; i > -1; i--) {
             let reviewed = json[i].properties.reviewed == "true";
             if (reviewed) {
                 reviewedCount++;
                 row = table.insertRow(-1);
                 cell1 = row.insertCell(0);
                 cell2 = row.insertCell(1);
-                cell3 = row.insertCell(2);
-                cell1.innerHTML = json[i].properties.timestamp.date;
-                cell2.innerHTML = json[i].properties.timestamp.time;
-                cell3.innerHTML = json[i].properties.type;
+                cell1.innerHTML = json[i].properties.timestamp.time + "<br>" + json[i].properties.timestamp.date;
+                cell2.innerHTML = json[i].properties.type;
             } else {
                 unreviewedCount++;
             }

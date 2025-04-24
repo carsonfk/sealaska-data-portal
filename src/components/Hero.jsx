@@ -11,7 +11,7 @@ export default function Hero( {scrollToMap} ) {
             
             <ul>
                 <li>Leave the map in View mode to view Southeast Alaska land status and community posts.</li>
-                <li>Switch to Contribute mode to post something you found!</li>
+                <li>Swap to Contribute mode to post something you found!</li>
             </ul>
         </div>
     )

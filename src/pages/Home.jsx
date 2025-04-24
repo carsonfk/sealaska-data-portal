@@ -142,7 +142,7 @@ export default function Home(props){
 					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits} onReset={handleReset}/>
 					<ListFeatures locations={data} mode={mapMode}/>
 				</div>
-				<Map locations={data} mode={mapMode} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection}/>
+				<Map locations={data} locations2={props.taxBlocks} mode={mapMode} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection}/>
 				<div className="options">
 					
 				</div>

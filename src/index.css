@@ -215,6 +215,7 @@ nav {
   border: 1px solid #ddd;
   margin-top: 5px;
   width: 100%;
+  cursor: pointer;
 }
 
 th,
