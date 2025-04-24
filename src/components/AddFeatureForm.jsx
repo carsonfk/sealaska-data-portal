@@ -74,7 +74,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
     if (mode === 'contribute') {
         return (
             <div className="add-location-form">
-                <h2>Add New Location</h2>
+                <h2>Add Location</h2>
                 <form id="newLocationForm" onSubmit={onSubmit}>
                     <label htmlFor="latitude">Latitude:</label>
                     <br></br>

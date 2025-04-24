@@ -49,46 +49,50 @@ nav {
 }
 
 #info {
-  display: table;
   position: fixed;
   margin: 10px auto;
-  word-wrap: anywhere;
-  white-space: pre-wrap;
-  padding: 10px;
+  padding: 7px;
   border: none;
   border-radius: 3px;
   font-size: 12px;
   text-align: center;
-  color: #222;
   background: linear-gradient(to bottom, beige, white);
   z-index: 5;
   box-shadow:0 0 2px #000c;
 }
 
 #update {
-  display: table;
+  display: flex;
+  justify-content: space-between;
   position: fixed;
-  bottom: 10px;
-  word-wrap: anywhere;
-  white-space: pre-wrap;
-  padding: 10px;
+  bottom: 30px;
+  padding: 0px 20px 0px 20px;
   border: none;
   border-radius: 3px;
-  font-size: 20px;
-  text-align: center;
-  color: #222;
+  font-size: 15px;
   background: linear-gradient(to bottom, beige, white);
-  z-index: 6;
-  box-shadow:0 0 2px #000c;
-  transition: all 1s;
-
+  z-index: 10;
+  box-shadow: 0 0 2px #000c;
+  transition: all 0.1s;
   opacity: 1;
-  height: 150px;
+  width: 300px;
+  height: 42px;
 }
 
-.hide {
-  height: 0px;
+#update.hide {
   opacity: 0;
+  height: 28px;
+  width: 200px;
+  font-size: 10px;
+}
+
+#location-msg, #location-close {
+  line-height: 42px;
+}
+
+#location-close {
+  color: #CD202D;
+  cursor: pointer;
 }
 
 .mapboxgl-popup {
@@ -138,7 +142,7 @@ nav {
   max-width: 300px;
   overflow-y: scroll;
   box-shadow:0 0 5px #000c;
-  z-index:5;
+  z-index:2;
   background: linear-gradient(to bottom, beige, white);
   padding: 10px;
   text-align: center;
@@ -192,17 +196,25 @@ nav {
   background-color: #CD202D;
 }
 
-/* table */
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-  width: 100%;
-  border: 1px solid #ddd;
-  margin-top: 5px;
+/* list-location */
+.list-location {
+  border: 3px solid #CD202D;
+  border-radius: 5px;
+  padding: 10px 0px 25px 0px;;
+  margin-top: 10px;
+  width: 100%
 }
 
 #table-title {
   margin: 0;
+}
+
+#feature-list {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+  margin-top: 5px;
+  width: 100%;
 }
 
 th,
@@ -221,6 +233,7 @@ tr:nth-child(even) {
   border-radius: 5px;
   padding: 10px 20px;
   margin-top: 10px;
+  width: 100%;
 }
 
 .location{

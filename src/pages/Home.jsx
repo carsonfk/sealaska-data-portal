@@ -35,7 +35,7 @@ export default function Home(props){
 
 	useInterval(() => {
 		setReset((reset) => reset + 1);
-	}, 10000);
+	}, 60000);
 
     useEffect(() => {
 		async function contributeMode() {
@@ -112,7 +112,7 @@ export default function Home(props){
 					row.val().longitude},${
 					row.val().latitude
 				}]}}`;
-				console.log(newLoc);
+				//console.log(newLoc);
 				jsonFeatures.push(newLoc);
 			});
 

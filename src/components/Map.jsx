@@ -23,13 +23,11 @@ export default function Map( {locations, mode, selectionCoordinates, onSelect}) 
   let coordinates;
 
   useEffect(() => {
-    
     if (locations) {
       let update = document.getElementById("update");
       update.classList.toggle("hide");
       setTimeout(() => {
         update.classList.toggle("hide");
-        console.log("hello world!")
       }, 5000);
 
       setFeatureLocations(locations); //setState of features to jsonified features
@@ -70,7 +68,7 @@ export default function Map( {locations, mode, selectionCoordinates, onSelect}) 
   //right click removes marker
   const onRightClick = 
     () => {
-      console.log("hello world!");
+      //console.log("hello world!");
       marker.remove();
       onSelect([]);
     }
@@ -128,8 +126,8 @@ export default function Map( {locations, mode, selectionCoordinates, onSelect}) 
       let mouseLng = e.lngLat.lng;
       document.getElementById('info').innerHTML =
           // displays latitude, longitude of click/hover
-          Math.abs(parseFloat(JSON.stringify(mouseLat)).toFixed(6)) + ((mouseLat >= 0) ? "°N" : "°S") +
-            ", " + Math.abs(parseFloat(JSON.stringify(mouseLng)).toFixed(6)) + ((mouseLng >= 0) ? "°E" : "°W");
+          Math.abs(parseFloat(JSON.stringify(mouseLat)).toFixed(4)) + ((mouseLat >= 0) ? "°N" : "°S") +
+            ", " + Math.abs(parseFloat(JSON.stringify(mouseLng)).toFixed(4)) + ((mouseLng >= 0) ? "°E" : "°W");
     });
 
     //map.current.on('style.load', () => {
@@ -138,7 +136,7 @@ export default function Map( {locations, mode, selectionCoordinates, onSelect}) 
     map.current.on("style.load", () => {
       // Custom atmosphere styling
       map.current.setFog({
-        'color': 'rgb(220, 159, 159)', // Pink fog / lower atmosphere
+        'color': 'rgb(247, 193, 193)', // Pink fog / lower atmosphere
         'high-color': 'rgb(36, 92, 223)', // Blue sky / upper atmosphere
         'horizon-blend': 0.1 // Exaggerate atmosphere (default is .1)
       });
@@ -183,7 +181,7 @@ export default function Map( {locations, mode, selectionCoordinates, onSelect}) 
         type: "circle",
         source: "locations",
         paint: {
-          "circle-radius": 8,
+          "circle-radius": 7,
           "circle-stroke-width": 2,
           "circle-color": "orange",
           "circle-stroke-color": "white",
@@ -236,7 +234,7 @@ export default function Map( {locations, mode, selectionCoordinates, onSelect}) 
   useEffect(() => {
     if (map.current.getSource("locations")) {
       //update the source of the features on the map
-      console.log(featureLocations);
+      //console.log(featureLocations);
       const source = map.current.getSource("locations");
       source.setData({
         type: "FeatureCollection",
@@ -249,8 +247,12 @@ export default function Map( {locations, mode, selectionCoordinates, onSelect}) 
     <>
       <div className="map">
         <div ref={mapContainer} style={{ height: "100%", width: "100%"}} />
-        <pre id="info">Hover to see coordinates!</pre>
-        <div id="update">Locations Updated</div>
+        <div id="info">Hover to see coordinates!</div>
+        <div id="update" className="hide">
+          <div id="location-msg">Locations Updated</div>
+          
+          <div id="location-close">CLOSE</div>
+        </div>
       </div>
     </>
   );
