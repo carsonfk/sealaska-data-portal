@@ -74,13 +74,21 @@ nav {
   padding: 10px;
   border: none;
   border-radius: 3px;
-  font-size: 12px;
+  font-size: 20px;
   text-align: center;
   color: #222;
   background: linear-gradient(to bottom, beige, white);
   z-index: 6;
   box-shadow:0 0 2px #000c;
-  font-size: 20px;
+  transition: all 1s;
+
+  opacity: 1;
+  height: 150px;
+}
+
+.hide {
+  height: 0px;
+  opacity: 0;
 }
 
 .mapboxgl-popup {
@@ -182,6 +190,29 @@ nav {
   width: 20px;
   border: 5px solid white;
   background-color: #CD202D;
+}
+
+/* table */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #ddd;
+  margin-top: 5px;
+}
+
+#table-title {
+  margin: 0;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 7px;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
 }
 
 /* add-location */

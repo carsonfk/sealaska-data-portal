@@ -23,8 +23,16 @@ export default function Map( {locations, mode, selectionCoordinates, onSelect}) 
   let coordinates;
 
   useEffect(() => {
+    
     if (locations) {
-      setFeatureLocations(locations); //setState of features to this string array of to-be-jsonified features
+      let update = document.getElementById("update");
+      update.classList.toggle("hide");
+      setTimeout(() => {
+        update.classList.toggle("hide");
+        console.log("hello world!")
+      }, 5000);
+
+      setFeatureLocations(locations); //setState of features to jsonified features
     }
   }, [locations]); //fire this whenever the features put into the map change
 
@@ -116,10 +124,12 @@ export default function Map( {locations, mode, selectionCoordinates, onSelect}) 
     });
 
     map.current.on('mousemove', (e) => {
+      let mouseLat = e.lngLat.lat;
+      let mouseLng = e.lngLat.lng;
       document.getElementById('info').innerHTML =
           // displays latitude, longitude of click/hover
-          parseFloat(JSON.stringify(e.lngLat.lat)).toFixed(6) +
-            ", " + parseFloat(JSON.stringify(e.lngLat.lng)).toFixed(6);
+          Math.abs(parseFloat(JSON.stringify(mouseLat)).toFixed(6)) + ((mouseLat >= 0) ? "°N" : "°S") +
+            ", " + Math.abs(parseFloat(JSON.stringify(mouseLng)).toFixed(6)) + ((mouseLng >= 0) ? "°E" : "°W");
     });
 
     //map.current.on('style.load', () => {
