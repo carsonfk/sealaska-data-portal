@@ -198,15 +198,28 @@ export default function Map( {locations, locations2, mode, selectionCoordinates,
       //});
 
       map.current.addLayer({
-        'id': 'parks-layer',
+        'id': 'taxblocks',
         'type': 'fill',
         'source': {
             'type': 'geojson',
-            'data': 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/ArcGIS/rest/services/Tax_Blocks_(geojson)/FeatureServer/0/query?where=1%3D1&outSR=4326&f=pgeojson'
+            'data': 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/ArcGIS/rest/services/Tax_Blocks_(geojson)/FeatureServer/0/query?where=1%3D1&outSR=4326&outFields=SURFOWNER&f=pgeojson'
         },
         'paint': {
-            'fill-color': 'rgba(200, 100, 240, 0.3)',
-            'fill-outline-color': 'rgba(200, 100, 240, 1)'
+            'fill-color': [
+              'match',
+              ['get', 'SURFOWNER'],
+              'Sealaska',
+              'rgba(200, 100, 240, 0.3)',
+              'rgba(250, 100, 100, 0.3)'
+            ],
+            'fill-outline-color': 
+            [
+              'match',
+              ['get', 'SURFOWNER'],
+              'Sealaska',
+              'rgba(200, 100, 240, 1)',
+              'rgba(250, 100, 100, 1)'
+            ],
         }
     });
 
