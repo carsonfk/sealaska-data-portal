@@ -22,27 +22,50 @@ nav {
   justify-content: space-between;
   align-items: center;
   justify-self: center;
-  width: 1390px;
+  width: 1392px;
 }
 
 .logo {
   height: 40px;
 }
 
-.nav-links {
+.nav-content {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   width: 110px;
 }
 
-.nav-links a {
+.nav-content a {
   cursor: pointer;
   text-decoration: none;
   color: white;
 }
 
-.nav-links a:hover {
+.nav-content a:hover {
   font-weight: bold;
+}
+
+/* menu */
+input[type=checkbox] {
+  display: none;
+}
+
+input[type=checkbox] + label {
+  height: 15px;
+  width: 27px;
+  display: inline-block;
+  padding: 0px 0px 0px 0px;
+  margin-top: 7px;
+  background-image: url("../public/assets/hamburger.svg");
+}
+ 
+input[type=checkbox]:checked + label {
+  height: 22px;
+  width: 23px;
+  display:inline-block;
+  padding: 0px 0px 0px 0px;
+  background-image: url("../public/assets/close.svg");
 }
 
 /* content */
@@ -218,7 +241,7 @@ nav {
 .list-location {
   border: 3px solid #CD202D;
   border-radius: 5px;
-  padding: 10px 0px 25px 0px;;
+  padding: 10px 0px 0px 0px;;
   margin-top: 10px;
   width: 100%
 }
@@ -239,7 +262,7 @@ nav {
 th,
 td {
   text-align: left;
-  padding: 7px;
+  padding: 5px;
 }
 
 tr:nth-child(even) {
@@ -257,25 +280,4 @@ tr:nth-child(even) {
 
 .location{
   max-width: 113px;
-}
-
-/* menu */
-input[type=checkbox] {
-  display: none;
-}
-
-input[type=checkbox] + label {
-  height: 15px;
-  width: 28px;
-  display: inline-block;
-  padding: 0px 0px 0px 0px;
-  background-image: url("../public/assets/hamburger.svg")
-}
- 
-input[type=checkbox]:checked + label {
-  height: 22px;
-  width: 23px;
-  display:inline-block;
-  padding: 0px 0px 0px 0px;
-  background-image: url("../public/assets/close.svg")
 }

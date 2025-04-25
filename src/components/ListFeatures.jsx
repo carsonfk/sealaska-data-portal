@@ -3,26 +3,17 @@ import $ from 'jquery';
 //import { getDatabase, ref, set as firebaseSet, push } from 'firebase/database'
 //import FilterForm from './FilterForm'
 
-export default function ListFeatures( {locations, mode} ) {
+export default function ListFeatures( {locations, mode, onCenter} ) {
     const [ratio, setRatio] = useState([0,0]);
 
     function updateTable() { //repopulates the table with available data
         let reviewedCount = 0;
         let unreviewedCount = 0;
-        let json = JSON.parse(`[${locations}]`)
+        let json = locations; // revisit
         let table = document.getElementsByTagName("table")[0];
         let row, cell1, cell2;
         if (table.childElementCount !== 0) {
             $("#feature-list tr").remove();
-        }
-
-        //sorts the json (WIP)
-        if (true) {
-            let jsonSort = []; 
-            for (let i = json.length - 1; i > -1; i--) {
-                jsonSort.push(json[i])
-            }
-            json = jsonSort;
         }
 
         //loops sorted json to construct table
@@ -31,14 +22,15 @@ export default function ListFeatures( {locations, mode} ) {
             if (reviewed) {
                 reviewedCount++;
                 row = table.insertRow(-1);
-                row.id = "row-" + i;
-                console.log(row.id);
                 cell1 = row.insertCell(0);
+                cell1.id = i;
                 cell2 = row.insertCell(1);
+                cell2.id = i;
                 cell1.innerHTML = json[i].properties.timestamp.time + "<br>" + json[i].properties.timestamp.date;
                 cell2.innerHTML = json[i].properties.type;
                 row.addEventListener("click", (e) => {
-                    console.log(e.target);
+                    console.log(e.target.id);
+                    onCenter(e.target.id);
                 });
             } else {
                 unreviewedCount++;

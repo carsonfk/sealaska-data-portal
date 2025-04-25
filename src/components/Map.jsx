@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, useCallback } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-export default function Map( {locations, locations2, mode, selectionCoordinates, onSelect}) {
+export default function Map( {locations, mode, testLat, testLng, selectionCoordinates, onSelect}) {
   //let locations = props.locations;
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -29,7 +29,7 @@ export default function Map( {locations, locations2, mode, selectionCoordinates,
         if (!update.classList.contains("hide")) {
           update.classList.toggle("hide");
         }
-      }, 10000);
+      }, 7000);
       setFeatureLocations(locations); //setState of features to jsonified features
     }
   }, [locations]); //fire this whenever the features put into the map change
@@ -105,12 +105,18 @@ export default function Map( {locations, locations2, mode, selectionCoordinates,
     }
   }, [selectionCoordinates]); //fires whenever a coordinate is changed
 
+  useEffect(() => {
+    if (testLat && testLng) {
+      map.current.flyTo({center: [testLng, testLat],
+        essential: true, duration: 3000})
+      //setLng(-134.5);
+      //setLat(57.2);
+      //setZoom(6.0);
+    }
+  }, [testLat, testLng])
+
   mapboxgl.accessToken =
     "pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw";
-  //const bounds = [
-  //  [-140, 54.5], // southwest coordinates
-  //  [-130.25, 60] // northeast coordinates
-  //];
   useEffect(() => {
     let temp = document.getElementById("location-close");
     temp.addEventListener("click", () => {
@@ -161,14 +167,6 @@ export default function Map( {locations, locations2, mode, selectionCoordinates,
           'exaggeration': 1.5
       });
 
-      setTimeout(() => {
-        map.current.flyTo({zoom: 6.0, center: [-134.5, 57.2],
-          essential: true, duration: 10000})
-        setLng(-134.5);
-        setLat(57.2);
-        setZoom(6.0);
-      }, 1000);
-
       //add center for map animation
       map.current.addSource('center', {
         type: 'geojson',
@@ -177,6 +175,14 @@ export default function Map( {locations, locations2, mode, selectionCoordinates,
             coordinates: [-94, 40]
         }
       });
+
+      setTimeout(() => {
+        map.current.flyTo({zoom: 6.0, center: [-134.5, 57.2],
+          essential: true, duration: 10000})
+        setLng(-134.5);
+        setLat(57.2);
+        setZoom(6.0);
+      }, 1000);
       
       //map.current.addSource('taxblocks', {
       //  type: 'geojson',
@@ -227,7 +233,7 @@ export default function Map( {locations, locations2, mode, selectionCoordinates,
         type: "geojson",
         data: {
           type: "FeatureCollection",
-          features: JSON.parse(`[${featureLocations}]`),
+          features: featureLocations,
         }
       });
 
@@ -301,7 +307,7 @@ export default function Map( {locations, locations2, mode, selectionCoordinates,
       const source = map.current.getSource("locations");
       source.setData({
         type: "FeatureCollection",
-        features: JSON.parse(`[${featureLocations}]`),
+        features: featureLocations,
       });
     }
   }, [featureLocations]); // everytime the featureLocations state is changed

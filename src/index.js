@@ -7,7 +7,7 @@ import reportWebVitals from './reportWebVitals';
 
 //import 'libs/font-awesome/6.2.0/css/all.min.css'
 
-import taxBlocks from "./data/taxblocks.geojson";
+//import taxBlocks from "./data/taxblocks.geojson";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -33,7 +33,7 @@ const analytics = getAnalytics(app);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
-    <App locations2={taxBlocks} />
+    <App />
   </BrowserRouter>
 );
 

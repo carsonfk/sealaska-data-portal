@@ -10,7 +10,7 @@ export function App(props) {
     <NavBar />
     <Routes>
       <Route path="/about" element={<About />} />
-      <Route path="*" element={<Home locations2={props.taxBlocks}/>} />
+      <Route path="*" element={<Home />} />
     </Routes>
     </>
   );

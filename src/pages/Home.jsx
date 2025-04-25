@@ -8,7 +8,10 @@ import ViewContributeForm from "../components/ViewContributeForm";
 
 export default function Home(props){
 	const [data, setData] = useState()
+	const [testLng, setTestLng] = useState();
+	const [testLat, setTestLat] = useState();
 	//const [filter, setFilter] = useState('null')
+	const [sort, setSort] = useState('newest');
 	const [reset, setReset] = useState(0);
     const [mapMode, setMapMode] = useState('view');
     const [currentSelection, setCurrentSelection] = useState([[], 'none']);
@@ -84,6 +87,11 @@ export default function Home(props){
 	const handleReset = () => {
 		setReset((reset) => reset + 1);
 	}
+
+	const handleCenter = (id) => { //from listfeatures jsx - updates map center
+		setTestLat(data[id].geometry.coordinates[1]);
+		setTestLng(data[id].geometry.coordinates[0]);
+	}
 	
 	useEffect(()=>{ //this pulls data from the database on reset
 		async function resetLoad() {
@@ -91,7 +99,7 @@ export default function Home(props){
 			const locRef = ref(db, "features");
 			const dbFeatures = await get(locRef);
 
-			let jsonFeatures = []; // create an empty array to add all the new geoJSON stuff
+			let json = []; // create an empty array to add all the new geoJSON stuff
 			dbFeatures.forEach((row) => {
 				// for every feature, create a geoJSON format object and add it to the newLocations arr
 				const newLoc = `{"type":"Feature","properties":{"type":"${
@@ -113,10 +121,19 @@ export default function Home(props){
 					row.val().latitude
 				}]}}`;
 				//console.log(newLoc);
-				jsonFeatures.push(newLoc);
+				json.push(newLoc);
 			});
 
-			setData(jsonFeatures);
+			let locations = JSON.parse(`[${json}]`)
+			//sorts the json (WIP)
+			if (sort == 'newest') {
+				let locationsSort = []; 
+				for (let i = locations.length - 1; i > -1; i--) {
+					locationsSort.push(locations[i])
+				}
+				locations = locationsSort;
+			}
+			setData(locations);
 		}
 		resetLoad();
 		console.log(reset);
@@ -140,9 +157,9 @@ export default function Home(props){
 					<Hero scrollToMap={scrollToMap}/>
 					<ViewContributeForm onSubmit={handleFormSubmit} />
 					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits} onReset={handleReset}/>
-					<ListFeatures locations={data} mode={mapMode}/>
+					<ListFeatures locations={data} mode={mapMode} onCenter={handleCenter}/>
 				</div>
-				<Map locations={data} locations2={props.taxBlocks} mode={mapMode} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection}/>
+				<Map locations={data} mode={mapMode} testLat={testLat} testLng={testLng} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection} onCenter={handleCenter}/>
 				<div className="options">
 					
 				</div>
