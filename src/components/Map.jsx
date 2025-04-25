@@ -29,7 +29,7 @@ export default function Map( {locations, locations2, mode, selectionCoordinates,
         if (!update.classList.contains("hide")) {
           update.classList.toggle("hide");
         }
-      }, 5000);
+      }, 10000);
       setFeatureLocations(locations); //setState of features to jsonified features
     }
   }, [locations]); //fire this whenever the features put into the map change

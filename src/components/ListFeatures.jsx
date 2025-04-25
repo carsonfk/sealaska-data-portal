@@ -6,7 +6,7 @@ import $ from 'jquery';
 export default function ListFeatures( {locations, mode} ) {
     const [ratio, setRatio] = useState([0,0]);
 
-    function updateTable() {
+    function updateTable() { //repopulates the table with available data
         let reviewedCount = 0;
         let unreviewedCount = 0;
         let json = JSON.parse(`[${locations}]`)
@@ -15,15 +15,31 @@ export default function ListFeatures( {locations, mode} ) {
         if (table.childElementCount !== 0) {
             $("#feature-list tr").remove();
         }
-        for (let i = json.length - 1; i > -1; i--) {
+
+        //sorts the json (WIP)
+        if (true) {
+            let jsonSort = []; 
+            for (let i = json.length - 1; i > -1; i--) {
+                jsonSort.push(json[i])
+            }
+            json = jsonSort;
+        }
+
+        //loops sorted json to construct table
+        for (let i = 0; i < json.length; i++) {
             let reviewed = json[i].properties.reviewed == "true";
             if (reviewed) {
                 reviewedCount++;
                 row = table.insertRow(-1);
+                row.id = "row-" + i;
+                console.log(row.id);
                 cell1 = row.insertCell(0);
                 cell2 = row.insertCell(1);
                 cell1.innerHTML = json[i].properties.timestamp.time + "<br>" + json[i].properties.timestamp.date;
                 cell2.innerHTML = json[i].properties.type;
+                row.addEventListener("click", (e) => {
+                    console.log(e.target);
+                });
             } else {
                 unreviewedCount++;
             }
@@ -35,7 +51,7 @@ export default function ListFeatures( {locations, mode} ) {
         if (locations && mode === 'view') {
             updateTable();
         }
-    }, [locations, mode]); //fire this whenever the features put into the map change
+    }, [locations, mode]); //fire this whenever the features put into the map change or the mode changes
     
     if (mode === 'view') {
         return (

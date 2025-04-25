@@ -21,10 +21,28 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  justify-self: center;
+  width: 1390px;
 }
 
 .logo {
   height: 40px;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: space-between;
+  width: 110px;
+}
+
+.nav-links a {
+  cursor: pointer;
+  text-decoration: none;
+  color: white;
+}
+
+.nav-links a:hover {
+  font-weight: bold;
 }
 
 /* content */
@@ -243,21 +261,21 @@ tr:nth-child(even) {
 
 /* menu */
 input[type=checkbox] {
-  display:none;
+  display: none;
 }
 
 input[type=checkbox] + label {
   height: 15px;
-  width: 26px;
-  display:inline-block;
-  padding: 0 0 0 0px;
+  width: 28px;
+  display: inline-block;
+  padding: 0px 0px 0px 0px;
   background-image: url("../public/assets/hamburger.svg")
 }
  
 input[type=checkbox]:checked + label {
-  height: 15px;
-  width: 26px;
+  height: 22px;
+  width: 23px;
   display:inline-block;
-  padding: 0 0 0 0px;
+  padding: 0px 0px 0px 0px;
   background-image: url("../public/assets/close.svg")
 }
