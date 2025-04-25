@@ -22,15 +22,14 @@ export default function ListFeatures( {locations, mode, onCenter} ) {
             if (reviewed) {
                 reviewedCount++;
                 row = table.insertRow(-1);
+                row.id = i;
                 cell1 = row.insertCell(0);
-                cell1.id = i;
                 cell2 = row.insertCell(1);
-                cell2.id = i;
                 cell1.innerHTML = json[i].properties.timestamp.time + "<br>" + json[i].properties.timestamp.date;
                 cell2.innerHTML = json[i].properties.type;
                 row.addEventListener("click", (e) => {
-                    console.log(e.target.id);
-                    onCenter(e.target.id);
+                    e.target.parentNode.classList.toggle("hl");
+                    onCenter(e.target.parentNode.id);
                 });
             } else {
                 unreviewedCount++;

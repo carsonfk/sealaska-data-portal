@@ -269,6 +269,10 @@ tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
+tr.hl {
+  background-color: yellow; /* change this color */
+}
+
 /* add-location */
 .add-location-form{
   border: 3px solid #CD202D;
