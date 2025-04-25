@@ -136,6 +136,10 @@ export default function Map( {locations, locations2, mode, selectionCoordinates,
             ", " + Math.abs(parseFloat(JSON.stringify(mouseLng)).toFixed(4)) + ((mouseLng >= 0) ? "°E" : "°W");
     });
 
+    //map.current.on('load', function () {
+      
+    //});
+
     //map.current.on('style.load', () => {
     //});
 
@@ -174,14 +178,37 @@ export default function Map( {locations, locations2, mode, selectionCoordinates,
         }
       });
       
-      //map.current.addSource('locations2', {
+      //map.current.addSource('taxblocks', {
       //  type: 'geojson',
       //  data: {
       //      type: 'FeatureCollection',
-      //      features: JSON.parse(`[${locations2}]`),
+      //      data: 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/ArcGIS/rest/services/Tax_Blocks_(geojson)/FeatureServer/0'
       //  }
       //});
 
+      //map.current.addLayer({
+      //  id: 'taxblocks_layer',
+      //  type: 'fill',
+      //  source: 'taxblocks', // reference the data source
+      //  'layout': {},
+      //  'paint': {
+      //      'fill-color': '#0080ff', // blue color fill
+      //      'fill-opacity': 0.5
+      //  }
+      //});
+
+      map.current.addLayer({
+        'id': 'parks-layer',
+        'type': 'fill',
+        'source': {
+            'type': 'geojson',
+            'data': 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/ArcGIS/rest/services/Tax_Blocks_(geojson)/FeatureServer/0/query?where=1%3D1&outSR=4326&f=pgeojson'
+        },
+        'paint': {
+            'fill-color': 'rgba(200, 100, 240, 0.3)',
+            'fill-outline-color': 'rgba(200, 100, 240, 1)'
+        }
+    });
 
       map.current.addSource("locations", {
         type: "geojson",
