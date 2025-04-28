@@ -215,8 +215,8 @@ export default function Map( {locations, mode, testLat, testLng, selectionCoordi
               'match',
               ['get', 'SURFOWNER'],
               'Sealaska',
-              'rgba(200, 100, 240, 0.3)',
-              'rgba(250, 100, 100, 0.3)'
+              'rgba(200, 100, 240, 0.2)',
+              'rgba(250, 100, 100, 0.2)'
             ],
             'fill-outline-color': 
             [

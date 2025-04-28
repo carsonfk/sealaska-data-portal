@@ -162,7 +162,7 @@ export default function Home(props){
 				</div>
 				<Map locations={data} mode={mapMode} testLat={testLat} testLng={testLng} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection} onCenter={handleCenter}/>
 				<div className="options">
-					<Options />
+					<Options onReset={handleReset}/>
 				</div>
 			</div>
         </main>
