@@ -28,8 +28,16 @@ export default function ListFeatures( {locations, mode, onCenter} ) {
                 cell1.innerHTML = json[i].properties.timestamp.time + "<br>" + json[i].properties.timestamp.date;
                 cell2.innerHTML = json[i].properties.type;
                 row.addEventListener("click", (e) => {
-                    e.target.parentNode.classList.toggle("hl");
-                    onCenter(e.target.parentNode.id);
+                    let currentRow = e.target.parentNode;
+                    for (let child of table.children[0].children) {
+                        if (child.classList.contains("hl")) {
+                            if (!currentRow.classList.contains("hl")) {
+                                child.classList.toggle("hl");
+                            }
+                        }
+                    }
+                    currentRow.classList.toggle("hl");
+                    onCenter(currentRow.id);
                 });
             } else {
                 unreviewedCount++;

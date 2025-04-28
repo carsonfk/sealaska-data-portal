@@ -5,6 +5,7 @@ import ListFeatures from "../components/ListFeatures";
 import {getDatabase, ref, onValue, get, orderByChild, equalTo, query } from 'firebase/database'
 import Hero from "../components/Hero";
 import ViewContributeForm from "../components/ViewContributeForm";
+import Options from "../components/Options";
 
 export default function Home(props){
 	const [data, setData] = useState()
@@ -126,7 +127,7 @@ export default function Home(props){
 
 			let locations = JSON.parse(`[${json}]`)
 			//sorts the json (WIP)
-			if (sort == 'newest') {
+			if (sort === 'newest') {
 				let locationsSort = []; 
 				for (let i = locations.length - 1; i > -1; i--) {
 					locationsSort.push(locations[i])
@@ -161,7 +162,7 @@ export default function Home(props){
 				</div>
 				<Map locations={data} mode={mapMode} testLat={testLat} testLng={testLng} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection} onCenter={handleCenter}/>
 				<div className="options">
-					
+					<Options />
 				</div>
 			</div>
         </main>
