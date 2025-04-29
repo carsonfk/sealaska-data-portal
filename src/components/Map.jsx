@@ -10,6 +10,7 @@ export default function Map( {locations, mode, testLat, testLng, selectionCoordi
   const [lat, setLat] = useState(27);
   const [zoom, setZoom] = useState(2);
   const [featureLocations, setFeatureLocations] = useState([]);
+  const [timerID, setTimerID] = useState(1);
   const [marker, setMarker] = useState(new mapboxgl.Marker({
     id: 'marker',
     draggable: true
@@ -20,13 +21,22 @@ export default function Map( {locations, mode, testLat, testLng, selectionCoordi
   });
 
   let coordinates;
+  let update = document.getElementById("update");
 
   useEffect(() => {
     if (locations) {
-      let update = document.getElementById("update");
-      update.classList.toggle("hide");
+      setTimerID(timerID + 1);
+      let localID = timerID;
+      console.log("timer " + localID);
+      if (!update.classList.contains("hide")) {
+        update.classList.toggle("hide");
+        update.classList.toggle("hide");
+      } else {
+        update.classList.toggle("hide");
+      }
       setTimeout(() => {
-        if (!update.classList.contains("hide")) {
+        console.log("global: " + timerID + ", local: " + localID)
+        if (!update.classList.contains("hide") && timerID === localID) {
           update.classList.toggle("hide");
         }
       }, 7000);
