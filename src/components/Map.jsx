@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, useCallback } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-export default function Map( {locations, mode, testLat, testLng, selectionCoordinates, onSelect}) {
+export default function Map( {locations, mode, target, selectionCoordinates, onSelect}) {
   //let locations = props.locations;
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -15,28 +15,28 @@ export default function Map( {locations, mode, testLat, testLng, selectionCoordi
     id: 'marker',
     draggable: true
   }));
-  const popup = new mapboxgl.Popup({
+  const [popup, setPopup] = useState(new mapboxgl.Popup({
     closeButton: false,
     closeOnClick: false,
-  });
+  }));
 
   let coordinates;
 
   useEffect(() => {
     if (locations) {
       let update = document.getElementById("update");
-      if (!update.classList.contains("hide")) { // case 1: popup is visible because of recent refresh -> reset popup
+      if (!update.classList.contains("hide")) { // case 1: update msg is visible because of recent refresh -> reset popup
         update.classList.toggle("hide");
         setTimeout(() => {
           update.classList.toggle("hide");
         }, 100)
-      } else { // case 2: popup is hidden -> make visible
+      } else { // case 2: update msg is hidden -> make visible
         update.classList.toggle("hide");
       }
-      if (timer.length !== 0) { //restart popup hide timer if ongoing
+      if (timer.length !== 0) { //restart update msg hide timer if ongoing
         clearTimeout(timer);
       }
-      setTimer(setTimeout(() => { //set popup hide timer
+      setTimer(setTimeout(() => { //set update msg hide timer
         if (!update.classList.contains("hide")) {
           update.classList.toggle("hide");
         }
@@ -117,14 +117,34 @@ export default function Map( {locations, mode, testLat, testLng, selectionCoordi
   }, [selectionCoordinates]); //fires whenever a coordinate is changed
 
   useEffect(() => {
-    if (testLat && testLng) {
-      map.current.flyTo({center: [testLng, testLat],
-        essential: true, duration: 3000})
-      //setLng(-134.5);
-      //setLat(57.2);
-      //setZoom(6.0);
+    if (target) {
+      console.log (target)
+      if (target !== -1) {
+        const coordinates = featureLocations[target].geometry.coordinates.slice();
+        const type = featureLocations[target].properties.type.charAt(0).toUpperCase()
+          + featureLocations[target].properties.type.slice(1);
+        const details = featureLocations[target].properties.details;
+
+        map.current.flyTo({center: [coordinates[0], coordinates[1]],
+          essential: true, duration: 3000})
+
+        //console.log(coordinates, [lng, lat]);
+        if (coordinates == [lng, lat]) {
+          console.log("hiiii");
+        }
+        popup
+          .setLngLat(coordinates)
+          .setHTML("<strong><h2>" + type + "</h2></strong>" + details)
+          .addTo(map.current);
+
+        setLng(coordinates[0]);
+        setLat(coordinates[1]);
+        //setZoom(6.0);
+      } else {
+        popup.remove();
+      }
     }
-  }, [testLat, testLng])
+  }, [target])
 
   mapboxgl.accessToken =
     "pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw";
@@ -280,9 +300,9 @@ export default function Map( {locations, mode, testLat, testLng, selectionCoordi
       const reviewed = point.features[0].properties.reviewed === "true";
 
 
-      while (Math.abs(point.lngLat.lng - coordinates[0]) > 180) {
-        coordinates[0] += point.lngLat.lng > coordinates[0] ? 360 : -360;
-      }
+      //while (Math.abs(point.lngLat.lng - coordinates[0]) > 180) {
+      //  coordinates[0] += point.lngLat.lng > coordinates[0] ? 360 : -360;
+      //}
 
       if (reviewed) {
         popup
@@ -292,7 +312,7 @@ export default function Map( {locations, mode, testLat, testLng, selectionCoordi
       } else {
         popup
           .setLngLat(coordinates)
-          .setHTML("<strong><p>This POI is awaiting manual review</p></strong>")
+          .setHTML("<strong><p>Awaiting manual review</p></strong>")
           .addTo(map.current);
       }
     });

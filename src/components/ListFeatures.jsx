@@ -33,11 +33,16 @@ export default function ListFeatures( {locations, mode, onCenter} ) {
                         if (child.classList.contains("hl")) {
                             if (!currentRow.classList.contains("hl")) {
                                 child.classList.toggle("hl");
+                                console.log("hello");
                             }
                         }
                     }
                     currentRow.classList.toggle("hl");
-                    onCenter(currentRow.id);
+                    if (currentRow.classList.contains("hl")) {
+                        onCenter(currentRow.id); // sends current highlighted row id
+                    } else {
+                        onCenter(-1); // no row is highlighted
+                    }
                 });
             } else {
                 unreviewedCount++;

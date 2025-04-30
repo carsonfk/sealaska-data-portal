@@ -135,7 +135,11 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
                         <label htmlFor="sealaska">For Sealaska use only: </label>
                         <input style={{width: '20px', height: '20px', marginRight: '10px' }} type="radio" className="sharing" id="sealaska" name="sharing-type" value="sealaska" onChange={(e) => updateForm({ sharing: "sealaska" })}/>
                     </div>
-
+                    <br></br>
+                    <div>
+                        <label for="image">{"Choose a photo (optional):"}</label>
+                        <input type="file" id="image" name="image" accept="image/png, image/jpeg" />
+                    </div>
                     <button className="addLocation" type="submit">Submit your Location</button>
                 </form>
             </div>

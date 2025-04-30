@@ -9,8 +9,7 @@ import Options from "../components/Options";
 
 export default function Home(props){
 	const [data, setData] = useState()
-	const [testLng, setTestLng] = useState();
-	const [testLat, setTestLat] = useState();
+	const [target, setTarget] = useState();
 	//const [filter, setFilter] = useState('null')
 	const [sort, setSort] = useState('newest');
 	const [reset, setReset] = useState(0);
@@ -90,8 +89,7 @@ export default function Home(props){
 	}
 
 	const handleCenter = (id) => { //from listfeatures jsx - updates map center
-		setTestLat(data[id].geometry.coordinates[1]);
-		setTestLng(data[id].geometry.coordinates[0]);
+		setTarget(id);
 	}
 	
 	useEffect(()=>{ //this pulls data from the database on reset
@@ -160,7 +158,7 @@ export default function Home(props){
 					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits} onReset={handleReset}/>
 					<ListFeatures locations={data} mode={mapMode} onCenter={handleCenter}/>
 				</div>
-				<Map locations={data} mode={mapMode} testLat={testLat} testLng={testLng} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection} onCenter={handleCenter}/>
+				<Map locations={data} mode={mapMode} target={target} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection} onCenter={handleCenter}/>
 				<div className="options">
 					<Options onReset={handleReset}/>
 				</div>
