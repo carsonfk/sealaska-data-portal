@@ -10,7 +10,7 @@ export default function Map( {locations, mode, testLat, testLng, selectionCoordi
   const [lat, setLat] = useState(27);
   const [zoom, setZoom] = useState(2);
   const [featureLocations, setFeatureLocations] = useState([]);
-  const [timerID, setTimerID] = useState(1);
+  const [timer, setTimer] = useState([]);
   const [marker, setMarker] = useState(new mapboxgl.Marker({
     id: 'marker',
     draggable: true
@@ -21,25 +21,26 @@ export default function Map( {locations, mode, testLat, testLng, selectionCoordi
   });
 
   let coordinates;
-  let update = document.getElementById("update");
 
   useEffect(() => {
     if (locations) {
-      setTimerID(timerID + 1);
-      let localID = timerID;
-      console.log("timer " + localID);
-      if (!update.classList.contains("hide")) {
+      let update = document.getElementById("update");
+      if (!update.classList.contains("hide")) { // case 1: popup is visible because of recent refresh -> reset popup
         update.classList.toggle("hide");
-        update.classList.toggle("hide");
-      } else {
+        setTimeout(() => {
+          update.classList.toggle("hide");
+        }, 100)
+      } else { // case 2: popup is hidden -> make visible
         update.classList.toggle("hide");
       }
-      setTimeout(() => {
-        console.log("global: " + timerID + ", local: " + localID)
-        if (!update.classList.contains("hide") && timerID === localID) {
+      if (timer.length !== 0) { //restart popup hide timer if ongoing
+        clearTimeout(timer);
+      }
+      setTimer(setTimeout(() => { //set popup hide timer
+        if (!update.classList.contains("hide")) {
           update.classList.toggle("hide");
         }
-      }, 7000);
+      }, 7000));
       setFeatureLocations(locations); //setState of features to jsonified features
     }
   }, [locations]); //fire this whenever the features put into the map change
