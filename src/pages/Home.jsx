@@ -84,12 +84,16 @@ export default function Home(props){
         setCurrentSelection([coordinates, 'box']);
     }
 
-	const handleReset = () => {
-		setReset((reset) => reset + 1);
+	const handleTemp = (id) => { //from map jsx - updates map center
+		setTarget(id);
 	}
 
 	const handleCenter = (id) => { //from listfeatures jsx - updates map center
 		setTarget(id);
+	}
+
+	const handleReset = () => {
+		setReset((reset) => reset + 1);
 	}
 	
 	useEffect(()=>{ //this pulls data from the database on reset
@@ -156,9 +160,9 @@ export default function Home(props){
 					<Hero scrollToMap={scrollToMap}/>
 					<ViewContributeForm onSubmit={handleFormSubmit} />
 					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits} onReset={handleReset}/>
-					<ListFeatures locations={data} mode={mapMode} onCenter={handleCenter}/>
+					<ListFeatures locations={data} mode={mapMode} target={target} onCenter={handleCenter}/>
 				</div>
-				<Map locations={data} mode={mapMode} target={target} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection} onCenter={handleCenter}/>
+				<Map locations={data} mode={mapMode} target={target} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection} onTemp={handleTemp}/>
 				<div className="options">
 					<Options onReset={handleReset}/>
 				</div>

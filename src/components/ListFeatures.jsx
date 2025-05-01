@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import $ from 'jquery';
 //import { getDatabase, ref, set as firebaseSet, push } from 'firebase/database'
 //import FilterForm from './FilterForm'
 
-export default function ListFeatures( {locations, mode, onCenter} ) {
+export default function ListFeatures( {locations, mode, onCenter, target} ) {
     const [ratio, setRatio] = useState([0,0]);
 
-    function updateTable() { //repopulates the table with available data
+    function buildTable() { //populates the table with available data
         let reviewedCount = 0;
         let unreviewedCount = 0;
         let json = locations; // revisit
@@ -51,12 +51,32 @@ export default function ListFeatures( {locations, mode, onCenter} ) {
         setRatio([reviewedCount, unreviewedCount]);
     }
 
+    function updateTableHL(id) {
+        let table = document.getElementsByTagName("table")[0];
+
+        //for (let child of table.children[0].children) {
+        //    if (child.classList.contains("hl")) {
+        //        child.classList.toggle("hl");
+                //if (!currentRow.classList.contains("hl")) {
+                //    child.classList.toggle("hl");
+                //    console.log("hello");
+                //}
+        //    }
+        //}
+    }
+
     useEffect(() => {
         if (locations && mode === 'view') {
-            updateTable();
+            buildTable();
         }
     }, [locations, mode]); //fire this whenever the features put into the map change or the mode changes
     
+    useEffect(() => {
+        if (target) {
+            updateTableHL(target)
+        }
+    }, [target])
+
     if (mode === 'view') {
         return (
             <div className="list-location">

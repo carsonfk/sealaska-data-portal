@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, useCallback } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-export default function Map( {locations, mode, target, selectionCoordinates, onSelect}) {
+export default function Map( {locations, mode, target, selectionCoordinates, onSelect, onTemp}) {
   //let locations = props.locations;
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -106,6 +106,9 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
           .setHTML("Awaiting manual review")
           .addTo(map.current);
       }
+      console.log("wawawa")
+      console.log(point);
+      onTemp()
     }
   const onPopupRef = useRef(onPopup);
 
@@ -113,13 +116,21 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     () => {
       map.current.getCanvas().style.cursor = "pointer"
     }
-  const popupPointerRef = useRef(popupPointer)
+  const popupPointerRef = useRef(popupPointer);
 
   const defaultPointer =
     () => {
       map.current.getCanvas().style.cursor = ""
     }
-  const defaultPointerRef = useRef(defaultPointer)
+  const defaultPointerRef = useRef(defaultPointer);
+
+  const removePopup =
+    () => {
+      popup.remove();
+      console.log("wawawa");
+      onTemp(-1);
+    }
+  const removePopupRef = useRef(removePopup);
 
   useEffect(() => {
       if (mode === 'contribute') { //stuff that happens when map is swapped to contribute mode
@@ -181,8 +192,8 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
   mapboxgl.accessToken =
     "pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw";
   useEffect(() => {
-    let temp = document.getElementById("location-close");
-    temp.addEventListener("click", () => {
+    let close = document.getElementById("location-close");
+    close.addEventListener("click", () => {
       let update = document.getElementById("update");
       update.classList.toggle("hide");
     });
@@ -324,11 +335,16 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
 
   useEffect(() => {
     if (mode === 'view') {
+      removePopupRef.current = removePopup;
+      map.current.on('click', removePopupRef.current);
       onPopupRef.current = onPopup;
       map.current.on('click', "locations_layer", onPopupRef.current);
+      popupPointerRef.current = popupPointer;
       map.current.on("mouseenter", "locations_layer", popupPointerRef.current);
+      defaultPointerRef.current = defaultPointer;
       map.current.on("mouseleave", "locations_layer", defaultPointerRef.current);
     } else {
+      map.current.off('click', removePopupRef.current);
       map.current.off('click', "locations_layer", onPopupRef.current);
       map.current.off("mouseenter", "locations_layer", popupPointerRef.current);
       map.current.off("mouseleave", "locations_layer", defaultPointerRef.current);
