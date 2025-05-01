@@ -16,12 +16,33 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     draggable: true
   }));
   const [popup, setPopup] = useState(new mapboxgl.Popup({
-    closeButton: false,
-    closeOnClick: false,
+    closeOnClick: false
   }));
-  const [visible, setVisible] = useState(false);
 
   let coordinates;
+
+  function createPopup(point) {
+    const coordinates = point.features[0].geometry.coordinates.slice();
+    const type = point.features[0].properties.type.charAt(0).toUpperCase()
+      + point.features[0].properties.type.slice(1);
+    const details = point.features[0].properties.details;
+    const reviewed = point.features[0].properties.reviewed === "true";
+
+    //while (Math.abs(point.lngLat.lng - coordinates[0]) > 180) {
+    //  coordinates[0] += point.lngLat.lng > coordinates[0] ? 360 : -360;
+    //}
+    if (reviewed) {
+      popup
+        .setLngLat(coordinates)
+        .setHTML("<strong><h2>" + type + "</h2></strong>" + details)
+        .addTo(map.current);
+    } else {
+      popup
+        .setLngLat(coordinates)
+        .setHTML("Awaiting manual review")
+        .addTo(map.current);
+    }
+  }
 
   useEffect(() => {
     if (locations) {
@@ -129,21 +150,16 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
           essential: true, duration: 3000})
 
         //console.log(coordinates, [lng, lat]);
-        if (coordinates == [lng, lat]) {
-          console.log("hiiii");
-        }
         popup
           .setLngLat(coordinates)
           .setHTML("<strong><h2>" + type + "</h2></strong>" + details)
           .addTo(map.current);
-        setVisible(true);
 
         setLng(coordinates[0]);
         setLat(coordinates[1]);
         //setZoom(6.0);
       } else {
         popup.remove();
-        setVisible(false);
       }
     }
   }, [target])
@@ -294,68 +310,12 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     //cursor becomes pointer when entering feature
     map.current.on("mouseenter", "locations_layer", (point) => {
       map.current.getCanvas().style.cursor = "pointer";
-      const coordinates = point.features[0].geometry.coordinates.slice();
-      const type = point.features[0].properties.type.charAt(0).toUpperCase()
-        + point.features[0].properties.type.slice(1);
-      const details = point.features[0].properties.details;
-      const reviewed = point.features[0].properties.reviewed === "true";
-
-      //while (Math.abs(point.lngLat.lng - coordinates[0]) > 180) {
-      //  coordinates[0] += point.lngLat.lng > coordinates[0] ? 360 : -360;
-      //}
-      if (reviewed) {
-        popup
-          .setLngLat(coordinates)
-          .setHTML("<strong><h2>" + type + "</h2></strong>" + details)
-          .addTo(map.current);
-      } else {
-        popup
-          .setLngLat(coordinates)
-          .setHTML("<strong><p>Awaiting manual review</p></strong>")
-          .addTo(map.current);
-      }
-      setVisible(true);
-      console.log(visible);
+      createPopup(point);
     });
 
     //add popup on click
     map.current.on("click", "locations_layer", (point) => {
-      const coordinates = point.features[0].geometry.coordinates.slice();
-      const type = point.features[0].properties.type.charAt(0).toUpperCase()
-        + point.features[0].properties.type.slice(1);
-      const details = point.features[0].properties.details;
-      const reviewed = point.features[0].properties.reviewed === "true";
-
-      if (popup.getLngLat() != undefined) {
-        console.log(coordinates);
-        console.log([popup.getLngLat().lng, popup.getLngLat().lat]);
-        if (coordinates[0] === popup.getLngLat().lng && coordinates[1] === popup.getLngLat().lat) {
-          if (visible) {
-            console.log("close?");
-            setTimeout(() => {
-              popup.remove();
-            }, 1);
-            setVisible(false);
-          } else {
-            if (reviewed) {
-              popup
-                .setLngLat(coordinates)
-                .setHTML("<strong><h2>" + type + "</h2></strong>" + details)
-                .addTo(map.current);
-            } else {
-              popup
-                .setLngLat(coordinates)
-                .setHTML("<strong><p>Awaiting manual review</p></strong>")
-                .addTo(map.current);
-            }
-            console.log("open?");
-          }
-        setVisible(true);
-        }
-      }
-      //while (Math.abs(point.lngLat.lng - coordinates[0]) > 180) {
-      //  coordinates[0] += point.lngLat.lng > coordinates[0] ? 360 : -360;
-      //}
+      createPopup(point);
     });
 
     //default cursor when leaving feature
