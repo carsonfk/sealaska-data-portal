@@ -38,7 +38,7 @@ export default function Home(props){
 
 	useInterval(() => {
 		setReset((reset) => reset + 1);
-	}, 60000);
+	}, 300000);
 
     useEffect(() => {
 		async function contributeMode() {

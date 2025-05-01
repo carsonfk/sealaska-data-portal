@@ -21,29 +21,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
 
   let coordinates;
 
-  function createPopup(point) {
-    const coordinates = point.features[0].geometry.coordinates.slice();
-    const type = point.features[0].properties.type.charAt(0).toUpperCase()
-      + point.features[0].properties.type.slice(1);
-    const details = point.features[0].properties.details;
-    const reviewed = point.features[0].properties.reviewed === "true";
-
-    //while (Math.abs(point.lngLat.lng - coordinates[0]) > 180) {
-    //  coordinates[0] += point.lngLat.lng > coordinates[0] ? 360 : -360;
-    //}
-    if (reviewed) {
-      popup
-        .setLngLat(coordinates)
-        .setHTML("<strong><h2>" + type + "</h2></strong>" + details)
-        .addTo(map.current);
-    } else {
-      popup
-        .setLngLat(coordinates)
-        .setHTML("Awaiting manual review")
-        .addTo(map.current);
-    }
-  }
-
   useEffect(() => {
     if (locations) {
       let update = document.getElementById("update");
@@ -63,6 +40,8 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
           update.classList.toggle("hide");
         }
       }, 7000));
+
+      popup.remove();
       setFeatureLocations(locations); //setState of features to jsonified features
     }
   }, [locations]); //fire this whenever the features put into the map change
@@ -80,7 +59,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         onSelect([]);
       }
     }
-
   const dragEndRef = useRef(onDragEnd);
 
   //adds or updates marker coordinates to click location
@@ -95,7 +73,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
           onSelect([coordinates.lat, coordinates.lng]);
          }
     }
-
   const addPointsRef = useRef(addPoints);
 
   //right click removes marker
@@ -105,11 +82,48 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       marker.remove();
       onSelect([]);
     }
-
   const onRightClickRef = useRef(onRightClick);
+
+  const onPopup = 
+    (point) => {
+      const coordinates = point.features[0].geometry.coordinates.slice();
+      const type = point.features[0].properties.type.charAt(0).toUpperCase()
+        + point.features[0].properties.type.slice(1);
+      const details = point.features[0].properties.details;
+      const reviewed = point.features[0].properties.reviewed === "true";
+
+      //while (Math.abs(point.lngLat.lng - coordinates[0]) > 180) {
+      //  coordinates[0] += point.lngLat.lng > coordinates[0] ? 360 : -360;
+      //}
+      if (reviewed) {
+        popup
+          .setLngLat(coordinates)
+          .setHTML("<strong><h2>" + type + "</h2></strong>" + details)
+          .addTo(map.current);
+      } else {
+        popup
+          .setLngLat(coordinates)
+          .setHTML("Awaiting manual review")
+          .addTo(map.current);
+      }
+    }
+  const onPopupRef = useRef(onPopup);
+
+  const popupPointer =
+    () => {
+      map.current.getCanvas().style.cursor = "pointer"
+    }
+  const popupPointerRef = useRef(popupPointer)
+
+  const defaultPointer =
+    () => {
+      map.current.getCanvas().style.cursor = ""
+    }
+  const defaultPointerRef = useRef(defaultPointer)
 
   useEffect(() => {
       if (mode === 'contribute') { //stuff that happens when map is swapped to contribute mode
+        //map.current.getCanvas().style.cursor = "pointer"
         addPointsRef.current = addPoints;
         map.current.on('click', addPointsRef.current);
         dragEndRef.current = onDragEnd
@@ -117,8 +131,8 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         onRightClickRef.current = onRightClick;
         marker.on('contextmenu', onRightClickRef.current);
         //setMarker(marker);
-        
       } else if (map.current && mode === 'view') { //stuff that happens when map is swapped to view mode
+        //map.current.getCanvas().style.cursor = ""
         map.current.off('click', addPointsRef.current);
         marker.off('dragend', dragEndRef.current);
         marker.remove();
@@ -232,25 +246,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         setLat(57.2);
         setZoom(6.0);
       }, 1000);
-      
-      //map.current.addSource('taxblocks', {
-      //  type: 'geojson',
-      //  data: {
-      //      type: 'FeatureCollection',
-      //      data: 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/ArcGIS/rest/services/Tax_Blocks_(geojson)/FeatureServer/0'
-      //  }
-      //});
-
-      //map.current.addLayer({
-      //  id: 'taxblocks_layer',
-      //  type: 'fill',
-      //  source: 'taxblocks', // reference the data source
-      //  'layout': {},
-      //  'paint': {
-      //      'fill-color': '#0080ff', // blue color fill
-      //      'fill-opacity': 0.5
-      //  }
-      //});
 
       map.current.addLayer({
         'id': 'taxblocks',
@@ -307,22 +302,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       });
     });
 
-    //cursor becomes pointer when entering feature
-    map.current.on("mouseenter", "locations_layer", (point) => {
-      map.current.getCanvas().style.cursor = "pointer";
-      createPopup(point);
-    });
-
-    //add popup on click
-    map.current.on("click", "locations_layer", (point) => {
-      createPopup(point);
-    });
-
-    //default cursor when leaving feature
-    map.current.on("mouseleave", "locations_layer", () => {
-      map.current.getCanvas().style.cursor = "";
-    });
-
     //redirect user to google maps for more info
     //map.current.on("click", "locations_layer", (point) => {
     //  const coordinates = point.features[0].geometry.coordinates.slice();
@@ -342,6 +321,20 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       });
     }
   }, [featureLocations]); // everytime the featureLocations state is changed
+
+  useEffect(() => {
+    if (mode === 'view') {
+      onPopupRef.current = onPopup;
+      map.current.on('click', "locations_layer", onPopupRef.current);
+      map.current.on("mouseenter", "locations_layer", popupPointerRef.current);
+      map.current.on("mouseleave", "locations_layer", defaultPointerRef.current);
+    } else {
+      map.current.off('click', "locations_layer", onPopupRef.current);
+      map.current.off("mouseenter", "locations_layer", popupPointerRef.current);
+      map.current.off("mouseleave", "locations_layer", defaultPointerRef.current);
+      popup.remove();
+    }
+  }, [mode])
 
   return (
     <>
