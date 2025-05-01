@@ -19,6 +19,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     closeButton: false,
     closeOnClick: false,
   }));
+  const [visible, setVisible] = useState(false);
 
   let coordinates;
 
@@ -118,7 +119,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
 
   useEffect(() => {
     if (target) {
-      console.log (target)
       if (target !== -1) {
         const coordinates = featureLocations[target].geometry.coordinates.slice();
         const type = featureLocations[target].properties.type.charAt(0).toUpperCase()
@@ -136,12 +136,14 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
           .setLngLat(coordinates)
           .setHTML("<strong><h2>" + type + "</h2></strong>" + details)
           .addTo(map.current);
+        setVisible(true);
 
         setLng(coordinates[0]);
         setLat(coordinates[1]);
         //setZoom(6.0);
       } else {
         popup.remove();
+        setVisible(false);
       }
     }
   }, [target])
@@ -289,21 +291,18 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       });
     });
 
-    //add popup when cursor enters feature
+    //cursor becomes pointer when entering feature
     map.current.on("mouseenter", "locations_layer", (point) => {
       map.current.getCanvas().style.cursor = "pointer";
-
       const coordinates = point.features[0].geometry.coordinates.slice();
       const type = point.features[0].properties.type.charAt(0).toUpperCase()
         + point.features[0].properties.type.slice(1);
       const details = point.features[0].properties.details;
       const reviewed = point.features[0].properties.reviewed === "true";
 
-
       //while (Math.abs(point.lngLat.lng - coordinates[0]) > 180) {
       //  coordinates[0] += point.lngLat.lng > coordinates[0] ? 360 : -360;
       //}
-
       if (reviewed) {
         popup
           .setLngLat(coordinates)
@@ -315,20 +314,61 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
           .setHTML("<strong><p>Awaiting manual review</p></strong>")
           .addTo(map.current);
       }
+      setVisible(true);
+      console.log(visible);
     });
 
-    //remove popup when cursor leaves feature
+    //add popup on click
+    map.current.on("click", "locations_layer", (point) => {
+      const coordinates = point.features[0].geometry.coordinates.slice();
+      const type = point.features[0].properties.type.charAt(0).toUpperCase()
+        + point.features[0].properties.type.slice(1);
+      const details = point.features[0].properties.details;
+      const reviewed = point.features[0].properties.reviewed === "true";
+
+      if (popup.getLngLat() != undefined) {
+        console.log(coordinates);
+        console.log([popup.getLngLat().lng, popup.getLngLat().lat]);
+        if (coordinates[0] === popup.getLngLat().lng && coordinates[1] === popup.getLngLat().lat) {
+          if (visible) {
+            console.log("close?");
+            setTimeout(() => {
+              popup.remove();
+            }, 1);
+            setVisible(false);
+          } else {
+            if (reviewed) {
+              popup
+                .setLngLat(coordinates)
+                .setHTML("<strong><h2>" + type + "</h2></strong>" + details)
+                .addTo(map.current);
+            } else {
+              popup
+                .setLngLat(coordinates)
+                .setHTML("<strong><p>Awaiting manual review</p></strong>")
+                .addTo(map.current);
+            }
+            console.log("open?");
+          }
+        setVisible(true);
+        }
+      }
+      //while (Math.abs(point.lngLat.lng - coordinates[0]) > 180) {
+      //  coordinates[0] += point.lngLat.lng > coordinates[0] ? 360 : -360;
+      //}
+    });
+
+    //default cursor when leaving feature
     map.current.on("mouseleave", "locations_layer", () => {
       map.current.getCanvas().style.cursor = "";
-      popup.remove();
     });
 
     //redirect user to google maps for more info
-    map.current.on("click", "locations_layer", (point) => {
-      const coordinates = point.features[0].geometry.coordinates.slice();
-      const url = `https://www.google.com/maps/search/?api=1&query=${coordinates[1]},${coordinates[0]}`;
-      window.open(url, "_blank");
-    });
+    //map.current.on("click", "locations_layer", (point) => {
+    //  const coordinates = point.features[0].geometry.coordinates.slice();
+    //  const url = `https://www.google.com/maps/search/?api=1&query=${coordinates[1]},${coordinates[0]}`;
+    //  window.open(url, "_blank");
+    //});
   }, []);
 
   useEffect(() => {
