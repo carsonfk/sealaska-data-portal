@@ -16,7 +16,6 @@ import { getAnalytics } from "firebase/analytics";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-
 const firebaseConfig = {
   apiKey: "AIzaSyCqqzFtIBrtnZIMhUonX1wovD5ugYbQ5U0",
   authDomain: "sealaska-data-portal.firebaseapp.com",

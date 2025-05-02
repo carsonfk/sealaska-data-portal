@@ -40,7 +40,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
       }, [mode]); //fire this whenever the mode changes
 
     useEffect(() => {
-        if (selectionCoordinates[1] === "map") {
+        if (selectionCoordinates[1] === 'map') {
             if (selectionCoordinates[0].length === 0) {
                 updateForm({ latitude: "", 
                             longitude: "" });
@@ -56,7 +56,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
         e.preventDefault();
         if (form.latitude !== "" && form.longitude !== "" && form.type !== "" && form.details !== "") {
             const db = getDatabase();
-            const locRef = ref(db, "features")
+            const locRef = ref(db, "features");
             const newLoc = { ...form, timestamp: getTimestampAK()};
             console.log(newLoc);
             const newLocRef = push(locRef, newLoc);
@@ -86,7 +86,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
                         className="location"
                         id="latitude"
                         name="latitude"
-                        value={parseFloat(form.latitude).toFixed(6)}
+                        value={parseFloat(parseFloat(form.latitude).toFixed(6))}
                         onChange={(e) => {
                             onEdit([e.target.value, form.longitude]);
                             updateForm({ latitude: e.target.value });
@@ -103,7 +103,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
                         className="location"
                         id="longitude"
                         name="longitude"
-                        value={parseFloat(form.longitude).toFixed(6)}
+                        value={parseFloat(parseFloat(form.longitude).toFixed(6))}
                         onChange={(e) => {
                             onEdit([form.latitude, e.target.value]);
                             updateForm({ longitude: e.target.value });

@@ -22,7 +22,7 @@ export default function ListFeatures( {locations, mode, onCenter, target} ) {
             if (reviewed) {
                 reviewedCount++;
                 row = table.insertRow(-1);
-                row.id = i;
+                row.id = json[i].id;
                 cell1 = row.insertCell(0);
                 cell2 = row.insertCell(1);
                 cell1.innerHTML = json[i].properties.timestamp.time + "<br>" + json[i].properties.timestamp.date;
@@ -33,7 +33,6 @@ export default function ListFeatures( {locations, mode, onCenter, target} ) {
                         if (child.classList.contains("hl")) {
                             if (!currentRow.classList.contains("hl")) {
                                 child.classList.toggle("hl");
-                                console.log("hello");
                             }
                         }
                     }
@@ -53,16 +52,13 @@ export default function ListFeatures( {locations, mode, onCenter, target} ) {
 
     function updateTableHL(id) {
         let table = document.getElementsByTagName("table")[0];
-
-        //for (let child of table.children[0].children) {
-        //    if (child.classList.contains("hl")) {
-        //        child.classList.toggle("hl");
-                //if (!currentRow.classList.contains("hl")) {
-                //    child.classList.toggle("hl");
-                //    console.log("hello");
-                //}
-        //    }
-        //}
+        for (let child of table.children[0].children) {
+            if (child.classList.contains("hl") && id !== parseInt(child.id)) {
+                child.classList.toggle("hl");
+            } else if (!child.classList.contains("hl") && id === parseInt(child.id)) {
+                child.classList.toggle("hl");
+            }
+        }
     }
 
     useEffect(() => {
@@ -72,8 +68,8 @@ export default function ListFeatures( {locations, mode, onCenter, target} ) {
     }, [locations, mode]); //fire this whenever the features put into the map change or the mode changes
     
     useEffect(() => {
-        if (target) {
-            updateTableHL(target)
+        if (target[1] === 'map') {
+            updateTableHL(target[0]);
         }
     }, [target])
 

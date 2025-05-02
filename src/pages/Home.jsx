@@ -9,7 +9,7 @@ import Options from "../components/Options";
 
 export default function Home(props){
 	const [data, setData] = useState()
-	const [target, setTarget] = useState();
+	const [target, setTarget] = useState([null, 'none']);
 	//const [filter, setFilter] = useState('null')
 	const [sort, setSort] = useState('newest');
 	const [reset, setReset] = useState(0);
@@ -85,24 +85,25 @@ export default function Home(props){
     }
 
 	const handleTemp = (id) => { //from map jsx - updates map center
-		setTarget(id);
+		setTarget([id, 'map']);
 	}
 
 	const handleCenter = (id) => { //from listfeatures jsx - updates map center
-		setTarget(id);
+		setTarget([id, 'list']);
 	}
 
 	const handleReset = () => {
 		setReset((reset) => reset + 1);
 	}
 	
-	useEffect(()=>{ //this pulls data from the database on reset
+	useEffect(()=>{ //this pulls data from the database on inital load and reset
 		async function resetLoad() {
 			const db = getDatabase();
 			const locRef = ref(db, "features");
 			const dbFeatures = await get(locRef);
 
 			let json = []; // create an empty array to add all the new geoJSON stuff
+			let localID = 0;
 			dbFeatures.forEach((row) => {
 				// for every feature, create a geoJSON format object and add it to the newLocations arr
 				const newLoc = `{"type":"Feature","properties":{"type":"${
@@ -122,17 +123,17 @@ export default function Home(props){
 				}"}},"geometry":{"type":"Point","coordinates":[${
 					row.val().longitude},${
 					row.val().latitude
-				}]}}`;
-				//console.log(newLoc);
+				}]},"id": ${localID}}`;
 				json.push(newLoc);
+				localID++;
 			});
 
-			let locations = JSON.parse(`[${json}]`)
+			let locations = JSON.parse(`[${json}]`);
 			//sorts the json (WIP)
 			if (sort === 'newest') {
 				let locationsSort = []; 
 				for (let i = locations.length - 1; i > -1; i--) {
-					locationsSort.push(locations[i])
+					locationsSort.push(locations[i]);
 				}
 				locations = locationsSort;
 			}
@@ -140,7 +141,7 @@ export default function Home(props){
 		}
 		resetLoad();
 		console.log(reset);
-	}, [reset])
+	}, [reset]);
 
 	const scrollToMap = () => { //no longer functional or needed
 		if (mapRef.current) {

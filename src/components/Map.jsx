@@ -16,7 +16,8 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     draggable: true
   }));
   const [popup, setPopup] = useState(new mapboxgl.Popup({
-    closeOnClick: false
+    closeOnClick: false,
+    closeButton: false
   }));
 
   let coordinates;
@@ -86,6 +87,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
 
   const onPopup = 
     (point) => {
+      const id = point.features[0].id;
       const coordinates = point.features[0].geometry.coordinates.slice();
       const type = point.features[0].properties.type.charAt(0).toUpperCase()
         + point.features[0].properties.type.slice(1);
@@ -106,31 +108,36 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
           .setHTML("Awaiting manual review")
           .addTo(map.current);
       }
-      console.log("wawawa")
-      console.log(point);
-      onTemp()
+      onTemp(id);
+      //console.log(point);
     }
   const onPopupRef = useRef(onPopup);
 
   const popupPointer =
     () => {
-      map.current.getCanvas().style.cursor = "pointer"
+      map.current.getCanvas().style.cursor = "pointer";
     }
   const popupPointerRef = useRef(popupPointer);
 
   const defaultPointer =
     () => {
-      map.current.getCanvas().style.cursor = ""
+      map.current.getCanvas().style.cursor = "";
     }
   const defaultPointerRef = useRef(defaultPointer);
 
   const removePopup =
     () => {
-      popup.remove();
-      console.log("wawawa");
+      console.log('hi');
       onTemp(-1);
+      popup.remove();
     }
   const removePopupRef = useRef(removePopup);
+
+  //const removePopupTest =
+  //  () => {
+  //    console.log('hello');
+  //  }
+  //const removePopupRefTest = useRef(removePopupTest);
 
   useEffect(() => {
       if (mode === 'contribute') { //stuff that happens when map is swapped to contribute mode
@@ -164,12 +171,18 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
   }, [selectionCoordinates]); //fires whenever a coordinate is changed
 
   useEffect(() => {
-    if (target) {
-      if (target !== -1) {
-        const coordinates = featureLocations[target].geometry.coordinates.slice();
-        const type = featureLocations[target].properties.type.charAt(0).toUpperCase()
-          + featureLocations[target].properties.type.slice(1);
-        const details = featureLocations[target].properties.details;
+    if (target[1] === 'list') {
+      if (target[0] !== -1) {
+        let targetFeature;
+        for (let i = 0; i < featureLocations.length; i++) {
+          if (featureLocations[i].id === parseInt(target[0])) {
+            targetFeature = featureLocations[i];
+          }
+        }
+        const coordinates = targetFeature.geometry.coordinates.slice();
+        const type = targetFeature.properties.type.charAt(0).toUpperCase()
+          + targetFeature.properties.type.slice(1);
+        const details = targetFeature.properties.details;
 
         map.current.flyTo({center: [coordinates[0], coordinates[1]],
           essential: true, duration: 3000})
@@ -179,7 +192,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
           .setLngLat(coordinates)
           .setHTML("<strong><h2>" + type + "</h2></strong>" + details)
           .addTo(map.current);
-
+        
         setLng(coordinates[0]);
         setLat(coordinates[1]);
         //setZoom(6.0);
@@ -187,7 +200,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         popup.remove();
       }
     }
-  }, [target])
+  }, [target]);
 
   mapboxgl.accessToken =
     "pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw";
@@ -337,6 +350,8 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     if (mode === 'view') {
       removePopupRef.current = removePopup;
       map.current.on('click', removePopupRef.current);
+      //removePopupRefTest.current = removePopupTest;
+      //popup.on('close', removePopupRefTest.current);
       onPopupRef.current = onPopup;
       map.current.on('click', "locations_layer", onPopupRef.current);
       popupPointerRef.current = popupPointer;
