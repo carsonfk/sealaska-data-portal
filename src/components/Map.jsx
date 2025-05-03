@@ -22,6 +22,24 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
 
   let coordinates;
 
+  function buildPopup(id, coordinates, type, details, reviewed, img) {
+    if (reviewed) {
+      if (img !== "") {
+        img = img + "<br>";
+      }
+      popup
+        .setLngLat(coordinates)
+        .setHTML("<strong><h2>" + type + "</h2></strong>" + img + details)
+        .addTo(map.current);
+    } else {
+      popup
+        .setLngLat(coordinates)
+        .setHTML("Awaiting manual review")
+        .addTo(map.current);
+    }
+    onTemp(id);
+  }
+
   useEffect(() => {
     if (locations) {
       let update = document.getElementById("update");
@@ -94,23 +112,18 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       const details = point.features[0].properties.details;
       const reviewed = point.features[0].properties.reviewed === "true";
 
-      //while (Math.abs(point.lngLat.lng - coordinates[0]) > 180) {
-      //  coordinates[0] += point.lngLat.lng > coordinates[0] ? 360 : -360;
-      //}
-      if (reviewed) {
-        popup
-          .setLngLat(coordinates)
-          .setHTML("<strong><h2>" + type + "</h2></strong>" + details)
-          .addTo(map.current);
+      if (point.features[0].properties.image !== "") {
+        const img = new Image();
+        img.src = point.features[0].properties.image;
+        img.onload = () => { // Perform actions with the loaded image
+          const imgStr = img.outerHTML;
+          buildPopup(id, coordinates, type, details, reviewed, imgStr)
+        }
       } else {
-        popup
-          .setLngLat(coordinates)
-          .setHTML("Awaiting manual review")
-          .addTo(map.current);
+        buildPopup(id, coordinates, type, details, reviewed, "")
       }
-      onTemp(id);
-      //console.log(point);
-    }
+    };
+    
   const onPopupRef = useRef(onPopup);
 
   const popupPointer =
@@ -127,7 +140,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
 
   const removePopup =
     () => {
-      console.log('hi');
       onTemp(-1);
       popup.remove();
     }
@@ -179,19 +191,25 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
             targetFeature = featureLocations[i];
           }
         }
+        const id = targetFeature.id;
         const coordinates = targetFeature.geometry.coordinates.slice();
         const type = targetFeature.properties.type.charAt(0).toUpperCase()
           + targetFeature.properties.type.slice(1);
         const details = targetFeature.properties.details;
-
+        
         map.current.flyTo({center: [coordinates[0], coordinates[1]],
           essential: true, duration: 3000})
 
-        //console.log(coordinates, [lng, lat]);
-        popup
-          .setLngLat(coordinates)
-          .setHTML("<strong><h2>" + type + "</h2></strong>" + details)
-          .addTo(map.current);
+        if (targetFeature.properties.image !== "") {
+          const img = new Image();
+          img.src = targetFeature.properties.image;
+          img.onload = () => { // Perform actions with the loaded image
+            const imgStr = img.outerHTML;
+            buildPopup(id, coordinates, type, details, true, imgStr)
+          }
+        } else {
+          buildPopup(id, coordinates, type, details, true, "")
+        }
         
         setLng(coordinates[0]);
         setLat(coordinates[1]);
@@ -374,7 +392,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         <div id="info">Hover to see coordinates!</div>
         <div id="update" className="hide">
           <div id="location-msg">Locations Updated</div>
-          
           <div id="location-close">CLOSE</div>
         </div>
       </div>

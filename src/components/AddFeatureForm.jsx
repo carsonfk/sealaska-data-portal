@@ -13,6 +13,23 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
         reviewed: false
     });
 
+    useEffect(() => {
+        console.log(form)
+    }, [form]);
+
+    function imageToBase64(img) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+              resolve(reader.result);
+            };
+            reader.onerror = (error) => {
+              reject(error);
+            };
+            reader.readAsDataURL(img);
+          });
+    }
+
     function getTimestampAK() {
         const timestamp = new Date(); // Current date and time
 
@@ -34,10 +51,22 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
     }
 
     useEffect(() => {
-          if (mode === 'view') { //clears form when swapped to view mode
+        if (mode === 'view') { //clears form when swapped to view mode
             updateForm({ type: "", details: "" });
-          }
-      }, [mode]); //fire this whenever the mode changes
+        } else {
+            document.getElementById('image').addEventListener('change', async (event) => {
+                const file = event.target.files[0];
+                try {
+                    const base64String = await imageToBase64(file);
+                    console.log('Base64 string:', base64String);
+                    updateForm({ image: base64String });
+
+                } catch (error) {
+                    console.error('Error converting image to Base64:', error);
+                }
+            });
+        }
+    }, [mode]); //fire this whenever the mode changes
 
     useEffect(() => {
         if (selectionCoordinates[1] === 'map') {
@@ -138,7 +167,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
                     <br></br>
                     <div>
                         <label for="image">{"Choose a photo (optional):"}</label>
-                        <input type="file" id="image" name="image" accept="image/png, image/jpeg" />
+                        <input type="file" id="image" name="image" accept="image/png, image/jpeg"/>
                     </div>
                     <button className="addLocation" type="submit">Submit your Location</button>
                 </form>

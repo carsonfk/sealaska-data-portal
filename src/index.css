@@ -101,7 +101,7 @@ input[type=checkbox]:checked + label {
   text-align: center;
   background: linear-gradient(to bottom, beige, white);
   z-index: 5;
-  box-shadow:0 0 2px #000c;
+  box-shadow: 0 0 3px #000c;
 }
 
 #update {
@@ -153,6 +153,11 @@ input[type=checkbox]:checked + label {
   left: 0;
   width: 10%;
   height: 10%;
+}
+
+img {
+  width: 200px;
+  margin: 0 auto;
 }
 
 /* options */
