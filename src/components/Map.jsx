@@ -22,14 +22,15 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
 
   let coordinates;
 
-  function buildPopup(id, coordinates, type, details, reviewed, img) {
+  //constructs popup using provided parameters
+  function buildPopup(id, coordinates, type, details, reviewed, timestamp, img) {
     if (reviewed) {
-      if (img !== "") {
-        img = img + "<br>";
-      }
+      //if (img !== "") {
+      //  img = img + "<br>";
+      //}
       popup
         .setLngLat(coordinates)
-        .setHTML("<strong><h2>" + type + "</h2></strong>" + img + details)
+        .setHTML("<strong><h2>" + type + "</h2></strong>" + img + "<h6>" + details + "</h6>" + "<p>" + timestamp.time + " · " + timestamp.date + "</p>")
         .addTo(map.current);
     } else {
       popup
@@ -111,16 +112,17 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         + point.features[0].properties.type.slice(1);
       const details = point.features[0].properties.details;
       const reviewed = point.features[0].properties.reviewed === "true";
+      const timestamp = JSON.parse(point.features[0].properties.timestamp);
 
       if (point.features[0].properties.image !== "") {
         const img = new Image();
         img.src = point.features[0].properties.image;
         img.onload = () => { // Perform actions with the loaded image
           const imgStr = img.outerHTML;
-          buildPopup(id, coordinates, type, details, reviewed, imgStr)
+          buildPopup(id, coordinates, type, details, reviewed, timestamp, imgStr)
         }
       } else {
-        buildPopup(id, coordinates, type, details, reviewed, "")
+        buildPopup(id, coordinates, type, details, reviewed, timestamp, "")
       }
     };
     
@@ -196,6 +198,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         const type = targetFeature.properties.type.charAt(0).toUpperCase()
           + targetFeature.properties.type.slice(1);
         const details = targetFeature.properties.details;
+        const timestamp = targetFeature.properties.timestamp;
         
         map.current.flyTo({center: [coordinates[0], coordinates[1]],
           essential: true, duration: 3000})
@@ -205,10 +208,10 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
           img.src = targetFeature.properties.image;
           img.onload = () => { // Perform actions with the loaded image
             const imgStr = img.outerHTML;
-            buildPopup(id, coordinates, type, details, true, imgStr)
+            buildPopup(id, coordinates, type, details, true, timestamp, imgStr)
           }
         } else {
-          buildPopup(id, coordinates, type, details, true, "")
+          buildPopup(id, coordinates, type, details, true, timestamp, "")
         }
         
         setLng(coordinates[0]);
@@ -364,6 +367,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     }
   }, [featureLocations]); // everytime the featureLocations state is changed
 
+  //note: consider moving this section
   useEffect(() => {
     if (mode === 'view') {
       removePopupRef.current = removePopup;
