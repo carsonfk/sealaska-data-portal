@@ -90,8 +90,9 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
             console.log(newLoc);
             const newLocRef = push(locRef, newLoc);
             updateForm({ latitude: "", longitude: "",
-                type: "", details: "" });
+                type: "", details: "", image: "" });
             onEdit(["", ""]);
+            document.getElementById('image').value = "";
             onReset();
         } else {
             //test error message
@@ -166,7 +167,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
                     </div>
                     <br></br>
                     <div>
-                        <label for="image">{"Choose a photo (optional):"}</label>
+                        <label for="image">Choose a photo (optional):</label>
                         <input type="file" id="image" name="image" accept="image/png, image/jpeg"/>
                     </div>
                     <button className="addLocation" type="submit">Submit your Location</button>
