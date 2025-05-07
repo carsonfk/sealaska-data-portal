@@ -9,8 +9,7 @@ export default function About(props){
             </header>
             
             <main>
-                
-                <div className="content">
+                <div id = "about" className="content">
                     
                 </div>
             </main>

@@ -4,12 +4,12 @@ body {
   font-family: "Roboto", Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f9f9f9;
+  background: #f9f9f9;
   color: #333;
 }
 
 nav {
-  background-color: black;
+  background: black;
   color: #fff;
   padding: 7px 20px;
   z-index: 5;
@@ -22,6 +22,7 @@ nav {
   justify-content: space-between;
   align-items: center;
   justify-self: center;
+  max-width: 85vw;
   width: 1392px;
 }
 
@@ -295,4 +296,9 @@ tr.hl {
 
 .location{
   max-width: 113px;
+}
+
+/* about page */
+#about {
+  background: linear-gradient(to bottom, beige, white);
 }

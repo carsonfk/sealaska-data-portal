@@ -30,7 +30,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       //}
       popup
         .setLngLat(coordinates)
-        .setHTML("<strong><h2>" + type + "</h2></strong>" + img + "<h6>" + details + "</h6>" + "<p>" + timestamp.time + " · " + timestamp.date + "</p>")
+        .setHTML("<strong><h2>" + type + "</h2></strong>" + img + "<h6>" + details + "</h6>" + timestamp.time + " · " + timestamp.date)
         .addTo(map.current);
     } else {
       popup
