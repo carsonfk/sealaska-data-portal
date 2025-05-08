@@ -125,7 +125,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         buildPopup(id, coordinates, type, details, reviewed, timestamp, "")
       }
     };
-    
+  
   const onPopupRef = useRef(onPopup);
 
   const popupPointer =
