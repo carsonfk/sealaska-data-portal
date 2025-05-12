@@ -68,7 +68,7 @@ export default function ListFeatures( {locations, mode, onCenter, target} ) {
     }, [locations, mode]); //fire this whenever the features put into the map change or the mode changes
     
     useEffect(() => {
-        if (target[1] === 'map') {
+        if (target[1] === 'map' || target[1] === 'reset') {
             updateTableHL(target[0]);
         }
     }, [target])

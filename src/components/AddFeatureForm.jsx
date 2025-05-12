@@ -14,10 +14,6 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
         reviewed: false
     });
 
-    useEffect(() => {
-        console.log(form)
-    }, [form]);
-
     function imageToBase64(img) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();

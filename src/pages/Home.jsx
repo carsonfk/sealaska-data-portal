@@ -16,29 +16,31 @@ export default function Home(props){
     const [mapMode, setMapMode] = useState('view');
     const [currentSelection, setCurrentSelection] = useState([[], 'none']);
 	const mapRef = useRef(null);
-	const timerRef = useRef();
+	const timerRef = useRef(null);
+	const [temp, setTemp] = useState();
 
-	function useInterval(callback, delay) {
+	//function useInterval(callback, delay) {
 		// Remember the latest callback.
-		useEffect(() => {
-		    timerRef.current = callback;
-		}, [callback]);
+	//	useEffect(() => {
+	//	    timerRef.current = callback;
+	//	}, [callback]);
 
 		// Set up the interval.
-		useEffect(() => {
-		    function tick() {
-			    timerRef.current();
-		    }
-		    if (delay !== null) {
-			    let id = setInterval(tick, delay);
-			    return () => clearInterval(id);
-		    }
-		}, [delay]);
-	}
+	//	useEffect(() => {
+	//	    function tick() {
+	//		    timerRef.current();
+	//	    }
+	//	    if (delay !== null) {
+	//		    let id = setInterval(tick, delay);
+				//setTemp(id);
+	//		    return () => clearInterval(id);
+	//	    }
+	//	}, [delay]);
+	//}
 
-	useInterval(() => {
-		setReset((reset) => reset + 1);
-	}, 300000);
+	//useInterval(() => {
+	//	setReset((reset) => reset + 1);
+	//}, 5000);
 
     useEffect(() => {
 		async function contributeMode() {
@@ -138,9 +140,19 @@ export default function Home(props){
 				locations = locationsSort;
 			}
 			setData(locations);
+			if(reset !== 0) {
+				setTimeout(() => {
+					setTarget([target[0], 'reset']);
+				}, 150);
+			}
 		}
 		resetLoad();
 		console.log(reset);
+
+		clearTimeout(temp);
+		setTemp(setTimeout(() => {
+			setReset((reset) => reset + 1);
+		}, 300000));
 	}, [reset]);
 
 	const scrollToMap = () => { //no longer functional or needed

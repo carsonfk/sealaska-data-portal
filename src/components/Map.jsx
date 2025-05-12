@@ -3,7 +3,6 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 export default function Map( {locations, mode, target, selectionCoordinates, onSelect, onTemp}) {
-  //let locations = props.locations;
   const mapContainer = useRef(null);
   const map = useRef(null);
   const [lng, setLng] = useState(-103);
@@ -20,14 +19,41 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     closeButton: false
   }));
 
-  let coordinates;
+  //begins popup construction with or without image
+  function handlePopup(feature) {
+    let id = feature.id;
+    let coordinates = feature.geometry.coordinates.slice();
+    let type = feature.properties.type.charAt(0).toUpperCase()
+      + feature.properties.type.slice(1);
+    let details = feature.properties.details;
+    let reviewed = feature.properties.reviewed === "true";
+    let timestamp = feature.properties.timestamp;
+    if (typeof timestamp === "string") {
+      timestamp = JSON.parse(timestamp);
+    }
 
-  //constructs popup using provided parameters
+    if (target[1] === 'list') {
+      map.current.flyTo({center: [coordinates[0], coordinates[1]],
+      essential: true, duration: 3000})
+      setLng(coordinates[0]);
+      setLat(coordinates[1]);
+      //setZoom(6.0);
+    }
+
+    if (feature.properties.image !== "") {
+      const img = new Image();
+      img.src = feature.properties.image;
+      img.onload = () => { // Perform actions with the loaded image
+        const imgStr = img.outerHTML;
+        buildPopup(id, coordinates, type, details, reviewed, timestamp, imgStr);
+      }
+    } else {
+      buildPopup(id, coordinates, type, details, reviewed, timestamp, "");
+    }
+  }
+  //constructs a reviewed/unreviewed popup using provided parameters
   function buildPopup(id, coordinates, type, details, reviewed, timestamp, img) {
     if (reviewed) {
-      //if (img !== "") {
-      //  img = img + "<br>";
-      //}
       popup
         .setLngLat(coordinates)
         .setHTML("<strong><h2>" + type + "</h2></strong>" + img + "<h6>" + details + "</h6>" + timestamp.time + " · " + timestamp.date)
@@ -66,6 +92,13 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     }
   }, [locations]); //fire this whenever the features put into the map change
 
+  //const onDragStart = 
+  //  () => {
+  //    setPrev(marker.getLngLat());
+  //    console.log(prev);
+  //  }
+  //const dragStartRef = useRef(onDragStart);
+
   //updates marker coordinates to drop location, or rejects drop and returns marker to existing selection
   const onDragEnd = 
     () => {
@@ -85,7 +118,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
   const addPoints = 
     (e) => {
       e.preventDefault();
-      coordinates = e.lngLat;
+      let coordinates = e.lngLat;
       if (coordinates.lat >= 54.5 && coordinates.lat <= 60 && 
          coordinates.lng >= -140 && coordinates.lng <= -130.25) {
           marker.setLngLat(coordinates).addTo(map.current);
@@ -106,24 +139,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
 
   const onPopup = 
     (point) => {
-      const id = point.features[0].id;
-      const coordinates = point.features[0].geometry.coordinates.slice();
-      const type = point.features[0].properties.type.charAt(0).toUpperCase()
-        + point.features[0].properties.type.slice(1);
-      const details = point.features[0].properties.details;
-      const reviewed = point.features[0].properties.reviewed === "true";
-      const timestamp = JSON.parse(point.features[0].properties.timestamp);
-
-      if (point.features[0].properties.image !== "") {
-        const img = new Image();
-        img.src = point.features[0].properties.image;
-        img.onload = () => { // Perform actions with the loaded image
-          const imgStr = img.outerHTML;
-          buildPopup(id, coordinates, type, details, reviewed, timestamp, imgStr)
-        }
-      } else {
-        buildPopup(id, coordinates, type, details, reviewed, timestamp, "")
-      }
+      handlePopup(point.features[0]);
     };
   
   const onPopupRef = useRef(onPopup);
@@ -185,7 +201,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
   }, [selectionCoordinates]); //fires whenever a coordinate is changed
 
   useEffect(() => {
-    if (target[1] === 'list') {
+    if (target[1] === 'list' || target[1] === 'reset') {
       if (target[0] !== -1) {
         let targetFeature;
         for (let i = 0; i < featureLocations.length; i++) {
@@ -193,30 +209,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
             targetFeature = featureLocations[i];
           }
         }
-        const id = targetFeature.id;
-        const coordinates = targetFeature.geometry.coordinates.slice();
-        const type = targetFeature.properties.type.charAt(0).toUpperCase()
-          + targetFeature.properties.type.slice(1);
-        const details = targetFeature.properties.details;
-        const timestamp = targetFeature.properties.timestamp;
-        
-        map.current.flyTo({center: [coordinates[0], coordinates[1]],
-          essential: true, duration: 3000})
-
-        if (targetFeature.properties.image !== "") {
-          const img = new Image();
-          img.src = targetFeature.properties.image;
-          img.onload = () => { // Perform actions with the loaded image
-            const imgStr = img.outerHTML;
-            buildPopup(id, coordinates, type, details, true, timestamp, imgStr)
-          }
-        } else {
-          buildPopup(id, coordinates, type, details, true, timestamp, "")
-        }
-        
-        setLng(coordinates[0]);
-        setLat(coordinates[1]);
-        //setZoom(6.0);
+        handlePopup(targetFeature);
       } else {
         popup.remove();
       }
@@ -304,16 +297,16 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
               'match',
               ['get', 'SURFOWNER'],
               'Sealaska',
-              'rgba(200, 100, 240, 0.2)',
-              'rgba(250, 100, 100, 0.2)'
+              'rgba(250, 100, 100, 0.2)',
+              'rgba(200, 100, 240, 0.2)'
             ],
             'fill-outline-color': 
             [
               'match',
               ['get', 'SURFOWNER'],
               'Sealaska',
-              'rgba(200, 100, 240, 1)',
-              'rgba(250, 100, 100, 1)'
+              'rgba(250, 100, 100, 1)',
+              'rgba(200, 100, 240, 1)'
             ],
         }
     });
@@ -342,7 +335,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
                         '#ccc',
                         'white'
                     ],
-          "circle-stroke-color": "white",
+          "circle-stroke-color": "white"
         },
       });
     });
