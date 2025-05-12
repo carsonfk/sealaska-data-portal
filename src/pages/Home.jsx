@@ -165,7 +165,7 @@ export default function Home(props){
 				</div>
 				<Map locations={data} mode={mapMode} target={target} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection} onTemp={handleTemp}/>
 				<div className="options">
-					<Options onReset={handleReset}/>
+					<Options onReset={handleReset} reset={reset}/>
 				</div>
 			</div>
         </main>

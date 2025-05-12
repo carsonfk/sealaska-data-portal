@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getDatabase, ref, set as firebaseSet, push } from 'firebase/database'
 //import FilterForm from './FilterForm'
+import getTimestampAK from "../functions";
 
 export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onReset} ) {
     const [form, setForm] = useState({
@@ -28,20 +29,6 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
             };
             reader.readAsDataURL(img);
           });
-    }
-
-    function getTimestampAK() {
-        const timestamp = new Date(); // Current date and time
-
-        // Format the date and time in a specific time zone
-        const formattedTimestamp = new Intl.DateTimeFormat('en-US', {
-            timeZone: 'America/Juneau',
-            dateStyle: 'short',
-            timeStyle: 'short'
-        }).format(timestamp);
-
-        let timestampSplit = formattedTimestamp.split(', ');
-        return {date: timestampSplit[0], time: timestampSplit[1]};
     }
 
     function updateForm(value) {
@@ -72,10 +59,10 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
         if (selectionCoordinates[1] === 'map') {
             if (selectionCoordinates[0].length === 0) {
                 updateForm({ latitude: "", 
-                            longitude: "" });
+                             longitude: "" });
             } else {
                 updateForm({ latitude: selectionCoordinates[0][0], 
-                            longitude: selectionCoordinates[0][1] });
+                             longitude: selectionCoordinates[0][1] });
             }
         }
     }, [selectionCoordinates]); //fires whenever a marker is placed/moved
