@@ -92,13 +92,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     }
   }, [locations]); //fire this whenever the features put into the map change
 
-  //const onDragStart = 
-  //  () => {
-  //    setPrev(marker.getLngLat());
-  //    console.log(prev);
-  //  }
-  //const dragStartRef = useRef(onDragStart);
-
   //updates marker coordinates to drop location, or rejects drop and returns marker to existing selection
   const onDragEnd = 
     () => {

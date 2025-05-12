@@ -9,7 +9,7 @@ import Options from "../components/Options";
 
 export default function Home(props){
 	const [data, setData] = useState()
-	const [target, setTarget] = useState([null, 'none']);
+	const [target, setTarget] = useState([-1, 'none']);
 	//const [filter, setFilter] = useState('null')
 	const [sort, setSort] = useState('newest');
 	const [reset, setReset] = useState(0);
