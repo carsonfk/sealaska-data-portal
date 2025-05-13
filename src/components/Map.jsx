@@ -32,11 +32,15 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     }
 
     if (target[1] === 'list') {
+      let lngDelta = Math.abs(map.current.getCenter().lng - coordinates[0]);
+      let latDelta = Math.abs(map.current.getCenter().lat - coordinates[1]);
+      let zoomLevel = map.current.getZoom();
+      let flyDuration = 2000 + (lngDelta * 20) + (latDelta * 20) + (zoomLevel * 300);
       map.current.flyTo({center: [coordinates[0], coordinates[1]],
-      essential: true, duration: 3000})
+        essential: true, duration: flyDuration})
       setLng(coordinates[0]);
       setLat(coordinates[1]);
-      //setZoom(6.0);
+      setZoom(map.current.getZoom());
     }
 
     if (feature.properties.image !== "") {
@@ -197,13 +201,8 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/outdoors-v12",
       center: [lng, lat],
-      zoom: zoom,
-      //maxBounds: bounds
+      zoom: zoom
     });
-
-    //setTimeout(() => {
-    //  map.current.setStyle('mapbox://styles/mapbox/satellite-v9');
-    //}, 5000);
 
     let close = document.getElementById("location-close");
     close.addEventListener("click", () => {
@@ -222,9 +221,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
 
     //map.current.on('load', function () {
       
-    //});
-
-    //map.current.on('style.load', () => {
     //});
 
     map.current.on("style.load", () => {
@@ -313,7 +309,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
                         'white'
                     ],
           "circle-stroke-color": "white"
-        },
+        }
       });
     });
 
@@ -323,12 +319,15 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     //  const url = `https://www.google.com/maps/search/?api=1&query=${coordinates[1]},${coordinates[0]}`;
     //  window.open(url, "_blank");
     //});
+
+    setTimeout(() => {
+      //map.current.setStyle('mapbox://styles/mapbox/satellite-streets-v12');
+    }, 2000);
   }, []);
 
   useEffect(() => {
     if (map.current.getSource("locations")) {
       //update the source of the features on the map
-      //console.log(featureLocations);
       const source = map.current.getSource("locations");
       source.setData({
         type: "FeatureCollection",

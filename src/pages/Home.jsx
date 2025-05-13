@@ -16,7 +16,7 @@ export default function Home(props){
     const [mapMode, setMapMode] = useState('view');
     const [currentSelection, setCurrentSelection] = useState([[], 'none']);
 	const mapRef = useRef(null);
-	const timerRef = useRef(null);
+	//const timerRef = useRef(null);
 	const [temp, setTemp] = useState();
 
 	//function useInterval(callback, delay) {
