@@ -88,10 +88,12 @@ export default function Home(props){
 
 	const handleTemp = (id) => { //from map jsx - updates map center
 		setTarget([id, 'map']);
+		console.log(id)
 	}
 
 	const handleCenter = (id) => { //from listfeatures jsx - updates map center
 		setTarget([id, 'list']);
+		console.log(id);
 	}
 
 	const handleReset = () => {

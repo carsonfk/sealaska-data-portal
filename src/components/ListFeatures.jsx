@@ -18,7 +18,7 @@ export default function ListFeatures( {locations, mode, onCenter, target} ) {
 
         //loops sorted json to construct table
         for (let i = 0; i < json.length; i++) {
-            let reviewed = json[i].properties.reviewed == "true";
+            let reviewed = json[i].properties.reviewed === "true";
             if (reviewed) {
                 reviewedCount++;
                 row = table.insertRow(-1);
@@ -68,10 +68,8 @@ export default function ListFeatures( {locations, mode, onCenter, target} ) {
     }, [locations, mode]); //fire this whenever the features put into the map change or the mode changes
     
     useEffect(() => {
-        if (target[1] === 'map' || target[1] === 'reset' && mode === 'view') {
-            if (target[0] !== -1) {
-                updateTableHL(target[0]);
-            }
+        if (mode === 'view' && (target[1] === 'map' || target[1] === 'reset')) {
+            updateTableHL(target[0]);
         }
     }, [target])
 

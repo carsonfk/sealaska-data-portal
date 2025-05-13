@@ -21,7 +21,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
 
   //begins popup construction with or without image
   function handlePopup(feature) {
-    let id = feature.id;
     let coordinates = feature.geometry.coordinates.slice();
     let type = feature.properties.type.charAt(0).toUpperCase()
       + feature.properties.type.slice(1);
@@ -45,14 +44,15 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       img.src = feature.properties.image;
       img.onload = () => { // Perform actions with the loaded image
         const imgStr = img.outerHTML;
-        buildPopup(id, coordinates, type, details, reviewed, timestamp, imgStr);
+        buildPopup(coordinates, type, details, reviewed, timestamp, imgStr);
       }
     } else {
-      buildPopup(id, coordinates, type, details, reviewed, timestamp, "");
+      buildPopup(coordinates, type, details, reviewed, timestamp, "");
     }
   }
+  
   //constructs a reviewed/unreviewed popup using provided parameters
-  function buildPopup(id, coordinates, type, details, reviewed, timestamp, img) {
+  function buildPopup(coordinates, type, details, reviewed, timestamp, img) {
     if (reviewed) {
       popup
         .setLngLat(coordinates)
@@ -64,7 +64,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         .setHTML("Awaiting manual review")
         .addTo(map.current);
     }
-    onTemp(id);
   }
 
   useEffect(() => {
@@ -132,6 +131,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
 
   const onPopup = 
     (point) => {
+      onTemp(point.features[0].id);
       handlePopup(point.features[0]);
     };
   
@@ -194,8 +194,9 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
   }, [selectionCoordinates]); //fires whenever a coordinate is changed
 
   useEffect(() => {
-    if (target[1] === 'list' || target[1] === 'reset') {
+    if (mode === 'view' && (target[1] === 'list' || target[1] === 'reset')) {
       if (target[0] !== -1) {
+        console.log(target)
         let targetFeature;
         for (let i = 0; i < featureLocations.length; i++) {
           if (featureLocations[i].id === parseInt(target[0])) {
@@ -205,6 +206,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         handlePopup(targetFeature);
       } else {
         popup.remove();
+        console.log("lalala")
       }
     }
   }, [target]);
