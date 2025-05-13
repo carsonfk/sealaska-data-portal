@@ -196,7 +196,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
   useEffect(() => {
     if (mode === 'view' && (target[1] === 'list' || target[1] === 'reset')) {
       if (target[0] !== -1) {
-        console.log(target)
         let targetFeature;
         for (let i = 0; i < featureLocations.length; i++) {
           if (featureLocations[i].id === parseInt(target[0])) {
@@ -206,7 +205,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         handlePopup(targetFeature);
       } else {
         popup.remove();
-        console.log("lalala")
       }
     }
   }, [target]);

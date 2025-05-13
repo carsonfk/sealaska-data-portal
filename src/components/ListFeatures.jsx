@@ -38,7 +38,7 @@ export default function ListFeatures( {locations, mode, onCenter, target} ) {
                     }
                     currentRow.classList.toggle("hl");
                     if (currentRow.classList.contains("hl")) {
-                        onCenter(currentRow.id); // sends current highlighted row id
+                        onCenter(parseInt(currentRow.id)); // sends current highlighted row id
                     } else {
                         onCenter(-1); // no row is highlighted
                     }
