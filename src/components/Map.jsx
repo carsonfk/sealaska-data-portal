@@ -163,26 +163,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
   //const removePopupRefTest = useRef(removePopupTest);
 
   useEffect(() => {
-      if (mode === 'contribute') { //stuff that happens when map is swapped to contribute mode
-        //map.current.getCanvas().style.cursor = "pointer"
-        addPointsRef.current = addPoints;
-        map.current.on('click', addPointsRef.current);
-        dragEndRef.current = onDragEnd
-        marker.on('dragend', dragEndRef.current);
-        onRightClickRef.current = onRightClick;
-        marker.on('contextmenu', onRightClickRef.current);
-        //setMarker(marker);
-      } else if (map.current && mode === 'view') { //stuff that happens when map is swapped to view mode
-        //map.current.getCanvas().style.cursor = ""
-        map.current.off('click', addPointsRef.current);
-        marker.off('dragend', dragEndRef.current);
-        marker.remove();
-        //setMarker(marker);
-        onSelect([]);
-      }
-  }, [mode]); //fire this whenever the mode changes
-
-  useEffect(() => {
     if (selectionCoordinates[1] === 'box') {
       if (selectionCoordinates[0][0] >= 54.5 && selectionCoordinates[0][0] <= 60 && 
         selectionCoordinates[0][1] >= -140 && selectionCoordinates[0][1] <= -130.25) {
@@ -212,12 +192,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
   mapboxgl.accessToken =
     "pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw";
   useEffect(() => {
-    let close = document.getElementById("location-close");
-    close.addEventListener("click", () => {
-      let update = document.getElementById("update");
-      update.classList.toggle("hide");
-    });
-
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
@@ -225,6 +199,16 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       center: [lng, lat],
       zoom: zoom,
       //maxBounds: bounds
+    });
+
+    //setTimeout(() => {
+    //  map.current.setStyle('mapbox://styles/mapbox/satellite-v9');
+    //}, 5000);
+
+    let close = document.getElementById("location-close");
+    close.addEventListener("click", () => {
+      let update = document.getElementById("update");
+      update.classList.toggle("hide");
     });
 
     map.current.on('mousemove', (e) => {
@@ -356,6 +340,13 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
   //note: consider moving this section
   useEffect(() => {
     if (mode === 'view') {
+      //map.current.getCanvas().style.cursor = ""
+      map.current.off('click', addPointsRef.current);
+      marker.off('dragend', dragEndRef.current);
+      marker.remove();
+      //setMarker(marker);
+      onSelect([]);
+
       removePopupRef.current = removePopup;
       map.current.on('click', removePopupRef.current);
       //removePopupRefTest.current = removePopupTest;
@@ -367,6 +358,15 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       defaultPointerRef.current = defaultPointer;
       map.current.on("mouseleave", "locations_layer", defaultPointerRef.current);
     } else {
+      //map.current.getCanvas().style.cursor = "pointer"
+      addPointsRef.current = addPoints;
+      map.current.on('click', addPointsRef.current);
+      dragEndRef.current = onDragEnd
+      marker.on('dragend', dragEndRef.current);
+      onRightClickRef.current = onRightClick;
+      marker.on('contextmenu', onRightClickRef.current);
+      //setMarker(marker);
+
       map.current.off('click', removePopupRef.current);
       map.current.off('click', "locations_layer", onPopupRef.current);
       map.current.off("mouseenter", "locations_layer", popupPointerRef.current);
