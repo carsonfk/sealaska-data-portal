@@ -35,7 +35,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       let lngDelta = Math.abs(map.current.getCenter().lng - coordinates[0]);
       let latDelta = Math.abs(map.current.getCenter().lat - coordinates[1]);
       let zoomLevel = map.current.getZoom();
-      let flyDuration = 2000 + (lngDelta * 20) + (latDelta * 20) + (zoomLevel * 300);
+      let flyDuration = 1000 + (lngDelta * 20) + (latDelta * 20) + (zoomLevel * 300);
       map.current.flyTo({center: [coordinates[0], coordinates[1]],
         essential: true, duration: flyDuration})
       setLng(coordinates[0]);
@@ -68,6 +68,80 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         .setHTML("Awaiting manual review")
         .addTo(map.current);
     }
+  }
+
+  function layerTest() {
+    console.log("hi!")
+    // Custom atmosphere styling
+    map.current.setFog({
+      'color': 'rgb(247, 193, 193)', // Pink fog / lower atmosphere
+      'high-color': 'rgb(36, 92, 223)', // Blue sky / upper atmosphere
+      'horizon-blend': 0.1 // Exaggerate atmosphere (default is .1)
+    });
+
+    map.current.addSource('mapbox-dem', {
+        'type': 'raster-dem',
+        'url': 'mapbox://mapbox.terrain-rgb'
+    });
+
+    map.current.setTerrain({
+        'source': 'mapbox-dem',
+        'exaggeration': 1.5
+    });
+
+    map.current.addLayer({
+      'id': 'taxblocks',
+      'type': 'fill',
+      'source': {
+          'type': 'geojson',
+          'data': 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/ArcGIS/rest/services/Tax_Blocks_(geojson)/FeatureServer/0/query?where=1%3D1&outSR=4326&outFields=SURFOWNER&f=pgeojson'
+      },
+      'paint': {
+          'fill-color': [
+            'match',
+            ['get', 'SURFOWNER'],
+            'Sealaska',
+            'rgba(250, 100, 100, 0.2)',
+            'rgba(200, 100, 240, 0.2)'
+          ],
+          'fill-outline-color': 
+          [
+            'match',
+            ['get', 'SURFOWNER'],
+            'Sealaska',
+            'rgba(250, 100, 100, 1)',
+            'rgba(200, 100, 240, 1)'
+          ],
+      }
+    });
+
+    map.current.addSource("locations", {
+      type: "geojson",
+      data: {
+        type: "FeatureCollection",
+        features: featureLocations,
+      }
+    });
+
+    map.current.addLayer({
+      id: "locations_layer",
+      type: "circle",
+      source: "locations",
+      paint: {
+        "circle-radius": 7,
+        "circle-stroke-width": 2,
+        'circle-color': [
+                      'match',
+                      ['get', 'reviewed'],
+                      'true',
+                      'orange',
+                      'false',
+                      '#ccc',
+                      'white'
+                  ],
+        "circle-stroke-color": "white"
+      }
+    });
   }
 
   useEffect(() => {
@@ -127,7 +201,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
   //right click removes marker
   const onRightClick = 
     () => {
-      //console.log("hello world!");
       marker.remove();
       onSelect([]);
     }
@@ -204,12 +277,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       zoom: zoom
     });
 
-    let close = document.getElementById("location-close");
-    close.addEventListener("click", () => {
-      let update = document.getElementById("update");
-      update.classList.toggle("hide");
-    });
-
     map.current.on('mousemove', (e) => {
       let mouseLat = e.lngLat.lat;
       let mouseLng = e.lngLat.lng;
@@ -219,28 +286,13 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
             ", " + Math.abs(parseFloat(JSON.stringify(mouseLng)).toFixed(4)) + ((mouseLng >= 0) ? "°E" : "°W");
     });
 
-    //map.current.on('load', function () {
-      
-    //});
+    let close = document.getElementById("location-close");
+    close.addEventListener("click", () => {
+      let update = document.getElementById("update");
+      update.classList.toggle("hide");
+    });
 
-    map.current.on("style.load", () => {
-      // Custom atmosphere styling
-      map.current.setFog({
-        'color': 'rgb(247, 193, 193)', // Pink fog / lower atmosphere
-        'high-color': 'rgb(36, 92, 223)', // Blue sky / upper atmosphere
-        'horizon-blend': 0.1 // Exaggerate atmosphere (default is .1)
-      });
-
-      map.current.addSource('mapbox-dem', {
-          'type': 'raster-dem',
-          'url': 'mapbox://mapbox.terrain-rgb'
-      });
-
-      map.current.setTerrain({
-          'source': 'mapbox-dem',
-          'exaggeration': 1.5
-      });
-
+    map.current.on('load', function () {
       //add center for map animation
       map.current.addSource('center', {
         type: 'geojson',
@@ -250,6 +302,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         }
       });
 
+      //initial map animation
       setTimeout(() => {
         map.current.flyTo({zoom: 6.0, center: [-134.5, 57.2],
           essential: true, duration: 10000})
@@ -257,60 +310,10 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         setLat(57.2);
         setZoom(6.0);
       }, 1000);
-
-      map.current.addLayer({
-        'id': 'taxblocks',
-        'type': 'fill',
-        'source': {
-            'type': 'geojson',
-            'data': 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/ArcGIS/rest/services/Tax_Blocks_(geojson)/FeatureServer/0/query?where=1%3D1&outSR=4326&outFields=SURFOWNER&f=pgeojson'
-        },
-        'paint': {
-            'fill-color': [
-              'match',
-              ['get', 'SURFOWNER'],
-              'Sealaska',
-              'rgba(250, 100, 100, 0.2)',
-              'rgba(200, 100, 240, 0.2)'
-            ],
-            'fill-outline-color': 
-            [
-              'match',
-              ['get', 'SURFOWNER'],
-              'Sealaska',
-              'rgba(250, 100, 100, 1)',
-              'rgba(200, 100, 240, 1)'
-            ],
-        }
     });
 
-      map.current.addSource("locations", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: featureLocations,
-        }
-      });
-
-      map.current.addLayer({
-        id: "locations_layer",
-        type: "circle",
-        source: "locations",
-        paint: {
-          "circle-radius": 7,
-          "circle-stroke-width": 2,
-          'circle-color': [
-                        'match',
-                        ['get', 'reviewed'],
-                        'true',
-                        'orange',
-                        'false',
-                        '#ccc',
-                        'white'
-                    ],
-          "circle-stroke-color": "white"
-        }
-      });
+    map.current.on("style.load", () => {
+      layerTest();
     });
 
     //redirect user to google maps for more info
@@ -319,10 +322,9 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     //  const url = `https://www.google.com/maps/search/?api=1&query=${coordinates[1]},${coordinates[0]}`;
     //  window.open(url, "_blank");
     //});
-
     setTimeout(() => {
-      //map.current.setStyle('mapbox://styles/mapbox/satellite-streets-v12');
-    }, 2000);
+      map.current.setStyle('mapbox://styles/mapbox/satellite-streets-v12');
+    }, 3000);
   }, []);
 
   useEffect(() => {
@@ -334,18 +336,14 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         features: featureLocations,
       });
     }
-  }, [featureLocations]); // everytime the featureLocations state is changed
+  }, [featureLocations]); //everytime the featureLocations state is changed
 
-  //note: consider moving this section
   useEffect(() => {
-    if (mode === 'view') {
+    if (mode === 'view') { //added/removed from map in view mode
       //map.current.getCanvas().style.cursor = ""
       map.current.off('click', addPointsRef.current);
       marker.off('dragend', dragEndRef.current);
       marker.remove();
-      //setMarker(marker);
-      onSelect([]);
-
       removePopupRef.current = removePopup;
       map.current.on('click', removePopupRef.current);
       //removePopupRefTest.current = removePopupTest;
@@ -356,7 +354,9 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       map.current.on("mouseenter", "locations_layer", popupPointerRef.current);
       defaultPointerRef.current = defaultPointer;
       map.current.on("mouseleave", "locations_layer", defaultPointerRef.current);
-    } else {
+
+      onSelect([]);
+    } else { //added/removed from map in contribute mode
       //map.current.getCanvas().style.cursor = "pointer"
       addPointsRef.current = addPoints;
       map.current.on('click', addPointsRef.current);
@@ -364,8 +364,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       marker.on('dragend', dragEndRef.current);
       onRightClickRef.current = onRightClick;
       marker.on('contextmenu', onRightClickRef.current);
-      //setMarker(marker);
-
       map.current.off('click', removePopupRef.current);
       map.current.off('click', "locations_layer", onPopupRef.current);
       map.current.off("mouseenter", "locations_layer", popupPointerRef.current);
