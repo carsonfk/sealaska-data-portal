@@ -73,7 +73,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
   }
 
   function layerTest() {
-    console.log("hi!");
     //custom atmosphere styling
     map.current.setFog({
       'color': 'rgb(247, 193, 193)', // Pink fog / lower atmosphere
@@ -356,7 +355,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
           type: "FeatureCollection",
           features: featureLocations,
         });
-        console.log("features!")
       }
     }, 200);
   }, [featureLocations, testing]); //everytime the featureLocations state or map style is changed
@@ -405,16 +403,14 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
           <div id="location-close">CLOSE</div>
         </div>
         <div id="menu">
-          <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" checked="checked"/>
-          <label for="satellite-streets-v12">satellite streets</label>
+          <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors" defaultChecked/>
+          <label for="outdoors-v12">outdoors</label>
+          <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite"/>
+          <label for="satellite-streets-v12">satellite</label>
           <input id="light-v11" type="radio" name="rtoggle" value="light"/>
           <label for="light-v11">light</label>
           <input id="dark-v11" type="radio" name="rtoggle" value="dark"/>
           <label for="dark-v11">dark</label>
-          <input id="streets-v12" type="radio" name="rtoggle" value="streets"/>
-          <label for="streets-v12">streets</label>
-          <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors"/>
-          <label for="outdoors-v12">outdoors</label>
         </div>
       </div>
     </>
