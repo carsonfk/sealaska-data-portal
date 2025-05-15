@@ -72,81 +72,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     }
   }
 
-  function layerTest() {
-    //custom atmosphere styling
-    map.current.setFog({
-      'color': 'rgb(247, 193, 193)', // Pink fog / lower atmosphere
-      'high-color': 'rgb(36, 92, 223)', // Blue sky / upper atmosphere
-      'horizon-blend': 0.1 // Exaggerate atmosphere (default is .1)
-    });
-
-    //elevation model
-    map.current.addSource('mapbox-dem', {
-        'type': 'raster-dem',
-        'url': 'mapbox://mapbox.terrain-rgb'
-    });
-    map.current.setTerrain({
-        'source': 'mapbox-dem',
-        'exaggeration': 1.5
-    });
-
-    //taxblocks layer
-    map.current.addSource("taxblocks", {
-        'type': 'geojson',
-        'data': 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/ArcGIS/rest/services/Tax_Blocks_(geojson)/FeatureServer/0/query?where=1%3D1&outSR=4326&outFields=SURFOWNER&f=pgeojson'
-    });
-    map.current.addLayer({
-      'id': 'taxblocks_layer',
-      'type': 'fill',
-      'source': 'taxblocks',
-      'paint': {
-          'fill-color': [
-            'match',
-            ['get', 'SURFOWNER'],
-            'Sealaska',
-            'rgba(250, 100, 100, 0.2)',
-            'rgba(200, 100, 240, 0.2)'
-          ],
-          'fill-outline-color': 
-          [
-            'match',
-            ['get', 'SURFOWNER'],
-            'Sealaska',
-            'rgba(250, 100, 100, 1)',
-            'rgba(200, 100, 240, 1)'
-          ]
-      }
-    });
-
-    //locations layer
-    map.current.addSource("locations", {
-      type: "geojson",
-      data: {
-        type: "FeatureCollection",
-        features: featureLocations,
-      }
-    });
-    map.current.addLayer({
-      id: "locations_layer",
-      type: "circle",
-      source: "locations",
-      paint: {
-        "circle-radius": 7,
-        "circle-stroke-width": 2,
-        'circle-color': [
-                      'match',
-                      ['get', 'reviewed'],
-                      'true',
-                      'orange',
-                      'false',
-                      '#ccc',
-                      'white'
-                  ],
-        "circle-stroke-color": "white"
-      }
-    });
-  }
-
   useEffect(() => {
     if (locations) {
       let update = document.getElementById("update");
@@ -331,7 +256,78 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     });
 
     map.current.on("style.load", () => {
-      layerTest();
+      //custom atmosphere styling
+      map.current.setFog({
+        'color': 'rgb(247, 193, 193)', // Pink fog / lower atmosphere
+        'high-color': 'rgb(36, 92, 223)', // Blue sky / upper atmosphere
+        'horizon-blend': 0.1 // Exaggerate atmosphere (default is .1)
+      });
+
+      //elevation model
+      map.current.addSource('mapbox-dem', {
+          'type': 'raster-dem',
+          'url': 'mapbox://mapbox.terrain-rgb'
+      });
+      map.current.setTerrain({
+          'source': 'mapbox-dem',
+          'exaggeration': 1.5
+      });
+
+      //taxblocks layer
+      map.current.addSource("taxblocks", {
+          'type': 'geojson',
+          'data': 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/ArcGIS/rest/services/Tax_Blocks_(geojson)/FeatureServer/0/query?where=1%3D1&outSR=4326&outFields=SURFOWNER&f=pgeojson'
+      });
+      map.current.addLayer({
+        'id': 'taxblocks_layer',
+        'type': 'fill',
+        'source': 'taxblocks',
+        'paint': {
+            'fill-color': [
+              'match',
+              ['get', 'SURFOWNER'],
+              'Sealaska',
+              'rgba(250, 100, 100, 0.2)',
+              'rgba(200, 100, 240, 0.2)'
+            ],
+            'fill-outline-color': 
+            [
+              'match',
+              ['get', 'SURFOWNER'],
+              'Sealaska',
+              'rgba(250, 100, 100, 1)',
+              'rgba(200, 100, 240, 1)'
+            ]
+        }
+      });
+
+      //locations layer
+      map.current.addSource("locations", {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: featureLocations,
+        }
+      });
+      map.current.addLayer({
+        id: "locations_layer",
+        type: "circle",
+        source: "locations",
+        paint: {
+          "circle-radius": 7,
+          "circle-stroke-width": 2,
+          'circle-color': [
+                        'match',
+                        ['get', 'reviewed'],
+                        'true',
+                        'orange',
+                        'false',
+                        '#ccc',
+                        'white'
+                    ],
+          "circle-stroke-color": "white"
+        }
+      });
     });
 
     //redirect user to google maps for more info
