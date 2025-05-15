@@ -256,22 +256,26 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     });
 
     map.current.on("style.load", () => {
-      //custom atmosphere styling
-      map.current.setFog({
-        'color': 'rgb(247, 193, 193)', // Pink fog / lower atmosphere
-        'high-color': 'rgb(36, 92, 223)', // Blue sky / upper atmosphere
-        'horizon-blend': 0.1 // Exaggerate atmosphere (default is .1)
-      });
 
-      //elevation model
-      map.current.addSource('mapbox-dem', {
-          'type': 'raster-dem',
-          'url': 'mapbox://mapbox.terrain-rgb'
-      });
-      map.current.setTerrain({
-          'source': 'mapbox-dem',
-          'exaggeration': 1.5
-      });
+      if (map.current.getStyle().name.includes("Outdoors") || map.current.getStyle().name.includes("Satellite")) {
+        //custom atmosphere styling for outdoor map
+        if (map.current.getStyle().name.includes("Outdoors")) {
+          map.current.setFog({
+            'color': 'rgb(247, 193, 193)', // Pink fog / lower atmosphere
+            'high-color': 'rgb(36, 92, 223)', // Blue sky / upper atmosphere
+            'horizon-blend': 0.1 // Exaggerate atmosphere (default is .1)
+          });
+        }
+        //elevation model for outdoor and satellite maps
+        map.current.addSource('mapbox-dem', {
+            'type': 'raster-dem',
+            'url': 'mapbox://mapbox.terrain-rgb'
+        });
+        map.current.setTerrain({
+            'source': 'mapbox-dem',
+            'exaggeration': 1
+        });
+      }
 
       //taxblocks layer
       map.current.addSource("taxblocks", {
@@ -387,27 +391,25 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       map.current.off("mouseleave", "locations_layer", defaultPointerRef.current);
       popup.remove();
     }
-  }, []);
+  }, [mode]);
 
   return (
     <>
-      <div className="map">
-        <div ref={mapContainer} style={{ height: "100%", width: "100%"}} />
-        <div id="info">Hover to see coordinates!</div>
-        <div id="update" className="hide">
-          <div id="location-msg">Locations Updated</div>
-          <div id="location-close">CLOSE</div>
-        </div>
-        <div id="menu">
-          <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors" defaultChecked/>
-          <label for="outdoors-v12">outdoors</label>
-          <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite"/>
-          <label for="satellite-streets-v12">satellite</label>
-          <input id="light-v11" type="radio" name="rtoggle" value="light"/>
-          <label for="light-v11">light</label>
-          <input id="dark-v11" type="radio" name="rtoggle" value="dark"/>
-          <label for="dark-v11">dark</label>
-        </div>
+      <div ref={mapContainer} style={{ height: "100%", width: "100%"}} />
+      <div id="info">Hover to see coordinates!</div>
+      <div id="update" className="hide">
+        <div id="location-msg">Locations Updated</div>
+        <div id="location-close">CLOSE</div>
+      </div>
+      <div id="menu">
+        <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors" defaultChecked/>
+        <label for="outdoors-v12">Outdoors</label>
+        <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite"/>
+        <label for="satellite-streets-v12">Satellite</label>
+        <input id="light-v11" type="radio" name="rtoggle" value="light"/>
+        <label for="light-v11">Light</label>
+        <input id="dark-v11" type="radio" name="rtoggle" value="dark"/>
+        <label for="dark-v11">Dark</label>
       </div>
     </>
   );

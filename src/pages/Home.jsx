@@ -175,7 +175,9 @@ export default function Home(props){
 					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits} onReset={handleReset}/>
 					<ListFeatures locations={data} mode={mapMode} target={target} onCenter={handleCenter}/>
 				</div>
-				<Map locations={data} mode={mapMode} target={target} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection} onTemp={handleTemp}/>
+				<div className="map">
+					<Map locations={data} mode={mapMode} target={target} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection} onTemp={handleTemp}/>
+				</div>
 				<div className="options">
 					<Options onReset={handleReset} reset={reset}/>
 				</div>

@@ -22,30 +22,34 @@ nav {
   justify-content: space-between;
   align-items: center;
   justify-self: center;
-  max-width: 85vw;
+  max-width: 94vw;
   width: 1392px;
 }
 
 .logo {
+  display: block;
   height: 40px;
+}
+.logo-small {
+  display: none; 
 }
 
 .nav-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 110px;
+  padding-right: 15px; /* potentially remove */
 }
 
-.nav-content a {
+.nav-link {
   cursor: pointer;
   text-decoration: none;
   color: white;
   font-size: 16px;
-
+  padding: 0px 30px 0px 0px;
 }
 
-.nav-content a:hover {
+.nav-link:hover {
   font-weight: bold;
 }
 
@@ -142,12 +146,13 @@ input[type=checkbox]:checked + label {
   cursor: pointer;
 }
 
+/* map style menu */
 #menu {
   display: flex;
   flex-direction: column;
-  position: fixed;
-  bottom: 30px;
-  right: 350px;
+  position: absolute; /* edge of map container div */
+  top: 10px;
+  right: 310px;
   padding: 0px 20px 0px 20px;
   border: none;
   border-radius: 3px;
@@ -177,28 +182,6 @@ img {
   margin: 0 auto;
 }
 
-/* options */
-.options {
-  display:flex;
-  flex:1;
-  flex-direction: column;
-  bottom: 0;
-  right: 0;
-  width: 300px;
-  max-width: 300px;
-  overflow-y: scroll;
-  color: black;
-  box-shadow:0 0 5px #000c;
-  z-index:2;
-  background: linear-gradient(to bottom, beige, white);
-  padding: 10px;
-  text-align: center;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  display: flex; /* Add flex display */
-  align-items: center; /* Vertically center content */
-}
-
 /* features */
 .features {
   display:flex;
@@ -216,8 +199,11 @@ img {
   text-align: center;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  display: flex; /* Add flex display */
   align-items: center; /* Vertically center content */
+}
+
+.heroContent {
+  
 }
 
 /* map mode, sharing mode */
@@ -314,7 +300,83 @@ tr.hl {
   max-width: 113px;
 }
 
+/* options */
+.options {
+  display:flex;
+  flex:1;
+  flex-direction: column;
+  bottom: 0;
+  right: 0;
+  width: 300px;
+  max-width: 300px;
+  overflow-y: scroll;
+  color: black;
+  box-shadow:0 0 5px #000c;
+  z-index:2;
+  background: linear-gradient(to bottom, beige, white);
+  padding: 10px;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  align-items: center; /* Vertically center content */
+}
+
 /* about page */
 #about {
   background: linear-gradient(to bottom, beige, white);
+}
+
+@media only screen and (max-width: 1100px) {
+  #menu {
+    right: 10px;
+  }
+  
+  .options {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+
+  .content {
+    flex: none;
+    background: none;
+    background-color: none;
+  }
+
+  .features {
+    position: fixed;
+    max-height: 275px;
+    max-width: 290px;
+    margin: 25px 25px;
+  }
+
+  .heroContent {
+    display:none;
+  }
+
+  .map {
+    
+  }
+
+  #menu {
+    
+  }
+
+  .options {
+    
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  nav {
+    padding: 6px;
+  }
+  .logo {
+    display: none; 
+  }
+  .logo-small {
+    display: block;
+    height: 42px;
+  }
 }

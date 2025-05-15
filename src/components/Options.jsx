@@ -3,6 +3,12 @@ import getTimestampAK from "../functions";
 
 export default function Options({onReset, reset}){
     
+    function updateSize() {
+        document.getElementById('h').textContent = window.innerHeight;
+        document.getElementById('w').textContent = window.innerWidth;
+    }
+    window.addEventListener("resize", updateSize);
+
     function onSubmit() {
         onReset();
     }
@@ -16,6 +22,8 @@ export default function Options({onReset, reset}){
         <>
             <button type='submit' onClick={onSubmit}>Refresh!</button>
             <p id="reset">Last Reset: N/A</p>
+            <p id="h"></p>
+            <p id="w"></p>
         </>
     )
 
