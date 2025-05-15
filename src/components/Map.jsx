@@ -19,6 +19,8 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     closeButton: false
   }));
 
+  const [testing, setTesting] = useState();
+
   //begins popup construction with or without image
   function handlePopup(feature) {
     let coordinates = feature.geometry.coordinates.slice();
@@ -71,31 +73,33 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
   }
 
   function layerTest() {
-    console.log("hi!")
-    // Custom atmosphere styling
+    console.log("hi!");
+    //custom atmosphere styling
     map.current.setFog({
       'color': 'rgb(247, 193, 193)', // Pink fog / lower atmosphere
       'high-color': 'rgb(36, 92, 223)', // Blue sky / upper atmosphere
       'horizon-blend': 0.1 // Exaggerate atmosphere (default is .1)
     });
 
+    //elevation model
     map.current.addSource('mapbox-dem', {
         'type': 'raster-dem',
         'url': 'mapbox://mapbox.terrain-rgb'
     });
-
     map.current.setTerrain({
         'source': 'mapbox-dem',
         'exaggeration': 1.5
     });
 
+    //taxblocks layer
+    map.current.addSource("taxblocks", {
+        'type': 'geojson',
+        'data': 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/ArcGIS/rest/services/Tax_Blocks_(geojson)/FeatureServer/0/query?where=1%3D1&outSR=4326&outFields=SURFOWNER&f=pgeojson'
+    });
     map.current.addLayer({
-      'id': 'taxblocks',
+      'id': 'taxblocks_layer',
       'type': 'fill',
-      'source': {
-          'type': 'geojson',
-          'data': 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/ArcGIS/rest/services/Tax_Blocks_(geojson)/FeatureServer/0/query?where=1%3D1&outSR=4326&outFields=SURFOWNER&f=pgeojson'
-      },
+      'source': 'taxblocks',
       'paint': {
           'fill-color': [
             'match',
@@ -111,10 +115,11 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
             'Sealaska',
             'rgba(250, 100, 100, 1)',
             'rgba(200, 100, 240, 1)'
-          ],
+          ]
       }
     });
 
+    //locations layer
     map.current.addSource("locations", {
       type: "geojson",
       data: {
@@ -122,7 +127,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         features: featureLocations,
       }
     });
-
     map.current.addLayer({
       id: "locations_layer",
       type: "circle",
@@ -206,26 +210,29 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     }
   const onRightClickRef = useRef(onRightClick);
 
+  //click on point places popup
   const onPopup = 
     (point) => {
       onTemp(point.features[0].id);
       handlePopup(point.features[0]);
-    };
-  
+    }
   const onPopupRef = useRef(onPopup);
 
+  //cursor becomes pointer when hovering over point
   const popupPointer =
     () => {
       map.current.getCanvas().style.cursor = "pointer";
     }
   const popupPointerRef = useRef(popupPointer);
 
+  //cursor returns to defualt when exiting point
   const defaultPointer =
     () => {
       map.current.getCanvas().style.cursor = "";
     }
   const defaultPointerRef = useRef(defaultPointer);
 
+  //click outside of point removes popup
   const removePopup =
     () => {
       onTemp(-1);
@@ -266,9 +273,9 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     }
   }, [target]);
 
-  mapboxgl.accessToken =
-    "pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw";
   useEffect(() => {
+    mapboxgl.accessToken =
+    "pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw";
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
@@ -291,6 +298,18 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       let update = document.getElementById("update");
       update.classList.toggle("hide");
     });
+
+    const layerList = document.getElementById('menu');
+    const inputs = layerList.getElementsByTagName('input');
+    for (const input of inputs) {
+      input.onclick = (layer) => {
+        const layerId = layer.target.id;
+        if (!map.current.style.globalId.includes(layerId)) {
+          map.current.setStyle('mapbox://styles/mapbox/' + layerId);
+          setTesting(layerId);
+        }
+      };
+    }
 
     map.current.on('load', function () {
       //add center for map animation
@@ -322,21 +341,25 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     //  const url = `https://www.google.com/maps/search/?api=1&query=${coordinates[1]},${coordinates[0]}`;
     //  window.open(url, "_blank");
     //});
-    setTimeout(() => {
-      map.current.setStyle('mapbox://styles/mapbox/satellite-streets-v12');
-    }, 3000);
+
+    return () => {
+      map.current.remove();
+    };
   }, []);
 
   useEffect(() => {
-    if (map.current.getSource("locations")) {
-      //update the source of the features on the map
-      const source = map.current.getSource("locations");
-      source.setData({
-        type: "FeatureCollection",
-        features: featureLocations,
-      });
-    }
-  }, [featureLocations]); //everytime the featureLocations state is changed
+    setTimeout(() => {
+      if (map.current.getSource("locations")) {
+        //update the source of the features on the map
+        const source = map.current.getSource("locations");
+        source.setData({
+          type: "FeatureCollection",
+          features: featureLocations,
+        });
+        console.log("features!")
+      }
+    }, 200);
+  }, [featureLocations, testing]); //everytime the featureLocations state or map style is changed
 
   useEffect(() => {
     if (mode === 'view') { //added/removed from map in view mode
@@ -370,7 +393,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       map.current.off("mouseleave", "locations_layer", defaultPointerRef.current);
       popup.remove();
     }
-  }, [mode])
+  }, []);
 
   return (
     <>
@@ -380,6 +403,18 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         <div id="update" className="hide">
           <div id="location-msg">Locations Updated</div>
           <div id="location-close">CLOSE</div>
+        </div>
+        <div id="menu">
+          <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" checked="checked"/>
+          <label for="satellite-streets-v12">satellite streets</label>
+          <input id="light-v11" type="radio" name="rtoggle" value="light"/>
+          <label for="light-v11">light</label>
+          <input id="dark-v11" type="radio" name="rtoggle" value="dark"/>
+          <label for="dark-v11">dark</label>
+          <input id="streets-v12" type="radio" name="rtoggle" value="streets"/>
+          <label for="streets-v12">streets</label>
+          <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors"/>
+          <label for="outdoors-v12">outdoors</label>
         </div>
       </div>
     </>
