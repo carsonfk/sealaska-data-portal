@@ -253,6 +253,7 @@ img {
   width: 300px;
   max-width: 300px;
   overflow-y: scroll;
+  overflow-x: hidden; /* figure out why this is needed */
   box-shadow:0 0 5px #000c;
   z-index:2;
   background: linear-gradient(to bottom, beige, white);
@@ -316,7 +317,7 @@ img {
 .list-location {
   border: 3px solid #CD202D;
   border-radius: 5px;
-  padding: 10px 0px 0px 0px;;
+  padding: 10px 0px 0px 0px;
   margin-top: 10px;
   width: 100%
 }
@@ -357,7 +358,7 @@ tr.hl {
   width: 100%;
 }
 
-.location{
+.location {
   max-width: 113px;
 }
 
@@ -414,8 +415,8 @@ tr.hl {
   
   .options {
     position: fixed;
-    max-height: 100px;
-    max-width: 100px;
+    height: 100px;
+    width: 85px;
     margin-right: 10px;
     top: 250px;
     overflow-y: hidden;
@@ -457,10 +458,14 @@ tr.hl {
 
   .features {
     position: fixed;
-    max-height: 275px;
-    max-width: 290px;
+    height: 300px;
+    width: 290px;
     margin: 25px 25px;
     box-shadow: 0 0 3px #000c;
+  }
+
+  .add-location-form {
+    
   }
 
   .heroContent {
@@ -501,19 +506,44 @@ tr.hl {
     height: 42px;
   }
 
-  #update {
-    width: 240px;
-  }
-
 }
 
 @media only screen and (max-width: 640px) {
   #update {
     bottom: 40px;
     font-size: 12px;
-    width: 200px;
-    height: 40px;
+    width: 180px;
+    height: 42px;
     padding: 0px 10px 0px 10px
+  }
+
+  .features {
+    height: 250px;
+    width: 240px;
+  }
+
+  .mode {
+    font-size: 13px;
+  }
+  
+  .mode:before {
+    height: 15px;
+    width: 15px;
+    border: 2px solid #CD202D;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .mode-input:checked + .mode {
+    background-color: #CD202D;
+    color: white;
+  }
+  
+  .mode-input:checked + .mode:before {
+    height: 15px;
+    width: 15px;
+    border: 4px solid white;
+    background-color: #CD202D;
   }
 
 }
