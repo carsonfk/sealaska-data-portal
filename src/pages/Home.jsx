@@ -19,6 +19,13 @@ export default function Home(props){
 	//const timerRef = useRef(null);
 	const [temp, setTemp] = useState();
 
+	//function updateSize() {
+    //    document.getElementById('h').textContent = window.innerHeight;
+    //    document.getElementById('w').textContent = window.innerWidth;
+    //}
+    //window.addEventListener("resize", updateSize);
+
+	
 	//function useInterval(callback, delay) {
 		// Remember the latest callback.
 	//	useEffect(() => {
