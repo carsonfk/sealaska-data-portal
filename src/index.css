@@ -189,6 +189,7 @@ input[type=checkbox]:checked + label {
 }
 
 #update.hide {
+  bottom: 37px;
   opacity: 0;
   height: 28px;
   width: 200px;
@@ -334,10 +335,8 @@ img {
   cursor: pointer;
 }
 
-th,
-td {
-  text-align: left;
-  padding: 5px;
+tr {
+  display: flex;
 }
 
 tr:nth-child(odd) {
@@ -347,6 +346,21 @@ tr:nth-child(odd) {
 tr.hl {
   background-color: yellow; /* change this color */
 }
+
+td {
+  text-align: left;
+  padding: 5px 5px 5px 5px;
+}
+
+td:first-child {
+  flex: 1;
+}
+
+td:nth-child(2) {
+  flex: 2;
+}
+
+
 
 /* add-location */
 .add-location-form{
@@ -394,12 +408,7 @@ tr.hl {
   background: linear-gradient(to bottom, beige, white);
 }
 
-@media only screen and (max-width: 1535px) {
-  .navbar {
-    width: 1135px;
-    max-width: 87.5vw;
-  }
-
+@media only screen and (max-width: 1920px) {
   .features {
     max-width: 300px;
   }
@@ -407,9 +416,16 @@ tr.hl {
   #menu {
     right: 310px;
   }
-
+  
   .options {
     max-width: 300px;
+  }
+}
+
+@media only screen and (max-width: 1535px) {
+  .navbar {
+    width: 1135px;
+    max-width: 87.5vw;
   }
 }
 
@@ -510,6 +526,10 @@ tr.hl {
     bottom: 25px;
   }
 
+  #update.hide {
+    right: 75px;
+  }
+
   .options {
     
   }
@@ -539,10 +559,18 @@ tr.hl {
     width: 120px;
   }
   #update {
+    right: 10px;
     bottom: 40px;
     font-size: 12px;
-    width: 180px;
-    height: 42px;
+    width: 195px;
+    padding: 0px 10px 0px 10px
+  }
+
+  #update.hide {
+    right: 42.5px;
+    bottom: 47px;
+    font-size: 8px;
+    width: 130px;
     padding: 0px 10px 0px 10px
   }
 
@@ -573,6 +601,10 @@ tr.hl {
     width: 15px;
     border: 4px solid white;
     background-color: #CD202D;
+  }
+
+  tr {
+    font-size: 14px;
   }
 
   #type {

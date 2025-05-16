@@ -305,7 +305,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         }
       });
 
-      //locations layer
+      //locations layer (plus transparent layer for easier click)
       map.current.addSource("locations", {
         type: "geojson",
         data: {
@@ -330,6 +330,15 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
                         'white'
                     ],
           "circle-stroke-color": "white"
+        }
+      });
+      map.current.addLayer({
+        id: "transparent_layer",
+        type: "circle",
+        source: "locations",
+        paint: {
+          "circle-radius": 20,
+          'circle-opacity': 0
         }
       });
     });
@@ -360,6 +369,8 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
   }, [featureLocations, testing]); //everytime the featureLocations state or map style is changed
 
   useEffect(() => {
+
+    let layerList = ["locations_layer", "transparent_layer"];
     if (mode === 'view') { //added/removed from map in view mode
       //map.current.getCanvas().style.cursor = ""
       map.current.off('click', addPointsRef.current);
@@ -370,11 +381,13 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       //removePopupRefTest.current = removePopupTest;
       //popup.on('close', removePopupRefTest.current);
       onPopupRef.current = onPopup;
-      map.current.on('click', "locations_layer", onPopupRef.current);
-      popupPointerRef.current = popupPointer;
-      map.current.on("mouseenter", "locations_layer", popupPointerRef.current);
-      defaultPointerRef.current = defaultPointer;
-      map.current.on("mouseleave", "locations_layer", defaultPointerRef.current);
+      for (let i = 0; i < layerList.length; i++) {
+        map.current.on('click', layerList[i], onPopupRef.current);
+        popupPointerRef.current = popupPointer;
+        map.current.on("mouseenter", layerList[i], popupPointerRef.current);
+        defaultPointerRef.current = defaultPointer;
+        map.current.on("mouseleave", layerList[i], defaultPointerRef.current);
+      }
 
       onSelect([]);
     } else { //added/removed from map in contribute mode
@@ -386,10 +399,12 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       onRightClickRef.current = onRightClick;
       marker.on('contextmenu', onRightClickRef.current);
       map.current.off('click', removePopupRef.current);
-      map.current.off('click', "locations_layer", onPopupRef.current);
-      map.current.off("mouseenter", "locations_layer", popupPointerRef.current);
-      map.current.off("mouseleave", "locations_layer", defaultPointerRef.current);
-      popup.remove();
+      for (let i = 0; i < layerList.length; i++) {
+        map.current.off('click', layerList[i], onPopupRef.current);
+        map.current.off("mouseenter", layerList[i], popupPointerRef.current);
+        map.current.off("mouseleave", layerList[i], defaultPointerRef.current);
+        popup.remove();
+      }
     }
   }, [mode]);
 

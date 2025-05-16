@@ -19,12 +19,6 @@ export default function Home(props){
 	//const timerRef = useRef(null);
 	const [temp, setTemp] = useState();
 
-	//function updateSize() {
-    //    document.getElementById('h').textContent = window.innerHeight;
-    //    document.getElementById('w').textContent = window.innerWidth;
-    //}
-    //window.addEventListener("resize", updateSize);
-
 
 	//function useInterval(callback, delay) {
 		// Remember the latest callback.
@@ -48,6 +42,18 @@ export default function Home(props){
 	//useInterval(() => {
 	//	setReset((reset) => reset + 1);
 	//}, 5000);
+
+	//sort provided JSON using sort parameter
+	function sortJSON(locations, sort) {
+		if (sort === 'newest') {
+			let locationsSort = []; 
+			for (let i = locations.length - 1; i > -1; i--) {
+				locationsSort.push(locations[i]);
+			}
+			locations = locationsSort;
+		}
+		return locations;
+	}
 
     useEffect(() => {
 		async function contributeMode() {
@@ -111,42 +117,40 @@ export default function Home(props){
 			const locRef = ref(db, "features");
 			const dbFeatures = await get(locRef);
 
-			let json = []; // create an empty array to add all the new geoJSON stuff
+			let publicJSON = []; // create an empty array to add public geoJSON stuff
+			let allJSON = []; // create an empty array to add all geoJSON stuff
 			let localID = 0;
 			dbFeatures.forEach((row) => {
-				// for every feature, create a geoJSON format object and add it to the newLocations arr
+				// for every feature, create a geoJSON format object and add it to public and/or private array
 				const newLoc = `{"type":"Feature","properties":{"type":"${
-				row.val().type
-				}","details":"${
-				row.val().details
-				}","image":"${
-				row.val().image
-				}","sharing":"${
-				row.val().sharing
-				}","reviewed":"${
-				row.val().reviewed
-				}","timestamp":{"date":"${
-					row.val().timestamp.date
-					}","time":"${
-					row.val().timestamp.time
-				}"}},"geometry":{"type":"Point","coordinates":[${
-					row.val().longitude},${
-					row.val().latitude
-				}]},"id": ${localID}}`;
-				json.push(newLoc);
+					row.val().type
+					}","details":"${
+					row.val().details
+					}","image":"${
+					row.val().image
+					}","sharing":"${
+					row.val().sharing
+					}","reviewed":"${
+					row.val().reviewed
+					}","timestamp":{"date":"${
+						row.val().timestamp.date
+						}","time":"${
+						row.val().timestamp.time
+					}"}},"geometry":{"type":"Point","coordinates":[${
+						row.val().longitude},${
+						row.val().latitude
+					}]},"id": ${localID}}`;
+				if (row.val().sharing == "public") {
+					publicJSON.push(newLoc);
+				}
+				allJSON.push(newLoc);
 				localID++;
 			});
 
-			let locations = JSON.parse(`[${json}]`);
-			//sorts the json (WIP)
-			if (sort === 'newest') {
-				let locationsSort = []; 
-				for (let i = locations.length - 1; i > -1; i--) {
-					locationsSort.push(locations[i]);
-				}
-				locations = locationsSort;
-			}
-			setData(locations);
+			//sorts parsed JSON and sets it as global data
+			setData(sortJSON(JSON.parse(`[${publicJSON}]`, sort)));
+			
+			//retains target after a reset
 			if(reset !== 0) {
 				setTimeout(() => {
 					setTarget([target[0], 'reset']);
