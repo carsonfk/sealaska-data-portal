@@ -282,7 +282,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       }
 
       //taxblocks layer
-      map.current.addSource("taxblocks", {
+      map.current.addSource('taxblocks', {
           'type': 'geojson',
           'data': 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/ArcGIS/rest/services/Tax_Blocks_(geojson)/FeatureServer/0/query?where=1%3D1&outSR=4326&outFields=SURFOWNER&outFields=TAX_NAME&f=pgeojson'
       });
@@ -321,20 +321,40 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       //  }
       //});
 
+      //roads layer
+      map.current.addSource("roads", {
+        'type': 'geojson',
+        'data': 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/arcgis/rest/services/Roads_16May_(geojson)/FeatureServer/0/query?where=1%3D1&outSR=4326&outFields=RD_OWNER&f=pgeojson'
+      })
+      map.current.addLayer({
+        'id': 'roads_layer',
+        'type': 'fill',
+        'source': 'roads',
+        'paint': {
+          'color': [
+              'match',
+              ['get', 'RD_OWNER'],
+              'Sealaska',
+              'rgba(250, 100, 100, 0.2)',
+              'rgba(200, 100, 240, 0.2)'
+            ],
+        }
+      });
+
 
       //locations layer + transparent layer (easier click)
       map.current.addSource("locations", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: featureLocations,
+        'type': "geojson",
+        'data': {
+          'type': "FeatureCollection",
+          'features': featureLocations,
         }
       });
       map.current.addLayer({
-        id: "locations_layer",
-        type: "circle",
-        source: "locations",
-        paint: {
+        'id': "locations_layer",
+        'type': "circle",
+        'source': "locations",
+        'paint': {
           "circle-radius": 7,
           "circle-stroke-width": 2,
           'circle-color': [
@@ -350,10 +370,10 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         }
       });
       map.current.addLayer({
-        id: "transparent_layer",
-        type: "circle",
-        source: "locations",
-        paint: {
+        'id': "transparent_layer",
+        'type': "circle",
+        'source': "locations",
+        'paint': {
           "circle-radius": 20,
           'circle-opacity': 0
         }
