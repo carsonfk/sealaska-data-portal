@@ -7,8 +7,13 @@ import Hero from "../components/Hero";
 import ViewContributeForm from "../components/ViewContributeForm";
 import Options from "../components/Options";
 
+import { createApiKey } from "@esri/arcgis-rest-developer-credentials";
+import { ArcGISIdentityManager } from "@esri/arcgis-rest-request";
+import { moveItem, getSelf } from "@esri/arcgis-rest-portal";
+//import "dotenv/config";
+
 export default function Home(props){
-	const [data, setData] = useState()
+	const [data, setData] = useState();
 	const [target, setTarget] = useState([-1, 'none']);
 	//const [filter, setFilter] = useState('null')
 	const [sort, setSort] = useState('newest');
@@ -19,28 +24,23 @@ export default function Home(props){
 	//const timerRef = useRef(null);
 	const [temp, setTemp] = useState();
 
-	//function useInterval(callback, delay) {
-		// Remember the latest callback.
-	//	useEffect(() => {
-	//	    timerRef.current = callback;
-	//	}, [callback]);
+	//const authentication = await ArcGISIdentityManager.signIn({
+	//	username: process.env.ARCGIS_USERNAME,
+	//	password: process.env.ARCGIS_PASSWORD,
+	//	portal: process.env.PORTAL_URL // OPTIONAL - For ArcGIS Enterprise only
+	//});
 
-		// Set up the interval.
-	//	useEffect(() => {
-	//	    function tick() {
-	//		    timerRef.current();
-	//	    }
-	//	    if (delay !== null) {
-	//		    let id = setInterval(tick, delay);
-				//setTemp(id);
-	//		    return () => clearInterval(id);
-	//	    }
-	//	}, [delay]);
-	//}
+	//const orgUrl = await getSelf({ authentication: authentication });
 
-	//useInterval(() => {
-	//	setReset((reset) => reset + 1);
-	//}, 5000);
+	//const newKey = await createApiKey({
+	//	title: `API key ${Math.floor(Date.now() / 1000)}`,
+	//	description: "API Key generated with ArcGIS REST JS with spatial analysis and basemap privileges",
+	//	tags: ["api key", "basemaps", "spatial analysis", "authentication"],
+	  
+	//	generateToken1: true,
+	  
+	//	authentication: authentication
+	//  });
 
 	//sort provided JSON using sort parameter
 	function sortJSON(locations, sort) {
@@ -55,24 +55,10 @@ export default function Home(props){
 	}
 
     useEffect(() => {
-		async function contributeMode() {
-			//const db = getDatabase();
-			//const locRef = ref(db, "features");
-			//const orderByType = query(locRef, orderByChild('type')) // makes a query to the database
-			//const querySnapshot = await get(orderByType);
-			//setData(querySnapshot)
-
-			//const db = getDatabase();
-			//const locRef = ref(db, "features");
-			//const first = await get(locRef);
-			//setData(first);
+		async function contributeMode() { //unused
 		}
 
-		async function viewMode() {
-			//const db = getDatabase();
-			//const locRef = ref(db, "features");
-			//const first = await get(locRef);
-			//setData(first);
+		async function viewMode() { //unused
 		}
 
 		if (mapMode === 'view'){
@@ -200,3 +186,26 @@ export default function Home(props){
         </>
     )
 }
+
+//function useInterval(callback, delay) {
+		// Remember the latest callback.
+	//	useEffect(() => {
+	//	    timerRef.current = callback;
+	//	}, [callback]);
+
+		// Set up the interval.
+	//	useEffect(() => {
+	//	    function tick() {
+	//		    timerRef.current();
+	//	    }
+	//	    if (delay !== null) {
+	//		    let id = setInterval(tick, delay);
+				//setTemp(id);
+	//		    return () => clearInterval(id);
+	//	    }
+	//	}, [delay]);
+	//}
+
+	//useInterval(() => {
+	//	setReset((reset) => reset + 1);
+	//}, 5000);
