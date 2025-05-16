@@ -268,6 +268,10 @@ img {
   align-items: center; /* Vertically center content */
 }
 
+input {
+  cursor: pointer;
+}
+
 /* map mode, sharing mode */
 .select-type/*, .sharing-buttons*/ {
   display: flex;
@@ -320,10 +324,6 @@ img {
   padding: 10px 0px 0px 0px;
   margin-top: 10px;
   width: 100%
-}
-
-#table-title {
-  margin: 0;
 }
 
 #feature-list {
@@ -578,10 +578,6 @@ td:nth-child(2) {
     height: 250px;
     width: 240px;
   }
-
-  .mode {
-    font-size: 13px;
-  }
   
   .mode:before {
     height: 15px;
@@ -603,8 +599,20 @@ td:nth-child(2) {
     background-color: #CD202D;
   }
 
-  tr {
-    font-size: 14px;
+  .list-location {
+    padding-top: 5px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+  
+  h6, p, tr, label, input, button {
+    font-size: 13px;
+  }
+
+  .add-location-form {
+    padding-top: 5px;
   }
 
   #type {

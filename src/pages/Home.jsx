@@ -19,7 +19,6 @@ export default function Home(props){
 	//const timerRef = useRef(null);
 	const [temp, setTemp] = useState();
 
-
 	//function useInterval(callback, delay) {
 		// Remember the latest callback.
 	//	useEffect(() => {
@@ -140,7 +139,7 @@ export default function Home(props){
 						row.val().longitude},${
 						row.val().latitude
 					}]},"id": ${localID}}`;
-				if (row.val().sharing == "public") {
+				if (row.val().sharing === "public") {
 					publicJSON.push(newLoc);
 				}
 				allJSON.push(newLoc);

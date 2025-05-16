@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -10,6 +11,8 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
   const [zoom, setZoom] = useState(2);
   const [featureLocations, setFeatureLocations] = useState([]);
   const [timer, setTimer] = useState([]);
+  const [styleSwap, setStyleSwap] = useState();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [marker, setMarker] = useState(new mapboxgl.Marker({
     id: 'marker',
     draggable: true
@@ -19,7 +22,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     closeButton: false
   }));
 
-  const [testing, setTesting] = useState();
+  const paramValue = searchParams.get('mapStyle');
 
   //begins popup construction with or without image
   function handlePopup(feature) {
@@ -203,7 +206,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: "mapbox://styles/mapbox/satellite-streets-v12",
+      style: "mapbox://styles/mapbox/" + (searchParams.get("mapStyle")),
       center: [lng, lat],
       zoom: zoom
     });
@@ -230,7 +233,8 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         const layerId = layer.target.id;
         if (!map.current.style.globalId.includes(layerId)) {
           map.current.setStyle('mapbox://styles/mapbox/' + layerId);
-          setTesting(layerId);
+          setStyleSwap(layerId);
+          setSearchParams({ mapStyle: layerId});
         }
       };
     }
@@ -280,7 +284,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       //taxblocks layer
       map.current.addSource("taxblocks", {
           'type': 'geojson',
-          'data': 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/ArcGIS/rest/services/Tax_Blocks_(geojson)/FeatureServer/0/query?where=1%3D1&outSR=4326&outFields=SURFOWNER&f=pgeojson'
+          'data': 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/ArcGIS/rest/services/Tax_Blocks_(geojson)/FeatureServer/0/query?where=1%3D1&outSR=4326&outFields=SURFOWNER&outFields=TAX_NAME&f=pgeojson'
       });
       map.current.addLayer({
         'id': 'taxblocks_layer',
@@ -304,8 +308,21 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
             ]
         }
       });
+      //map.current.addLayer({
+      //  id: 'taxblock_labels',
+      //  type: 'symbol',
+      //  source: 'taxblocks',
+      //  layout: {
+      //    'text-field': ['get', 'SURFOWNER'],
+      //    'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+      //    'text-radial-offset': 0.5,
+      //    'text-justify': 'auto',
+      //    //'icon-image': ['get', 'icon']
+      //  }
+      //});
 
-      //locations layer (plus transparent layer for easier click)
+
+      //locations layer + transparent layer (easier click)
       map.current.addSource("locations", {
         type: "geojson",
         data: {
@@ -366,7 +383,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         });
       }
     }, 200);
-  }, [featureLocations, testing]); //everytime the featureLocations state or map style is changed
+  }, [featureLocations, styleSwap]); //everytime the featureLocations state or map style is changed
 
   useEffect(() => {
 
@@ -417,13 +434,13 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         <div id="location-close">CLOSE</div>
       </div>
       <div id="menu">
-        <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" defaultChecked/>
+        <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" defaultChecked={paramValue === "satellite-streets-v12"}/>
         <label for="satellite-streets-v12">Satellite</label>
-        <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors"/>
+        <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors" defaultChecked={paramValue === "outdoors-v12"}/>
         <label for="outdoors-v12">Outdoors</label>
-        <input id="dark-v11" type="radio" name="rtoggle" value="dark"/>
+        <input id="dark-v11" type="radio" name="rtoggle" value="dark" defaultChecked={paramValue === "dark-v11"}/>
         <label for="dark-v11">Dark</label>
-        <input id="light-v11" type="radio" name="rtoggle" value="light"/>
+        <input id="light-v11" type="radio" name="rtoggle" value="light" defaultChecked={paramValue === "light-v11"}/>
         <label for="light-v11">Light</label>
       </div>
       <div id="alt-title">Sealaska Data Portal</div>
