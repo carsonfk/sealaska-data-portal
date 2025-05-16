@@ -575,4 +575,11 @@ tr.hl {
     background-color: #CD202D;
   }
 
+  #type {
+    width: 158px;
+  }
+
+  #details {
+    width: 158px;
+  }
 }
