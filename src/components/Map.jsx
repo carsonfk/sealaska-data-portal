@@ -411,6 +411,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         <input id="light-v11" type="radio" name="rtoggle" value="light"/>
         <label for="light-v11">Light</label>
       </div>
+      <div id="alt-title">Sealaska Data Portal</div>
     </>
   );
 }

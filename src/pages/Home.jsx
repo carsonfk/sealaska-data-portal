@@ -25,7 +25,7 @@ export default function Home(props){
     //}
     //window.addEventListener("resize", updateSize);
 
-	
+
 	//function useInterval(callback, delay) {
 		// Remember the latest callback.
 	//	useEffect(() => {
