@@ -203,7 +203,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: "mapbox://styles/mapbox/outdoors-v12",
+      style: "mapbox://styles/mapbox/satellite-streets-v12",
       center: [lng, lat],
       zoom: zoom
     });
@@ -402,14 +402,14 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         <div id="location-close">CLOSE</div>
       </div>
       <div id="menu">
-        <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors" defaultChecked/>
-        <label for="outdoors-v12">Outdoors</label>
-        <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite"/>
+        <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" defaultChecked/>
         <label for="satellite-streets-v12">Satellite</label>
-        <input id="light-v11" type="radio" name="rtoggle" value="light"/>
-        <label for="light-v11">Light</label>
+        <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors"/>
+        <label for="outdoors-v12">Outdoors</label>
         <input id="dark-v11" type="radio" name="rtoggle" value="dark"/>
         <label for="dark-v11">Dark</label>
+        <input id="light-v11" type="radio" name="rtoggle" value="light"/>
+        <label for="light-v11">Light</label>
       </div>
     </>
   );

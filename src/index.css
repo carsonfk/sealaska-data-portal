@@ -419,6 +419,7 @@ tr.hl {
     margin-right: 10px;
     top: 250px;
     overflow-y: hidden;
+    box-shadow: 0 0 3px #000c;
   }
 
   .refresh {
@@ -459,6 +460,7 @@ tr.hl {
     max-height: 275px;
     max-width: 290px;
     margin: 25px 25px;
+    box-shadow: 0 0 3px #000c;
   }
 
   .heroContent {
