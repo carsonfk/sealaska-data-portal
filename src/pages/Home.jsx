@@ -43,7 +43,7 @@ export default function Home(props){
 	//  });
 
 	//sort provided JSON using sort parameter
-	function sortJSON(locations, sort) {
+	function sortJSON(locations) {
 		if (sort === 'newest') {
 			let locationsSort = []; 
 			for (let i = locations.length - 1; i > -1; i--) {
@@ -133,7 +133,7 @@ export default function Home(props){
 			});
 
 			//sorts parsed JSON and sets it as global data
-			setData(sortJSON(JSON.parse(`[${publicJSON}]`, sort)));
+			setData(sortJSON(JSON.parse(`[${publicJSON}]`)));
 			
 			//retains target after a reset
 			if(reset !== 0) {

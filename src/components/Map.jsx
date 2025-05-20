@@ -149,6 +149,15 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
   const popupPointer =
     () => {
       map.current.getCanvas().style.cursor = "pointer";
+
+      //const coordinates = point.features[0].geometry.coordinates.slice();
+      //const name = point.features[0].properties.name;
+      //const type = point.features[0].properties.type.charAt(0).toUpperCase()
+      //  + point.features[0].properties.type.slice(1);
+
+      //while (Math.abs(point.lngLat.lng - coordinates[0]) > 180) {
+      //  coordinates[0] += point.lngLat.lng > coordinates[0] ? 360 : -360;
+      //}
     }
   const popupPointerRef = useRef(popupPointer);
 
@@ -204,9 +213,13 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     mapboxgl.accessToken =
     "pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw";
     if (map.current) return; // initialize map only once
+
+    var style;
+    searchParams.get("mapStyle") ? style = "mapbox://styles/mapbox/" + 
+      searchParams.get("mapStyle") : style = "mapbox://styles/mapbox/satellite-streets-v12";
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: "mapbox://styles/mapbox/" + (searchParams.get("mapStyle")),
+      style: style,
       center: [lng, lat],
       zoom: zoom
     });
@@ -230,11 +243,17 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     const inputs = layerList.getElementsByTagName('input');
     for (const input of inputs) {
       input.onclick = (layer) => {
-        const layerId = layer.target.id;
+       var layerId = layer.target.id;
         if (!map.current.style.globalId.includes(layerId)) {
-          map.current.setStyle('mapbox://styles/mapbox/' + layerId);
           setStyleSwap(layerId);
-          setSearchParams({ mapStyle: layerId});
+          if (layerId === 'satellite-streets-v12') {
+            map.current.setStyle('mapbox://styles/mapbox/satellite-streets-v12');
+            searchParams.delete('mapStyle');
+            setSearchParams(searchParams);
+          } else {
+            map.current.setStyle('mapbox://styles/mapbox/' + layerId);
+            setSearchParams({ mapStyle: layerId});
+          }
         }
       };
     }
@@ -418,7 +437,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       //removePopupRefTest.current = removePopupTest;
       //popup.on('close', removePopupRefTest.current);
       onPopupRef.current = onPopup;
-      for (let i = 0; i < layerList.length; i++) {
+      for (let i = 1; i < layerList.length; i++) {
         map.current.on('click', layerList[i], onPopupRef.current);
         popupPointerRef.current = popupPointer;
         map.current.on("mouseenter", layerList[i], popupPointerRef.current);
@@ -436,7 +455,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       onRightClickRef.current = onRightClick;
       marker.on('contextmenu', onRightClickRef.current);
       map.current.off('click', removePopupRef.current);
-      for (let i = 0; i < layerList.length; i++) {
+      for (let i = 1; i < layerList.length; i++) {
         map.current.off('click', layerList[i], onPopupRef.current);
         map.current.off("mouseenter", layerList[i], popupPointerRef.current);
         map.current.off("mouseleave", layerList[i], defaultPointerRef.current);
@@ -454,7 +473,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         <div id="location-close">CLOSE</div>
       </div>
       <div id="menu">
-        <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" defaultChecked={paramValue === "satellite-streets-v12"}/>
+        <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" defaultChecked={!searchParams.get("mapStyle")}/>
         <label for="satellite-streets-v12">Satellite</label>
         <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors" defaultChecked={paramValue === "outdoors-v12"}/>
         <label for="outdoors-v12">Outdoors</label>
