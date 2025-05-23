@@ -68,7 +68,7 @@ export default function Home(props){
 		}
 	}, [mapMode]) //anytime mapMode is updated
 
-    const handleFormSubmit = (selectedMode) => { //from form jsx - this has to do with updating map mode value when the map mode form is submitted
+    const handleModeSubmit = (selectedMode) => { //from form jsx - this has to do with updating map mode value when the map mode form is submitted
 		if (mapMode !== selectedMode) {
 			setMapMode(selectedMode);
 		}
@@ -95,6 +95,11 @@ export default function Home(props){
 	const handleReset = () => {
 		setReset((reset) => reset + 1);
 	}
+
+	const handleFormSubmit = () => {
+		setMapMode('view');
+		//setTarget([, 'list'])
+	}
 	
 	useEffect(()=>{ //this pulls data from the database on inital load and reset
 		async function resetLoad() {
@@ -115,6 +120,8 @@ export default function Home(props){
 					row.val().image
 					}","sharing":"${
 					row.val().sharing
+					}","reviewed":"${
+					row.val().globalid
 					}","reviewed":"${
 					row.val().reviewed
 					}","timestamp":{"date":"${
@@ -167,8 +174,8 @@ export default function Home(props){
 			<div className="content">
 				<div className="features">
 					<Hero scrollToMap={scrollToMap}/>
-					<ViewContributeForm onSubmit={handleFormSubmit} />
-					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits} onReset={handleReset}/>
+					<ViewContributeForm mode={mapMode} onSubmit={handleModeSubmit}/>
+					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits} onReset={handleReset} submitSwap={handleFormSubmit}/>
 					<ListFeatures locations={data} mode={mapMode} target={target} onCenter={handleCenter}/>
 				</div>
 				<div className="map">

@@ -270,8 +270,8 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
 
       //initial map animation
       setTimeout(() => {
-        map.current.flyTo({zoom: 6.0, center: [-134.5, 57.2],
-          essential: true, duration: 10000})
+        map.current.flyTo({zoom: 6, center: [-134.5, 57.2],
+          essential: true, duration: 12000})
         setLng(-134.5);
         setLat(57.2);
         setZoom(6.0);
@@ -374,7 +374,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         'type': "circle",
         'source': "locations",
         'paint': {
-          "circle-radius": 7,
+          "circle-radius": 6,
           "circle-stroke-width": 2,
           'circle-color': [
                         'match',

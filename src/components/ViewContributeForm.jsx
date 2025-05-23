@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-export default function ViewContributeForm( {onSubmit} ) {
+export default function ViewContributeForm( {mode, onSubmit} ) {
     
+    useEffect(() => {
+        document.getElementById(mode).checked = true;
+        console.log("lalala")
+    }, [mode]); //fire this whenever the mode changes
+
     //returns the value that is filled in the form to Home.
     document.querySelectorAll('input[type="radio"][name="map-mode"]').forEach(e => {
         e.addEventListener('change', function() {

@@ -3,7 +3,7 @@ import { getDatabase, ref, set as firebaseSet, push } from 'firebase/database'
 //import FilterForm from './FilterForm'
 import getTimestampAK from "../functions";
 
-export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onReset} ) {
+export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onReset, submitSwap} ) {
     const [form, setForm] = useState({
         latitude: "",
         longitude: "",
@@ -64,8 +64,8 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
     }, [selectionCoordinates]); //fires whenever a marker is placed/moved
 
     async function onSubmit(e) {
-        console.log(getTimestampAK());
         e.preventDefault();
+        console.log(getTimestampAK());
         if (form.latitude !== "" && form.longitude !== "" && form.type !== "" && form.details !== "") {
             const db = getDatabase();
             const locRef = ref(db, "features");
@@ -74,9 +74,10 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
             const newLocRef = push(locRef, newLoc);
             updateForm({ latitude: "", longitude: "",
                 type: "", details: "", image: "" });
-            onEdit(["", ""]);
+            //onEdit(["", ""]);
             document.getElementById('image').value = "";
             onReset();
+            submitSwap();
         } else {
             //test error message
             console.error("Error: one or more fields incomplete.")
@@ -124,6 +125,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
                     />
                     <br></br>
                     <label htmlFor="type">Type:</label>
+                    <br></br>
                     <input
                         type="text"
                         id="type"
@@ -133,6 +135,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
                     />
                     <br></br>
                     <label htmlFor="details">Details:</label>
+                    <br></br>
                     <textarea
                         id="details"
                         name="details"
