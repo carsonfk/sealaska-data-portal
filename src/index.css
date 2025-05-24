@@ -242,6 +242,10 @@ input[type=checkbox]:checked + label {
   height: 10%;
 }
 
+.mapboxgl-navigation-control {
+  left: 10px;
+}
+
 img {
   max-width: 200px;
   max-height: 150px;
@@ -476,6 +480,24 @@ td:nth-child(2) {
     max-width: 96vw;
   }
 
+}
+
+@media only screen and (max-width: 767px) {
+  nav {
+    padding: 6px;
+  }
+
+  .navbar {
+    width: 624px;
+  }
+  .logo {
+    display: none; 
+  }
+  .logo-small {
+    display: block;
+    height: 42px;
+  }
+
   .content {
     flex: none;
     background: none;
@@ -533,24 +555,6 @@ td:nth-child(2) {
   .options {
     
   }
-}
-
-@media only screen and (max-width: 767px) {
-  nav {
-    padding: 6px;
-  }
-
-  .navbar {
-    width: 624px;
-  }
-  .logo {
-    display: none; 
-  }
-  .logo-small {
-    display: block;
-    height: 42px;
-  }
-
 }
 
 @media only screen and (max-width: 640px) {

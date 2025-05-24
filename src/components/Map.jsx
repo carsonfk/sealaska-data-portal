@@ -270,8 +270,8 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
 
       //initial map animation
       setTimeout(() => {
-        map.current.flyTo({zoom: 6, center: [-134.5, 57.2],
-          essential: true, duration: 12000})
+        map.current.flyTo({zoom: 6, center: [-134.5, 57.2], bearing: 10,
+          essential: true, duration: 10000})
         setLng(-134.5);
         setLat(57.2);
         setZoom(6.0);
@@ -405,6 +405,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     //  const url = `https://www.google.com/maps/search/?api=1&query=${coordinates[1]},${coordinates[0]}`;
     //  window.open(url, "_blank");
     //});
+    map.current.addControl(new mapboxgl.NavigationControl());
 
     return () => {
       map.current.remove();

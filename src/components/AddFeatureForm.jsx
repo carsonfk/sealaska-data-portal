@@ -158,6 +158,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
                         <input type="file" id="image" name="image" accept="image/png, image/jpeg"/>
                     </div>
                     <button className="addLocation" type="submit">Submit your Location</button>
+                    <div id="error" hide="true"></div>
                 </form>
             </div>
         )
