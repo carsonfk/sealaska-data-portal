@@ -52,12 +52,16 @@ export default function ListFeatures( {locations, mode, onCenter, target} ) {
 
     function updateTableHL(id) {
         let table = document.getElementsByTagName("table")[0];
-        for (let child of table.children[0].children) {
-            if (child.classList.contains("hl") && id !== parseInt(child.id)) {
-                child.classList.toggle("hl");
-            } else if (!child.classList.contains("hl") && id === parseInt(child.id)) {
-                child.classList.toggle("hl");
+        if (table.children[0]) {
+            for (let child of table.children[0].children) {
+                if (child.classList.contains("hl") && id !== parseInt(child.id)) {
+                    child.classList.toggle("hl");
+                } else if (!child.classList.contains("hl") && id === parseInt(child.id)) {
+                    child.classList.toggle("hl");
+                }
             }
+        } else {
+            console.log("hi")
         }
     }
 

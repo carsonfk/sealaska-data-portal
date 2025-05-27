@@ -474,14 +474,34 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         <div id="location-close">CLOSE</div>
       </div>
       <div id="menu">
-        <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" defaultChecked={!searchParams.get("mapStyle")}/>
-        <label for="satellite-streets-v12">Satellite</label>
-        <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors" defaultChecked={paramValue === "outdoors-v12"}/>
-        <label for="outdoors-v12">Outdoors</label>
-        <input id="dark-v11" type="radio" name="rtoggle" value="dark" defaultChecked={paramValue === "dark-v11"}/>
-        <label for="dark-v11">Dark</label>
-        <input id="light-v11" type="radio" name="rtoggle" value="light" defaultChecked={paramValue === "light-v11"}/>
-        <label for="light-v11">Light</label>
+        <div id="basemap-menu">
+          <div id="menu-item">
+            <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" defaultChecked={!searchParams.get("mapStyle")}/>
+            <label for="satellite-streets-v12">Satellite</label>
+          </div>
+          <div id="menu-item">
+            <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors" defaultChecked={paramValue === "outdoors-v12"}/>
+            <label for="outdoors-v12">Outdoors</label>
+          </div>
+          <div id="menu-item">
+            <input id="dark-v11" type="radio" name="rtoggle" value="dark" defaultChecked={paramValue === "dark-v11"}/>
+            <label for="dark-v11">Dark</label>
+          </div>
+          <div id="menu-item">
+            <input id="light-v11" type="radio" name="rtoggle" value="light" defaultChecked={paramValue === "light-v11"}/>
+            <label for="light-v11">Light</label>
+          </div>
+        </div>
+        <div id="layer-menu">
+          <div id="menu-item">
+            <input id="sealaska-lands" type="checkbox" name="rtoggle" value="sealaska-lands" defaultChecked/>
+            <label for="sealaska-lands">Sealaska Lands</label>
+          </div>
+          <div id="menu-item">
+            <input id="roads" type="checkbox" name="rtoggle" value="roads" defaultChecked/>
+            <label for="roads">Roads</label>
+          </div>
+        </div>
       </div>
       <div id="alt-title">Sealaska Data Portal</div>
     </>
