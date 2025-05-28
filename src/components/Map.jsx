@@ -239,7 +239,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
       update.classList.toggle("hide");
     });
 
-    const layerList = document.getElementById('menu');
+    const layerList = document.getElementById('basemap-menu');
     const inputs = layerList.getElementsByTagName('input');
     for (const input of inputs) {
       input.onclick = (layer) => {
@@ -493,6 +493,10 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
           </div>
         </div>
         <div id="layer-menu">
+          <div id="menu-item">
+            <input id="posts" type="checkbox" name="rtoggle" value="posts" defaultChecked/>
+            <label for="posts">Posts</label>
+          </div>
           <div id="menu-item">
             <input id="sealaska-lands" type="checkbox" name="rtoggle" value="sealaska-lands" defaultChecked/>
             <label for="sealaska-lands">Sealaska Lands</label>

@@ -230,6 +230,10 @@ nav {
   margin: auto;
 }
 
+#menu-item input{
+  margin-right: 5px;
+}
+
 #alt-title {
   display: none 
 }
