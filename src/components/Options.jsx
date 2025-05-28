@@ -15,8 +15,8 @@ export default function Options({onReset, reset}){
     return (
         <>
         <div>
-            <button className="refresh"type='submit' onClick={onSubmit}>Refresh!</button>
-            <button className="refresh-small" type='submit' onClick={onSubmit}></button>
+            <button id="refresh"type='submit' onClick={onSubmit}>Refresh!</button>
+            <button id="refresh-small" type='submit' onClick={onSubmit}></button>
             <p id="reset">Last Reset: N/A</p>
         </div>
         </>

@@ -234,16 +234,23 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     });
 
     let close = document.getElementById("location-close");
-    close.addEventListener("click", () => {
+    close.onclick = () => {
       let update = document.getElementById("update");
       update.classList.toggle("hide");
-    });
+    };
 
-    const layerList = document.getElementById('basemap-menu');
-    const inputs = layerList.getElementsByTagName('input');
-    for (const input of inputs) {
+    var menu1 = document.getElementById("menu-icon");
+    var menu2 = document.getElementById('menu').getElementsByTagName('div');
+    menu1.onclick = () => {
+      for (let item of menu2) {
+        item.classList.toggle("hide");
+      }
+    }
+
+    let inputs = document.getElementById('basemap-menu').getElementsByTagName('input');
+    for (let input of inputs) {
       input.onclick = (layer) => {
-       var layerId = layer.target.id;
+       let layerId = layer.target.id;
         if (!map.current.style.globalId.includes(layerId)) {
           setStyleSwap(layerId);
           if (layerId === 'satellite-streets-v12') {
@@ -473,38 +480,44 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         <div id="location-msg">Locations Updated</div>
         <div id="location-close">CLOSE</div>
       </div>
-      <div id="menu">
-        <div id="basemap-menu">
-          <div id="menu-item">
-            <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" defaultChecked={!searchParams.get("mapStyle")}/>
-            <label for="satellite-streets-v12">Satellite</label>
+      <div id="menu-legend" className="flex-vertical">
+        <div id="menu">
+          <img id="menu-icon" alt="layer icon" src="https://images.icon-icons.com/2030/PNG/512/layers_icon_124022.png"></img>
+          <div id="basemap-menu" className="flex-vertical hide">
+            <div id="menu-item">
+              <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" defaultChecked={!searchParams.get("mapStyle")}/>
+              <label for="satellite-streets-v12">Satellite</label>
+            </div>
+            <div id="menu-item">
+              <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors" defaultChecked={paramValue === "outdoors-v12"}/>
+              <label for="outdoors-v12">Outdoors</label>
+            </div>
+            <div id="menu-item">
+              <input id="dark-v11" type="radio" name="rtoggle" value="dark" defaultChecked={paramValue === "dark-v11"}/>
+              <label for="dark-v11">Dark</label>
+            </div>
+            <div id="menu-item">
+              <input id="light-v11" type="radio" name="rtoggle" value="light" defaultChecked={paramValue === "light-v11"}/>
+              <label for="light-v11">Light</label>
+            </div>
           </div>
-          <div id="menu-item">
-            <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors" defaultChecked={paramValue === "outdoors-v12"}/>
-            <label for="outdoors-v12">Outdoors</label>
-          </div>
-          <div id="menu-item">
-            <input id="dark-v11" type="radio" name="rtoggle" value="dark" defaultChecked={paramValue === "dark-v11"}/>
-            <label for="dark-v11">Dark</label>
-          </div>
-          <div id="menu-item">
-            <input id="light-v11" type="radio" name="rtoggle" value="light" defaultChecked={paramValue === "light-v11"}/>
-            <label for="light-v11">Light</label>
+          <div id="layer-menu" className="flex-vertical hide">
+            <div id="menu-item">
+              <input id="posts" type="checkbox" name="rtoggle" value="posts" defaultChecked/>
+              <label for="posts">Posts</label>
+            </div>
+            <div id="menu-item">
+              <input id="sealaska-lands" type="checkbox" name="rtoggle" value="sealaska-lands" defaultChecked/>
+              <label for="sealaska-lands">Lands</label>
+            </div>
+            <div id="menu-item">
+              <input id="roads" type="checkbox" name="rtoggle" value="roads" defaultChecked/>
+              <label for="roads">Roads</label>
+            </div>
           </div>
         </div>
-        <div id="layer-menu">
-          <div id="menu-item">
-            <input id="posts" type="checkbox" name="rtoggle" value="posts" defaultChecked/>
-            <label for="posts">Posts</label>
-          </div>
-          <div id="menu-item">
-            <input id="sealaska-lands" type="checkbox" name="rtoggle" value="sealaska-lands" defaultChecked/>
-            <label for="sealaska-lands">Sealaska Lands</label>
-          </div>
-          <div id="menu-item">
-            <input id="roads" type="checkbox" name="rtoggle" value="roads" defaultChecked/>
-            <label for="roads">Roads</label>
-          </div>
+        <div id="legend">
+          <img id="menu-icon" alt="layer icon" src="https://images.icon-icons.com/2030/PNG/512/layers_icon_124022.png"></img>
         </div>
       </div>
       <div id="alt-title">Sealaska Data Portal</div>

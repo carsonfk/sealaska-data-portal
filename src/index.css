@@ -208,31 +208,67 @@ nav {
   cursor: pointer;
 }
 
-/* map style menu */
-#menu {
+.flex-vertical {
   display: flex;
   flex-direction: column;
-  position: absolute; /* edge of map container div */
-  top: 10px;
+  flex-basis: auto;
+}
+
+#menu-legend {
+  position: absolute;
   right: 360px;
-  padding: 4px 19px 4px 19px;
+  top: 110px;
+}
+
+#menu-legend > div { 
+  display: inherit;
+  flex-direction: inherit;
+  width: fit-content;
+}
+
+/* map style menu */
+#menu {
   border: none;
   border-radius: 3px;
   font-size: 15px;
-  background: linear-gradient(to bottom, beige, white);;
+  background: linear-gradient(to bottom, beige, white);
   z-index: 10;
   box-shadow: 0 0 2px #000c;
+  margin-bottom: 12px;
+  
+}
+
+#menu-icon:hover, #refresh-small:hover, #menu-item {
+  cursor: pointer;
 }
 
 #basemap-menu, #layer-menu {
-  display: flex;
-  flex-direction: column;
-  margin: auto;
+  padding: 0px 10px 10px 10px;
 }
 
 #menu-item input{
   margin-right: 5px;
 }
+
+#menu > div.hide {
+  display: none;
+}
+
+#menu-icon {
+  height: 40px;
+  margin-right: 0px;
+}
+
+/* map legend */
+#legend {
+  border: none;
+  border-radius: 3px;
+  font-size: 15px;
+  background: linear-gradient(to bottom, beige, white);
+  z-index: 10;
+  box-shadow: 0 0 2px #000c;
+}
+
 
 #alt-title {
   display: none 
@@ -409,11 +445,11 @@ td:nth-child(2) {
   align-items: center; /* Vertically center content */
 }
 
-.refresh {
+#refresh {
   margin: auto;
 }
 
-.refresh-small {
+#refresh-small {
   display: none;
 }
 
@@ -422,12 +458,16 @@ td:nth-child(2) {
   background: linear-gradient(to bottom, beige, white);
 }
 
-@media only screen and (max-width: 1920px) {
+@media only screen and (max-width: 920px) {
   .features {
     max-width: 300px;
   }
 
   #menu {
+    right: 310px;
+  }
+
+  #legend {
     right: 310px;
   }
   
@@ -458,16 +498,16 @@ td:nth-child(2) {
     height: 100px;
     width: 85px;
     margin-right: 10px;
-    top: 250px;
+    bottom: 50px;
     overflow-y: hidden;
     box-shadow: 0 0 3px #000c;
   }
 
-  .refresh {
+  #refresh {
     display: none;
   }
 
-  .refresh-small {
+  #refresh-small {
     display: block;
     margin: auto;
     background-image: url('../public/assets/refresh.svg');
