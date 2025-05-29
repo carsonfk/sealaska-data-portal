@@ -240,10 +240,27 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     };
 
     var menu1 = document.getElementById("menu-icon");
-    var menu2 = document.getElementById('menu').getElementsByTagName('div');
+    var menu2 = document.getElementById('menu-container').getElementsByTagName('div');
+    var legend1 = document.getElementById("legend-icon");
+    var legend2 = document.getElementById('legend-container').getElementsByTagName('div');
     menu1.onclick = () => {
       for (let item of menu2) {
         item.classList.toggle("hide");
+      }
+      for (let item of legend2) {
+        if (!item.classList.contains("hide")) {
+          item.classList.toggle("hide");
+        }
+      }
+    }
+    legend1.onclick = () => {
+      for (let item of legend2) {
+        item.classList.toggle("hide");
+      }
+      for (let item of menu2) {
+        if (!item.classList.contains("hide")) {
+          item.classList.toggle("hide");
+        }
       }
     }
 
@@ -475,14 +492,20 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
   return (
     <>
       <div ref={mapContainer} style={{ height: "100%", width: "100%"}} />
+      <div id="left-drawer">
+        <p className="arrow">{"<"}</p>
+      </div>
+      <div id="right-drawer">
+        <p className="arrow">{">"}</p>
+      </div>
       <div id="info">Hover to see coordinates!</div>
       <div id="update" className="hide">
         <div id="location-msg">Locations Updated</div>
         <div id="location-close">CLOSE</div>
       </div>
       <div id="menu-legend" className="flex-vertical">
-        <div id="menu">
-          <img id="menu-icon" alt="layer icon" src="https://images.icon-icons.com/2030/PNG/512/layers_icon_124022.png"></img>
+        <div id="menu-container">
+          <img id="menu-icon" alt="Image from icons.com" src="https://images.icon-icons.com/2030/PNG/512/layers_icon_124022.png"></img>
           <div id="basemap-menu" className="flex-vertical hide">
             <div id="menu-item">
               <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" defaultChecked={!searchParams.get("mapStyle")}/>
@@ -516,8 +539,13 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
             </div>
           </div>
         </div>
-        <div id="legend">
-          <img id="menu-icon" alt="layer icon" src="https://images.icon-icons.com/2030/PNG/512/layers_icon_124022.png"></img>
+        <div id="legend-container">
+          <img id="legend-icon" alt="Image from freeiconspng.com" src="https://www.freeiconspng.com/uploads/black-key-icon-7.png"></img>
+          <div id="legend" className="flex-vertical hide">
+            <div id="legend-item">
+              <h2>hello world!</h2>
+            </div>
+          </div>
         </div>
       </div>
       <div id="alt-title">Sealaska Data Portal</div>

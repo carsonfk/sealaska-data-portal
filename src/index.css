@@ -157,16 +157,44 @@ nav {
   justify-content: center;
 }
 
+#left-drawer, #right-drawer {
+  display: flex;
+  flex-direction: row;
+  background: linear-gradient(to bottom, beige, white);
+  position: absolute;
+  margin: auto;
+  align-self: center;
+  padding: 5px;
+  border: none;
+  font-size: 12px;
+  text-align: center;
+  box-shadow: 0 0 3px #000c;
+  height: 40px;
+  width: 13px;
+}
+
+#left-drawer {
+  left: 300px;
+  border-radius: 0px 3px 3px 0px;
+}
+
+#right-drawer {
+  right: 300px;
+  border-radius: 3px 0px 0px 3px;
+}
+
+.arrow {
+  margin:auto
+}
 #info {
   position: fixed;
   margin: 10px auto;
-  padding: 7px;
+  padding: 5px;
   border: none;
   border-radius: 3px;
   font-size: 12px;
   text-align: center;
   background: linear-gradient(to bottom, beige, white);
-  z-index: 5;
   box-shadow: 0 0 3px #000c;
 }
 
@@ -180,7 +208,6 @@ nav {
   border-radius: 3px;
   font-size: 15px;
   background: black;
-  z-index: 100;
   box-shadow: 0 0 2px #000c;
   transition: all 0.1s;
   opacity: 1;
@@ -211,7 +238,11 @@ nav {
 .flex-vertical {
   display: flex;
   flex-direction: column;
-  flex-basis: auto;
+}
+
+.flex-horizontal {
+  display: flex;
+  flex-direction: row;
 }
 
 #menu-legend {
@@ -220,14 +251,15 @@ nav {
   top: 110px;
 }
 
-#menu-legend > div { 
+#menu-legend > div {
   display: inherit;
   flex-direction: inherit;
   width: fit-content;
+  align-self: flex-end;
 }
 
 /* map style menu */
-#menu {
+#menu-container {
   border: none;
   border-radius: 3px;
   font-size: 15px;
@@ -235,7 +267,6 @@ nav {
   z-index: 10;
   box-shadow: 0 0 2px #000c;
   margin-bottom: 12px;
-  
 }
 
 #menu-icon:hover, #refresh-small:hover, #menu-item {
@@ -250,17 +281,17 @@ nav {
   margin-right: 5px;
 }
 
-#menu > div.hide {
+#menu-container > div.hide, #legend-container > div.hide {
   display: none;
 }
 
-#menu-icon {
-  height: 40px;
+#menu-icon, #legend-icon {
+  width: 30px;
   margin-right: 0px;
 }
 
 /* map legend */
-#legend {
+#legend-container {
   border: none;
   border-radius: 3px;
   font-size: 15px;
@@ -286,10 +317,6 @@ nav {
   left: 0;
   width: 10%;
   height: 10%;
-}
-
-.mapboxgl-navigation-control {
-  left: 10px;
 }
 
 img {
@@ -458,16 +485,12 @@ td:nth-child(2) {
   background: linear-gradient(to bottom, beige, white);
 }
 
-@media only screen and (max-width: 920px) {
+@media only screen and (max-width: 1920px) {
   .features {
     max-width: 300px;
   }
 
-  #menu {
-    right: 310px;
-  }
-
-  #legend {
+  #menu-legend {
     right: 310px;
   }
   
@@ -489,7 +512,7 @@ td:nth-child(2) {
     max-width: 97vw;
   }
 
-  #menu {
+  #menu-legend {
     right: 10px;
   }
   
@@ -572,7 +595,7 @@ td:nth-child(2) {
     z-index: 5;
     left: 10px;
     margin: 10px auto;
-    padding: 7px;
+    padding: 3px;
     border: none;
     border-radius: 3px;
     font-size: 20px;
@@ -612,7 +635,8 @@ td:nth-child(2) {
 @media only screen and (max-width: 640px) {
 
   #alt-title {
-    width: 120px;
+    width: 110px;
+    padding: 0px;
   }
 
   /*
