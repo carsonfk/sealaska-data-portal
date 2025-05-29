@@ -23,6 +23,7 @@ export default function Home(props){
 	const mapRef = useRef(null);
 	//const timerRef = useRef(null);
 	const [temp, setTemp] = useState();
+	const [sidebars, setSidebars] = useState([true, true]);
 
 	//const authentication = await ArcGISIdentityManager.signIn({
 	//	username: process.env.ARCGIS_USERNAME,
@@ -53,20 +54,6 @@ export default function Home(props){
 		}
 		return locations;
 	}
-
-    useEffect(() => {
-		async function contributeMode() { //unused
-		}
-
-		async function viewMode() { //unused
-		}
-
-		if (mapMode === 'view'){
-			viewMode();
-		} else if (mapMode === 'contribute'){
-			contributeMode();
-		}
-	}, [mapMode]) //anytime mapMode is updated
 
     const handleModeSubmit = (selectedMode) => { //from form jsx - this has to do with updating map mode value when the map mode form is submitted
 		if (mapMode !== selectedMode) {
@@ -100,6 +87,42 @@ export default function Home(props){
 		setMapMode('view');
 		//setTarget([, 'list'])
 	}
+
+	useEffect(() => {
+		var left = document.getElementById("left-drawer");
+		var features = document.getElementById("features");
+		left.onclick = () => {
+			features.classList.toggle("hide");
+			left.classList.toggle("hide")
+			setTimeout(() => {
+				setSidebars([!sidebars[0], sidebars[1]]);
+			}, 1);
+		};
+
+		let right = document.getElementById("right-drawer")
+		let options = document.getElementById("options");
+		right.onclick = () => {
+			options.classList.toggle("hide");
+			right.classList.toggle("hide")
+			setTimeout(() => {
+				setSidebars([sidebars[0], !sidebars[1]]);
+			}, 1);
+		};
+	}, []);
+
+	useEffect(() => {
+		async function contributeMode() { //unused
+		}
+
+		async function viewMode() { //unused
+		}
+
+		if (mapMode === 'view'){
+			viewMode();
+		} else if (mapMode === 'contribute'){
+			contributeMode();
+		}
+	}, [mapMode]) //anytime mapMode is updated
 	
 	useEffect(()=>{ //this pulls data from the database on inital load and reset
 		async function resetLoad() {
@@ -172,16 +195,22 @@ export default function Home(props){
         <main>
             
 			<div className="content">
-				<div className="features">
+				<div id="left-drawer">
+					<p className="arrow">{"<"}</p>
+				</div>
+				<div id="features">
 					<Hero scrollToMap={scrollToMap}/>
 					<ViewContributeForm mode={mapMode} onSubmit={handleModeSubmit}/>
 					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits} onReset={handleReset} submitSwap={handleFormSubmit}/>
 					<ListFeatures locations={data} mode={mapMode} target={target} onCenter={handleCenter}/>
 				</div>
-				<div className="map">
-					<Map locations={data} mode={mapMode} target={target} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection} onTemp={handleTemp}/>
+				<div id="map">
+					<Map locations={data} mode={mapMode} target={target} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection} onTemp={handleTemp} sidebars={sidebars}/>
 				</div>
-				<div className="options">
+				<div id="right-drawer">
+					<p className="arrow">{">"}</p>
+				</div>
+				<div id="options">
 					<Options onReset={handleReset} reset={reset}/>
 				</div>
 			</div>

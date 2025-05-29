@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-export default function Map( {locations, mode, target, selectionCoordinates, onSelect, onTemp}) {
+export default function Map( {locations, mode, target, selectionCoordinates, onSelect, onTemp, sidebars}) {
   const mapContainer = useRef(null);
   const map = useRef(null);
   const [lng, setLng] = useState(-103);
@@ -74,6 +74,21 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
         .addTo(map.current);
     }
   }
+
+  useEffect(() => {
+    if (map.current) {
+      console.log(sidebars)
+      var classes = document.getElementById("mapContainer").classList;
+      console.log(classes)
+      if ((sidebars[0] && classes.contains("left")) || (!sidebars[0] && !classes.contains("left"))) {
+        classes.toggle("left");
+      }
+      if ((sidebars[1] && classes.contains("right")) || (!sidebars[1] && !classes.contains("right"))) {
+        classes.toggle("right");
+      }
+      map.current.resize();
+    }
+  }, [sidebars])
 
   useEffect(() => {
     if (locations) {
@@ -491,13 +506,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
 
   return (
     <>
-      <div ref={mapContainer} style={{ height: "100%", width: "100%"}} />
-      <div id="left-drawer">
-        <p className="arrow">{"<"}</p>
-      </div>
-      <div id="right-drawer">
-        <p className="arrow">{">"}</p>
-      </div>
+      <div id="mapContainer" ref={mapContainer} />
       <div id="info">Hover to see coordinates!</div>
       <div id="update" className="hide">
         <div id="location-msg">Locations Updated</div>

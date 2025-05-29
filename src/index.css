@@ -148,13 +148,28 @@ nav {
 }
 
 /* map */
-.map {
+#map {
   display: flex;
   flex: 1;
   flex-direction: row;
   background:#ddd;
   z-index: 1;
   justify-content: center;
+}
+
+#mapContainer {
+  width: 100%;
+  height: 100%;
+}
+
+#mapContainer.left {
+  position: absolute;
+  left: 0px;
+}
+
+#mapContainer.right {
+  position: absolute;
+  right: 0px;
 }
 
 #left-drawer, #right-drawer {
@@ -171,16 +186,26 @@ nav {
   box-shadow: 0 0 3px #000c;
   height: 40px;
   width: 13px;
+  z-index: 2;
+  cursor: pointer;
 }
 
 #left-drawer {
-  left: 300px;
+  left: 350px;
   border-radius: 0px 3px 3px 0px;
 }
 
+#left-drawer.hide {
+  left: 0px;
+}
+
 #right-drawer {
-  right: 300px;
+  right: 350px;
   border-radius: 3px 0px 0px 3px;
+}
+
+#right-drawer.hide {
+  right: 0px;
 }
 
 .arrow {
@@ -221,6 +246,7 @@ nav {
   height: 28px;
   width: 200px;
   font-size: 10px;
+  z-index: -1;
 }
 
 #location-msg, #location-close {
@@ -326,7 +352,7 @@ img {
 }
 
 /* features */
-.features {
+#features {
   display:flex;
   flex:1;
   flex-direction: column;
@@ -343,6 +369,10 @@ img {
   border-radius: 3px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   align-items: center; /* Vertically center content */
+}
+
+#features.hide {
+  margin-left: -300px;
 }
 
 input {
@@ -453,7 +483,7 @@ td:nth-child(2) {
 }
 
 /* options */
-.options {
+#options {
   display:flex;
   flex:1;
   flex-direction: column;
@@ -472,6 +502,14 @@ td:nth-child(2) {
   align-items: center; /* Vertically center content */
 }
 
+#options, #features, #right-drawer, #left-drawer {
+  transition: all 0.3s;
+}
+
+#options.hide {
+  margin-right: -300px;
+}
+
 #refresh {
   margin: auto;
 }
@@ -486,16 +524,24 @@ td:nth-child(2) {
 }
 
 @media only screen and (max-width: 1920px) {
-  .features {
+  #features {
     max-width: 300px;
+  }
+  
+  #options {
+    max-width: 300px;
+  }
+
+  #left-drawer {
+    left: 300px;
+  }
+
+  #right-drawer {
+    right: 300px;
   }
 
   #menu-legend {
     right: 310px;
-  }
-  
-  .options {
-    max-width: 300px;
   }
 }
 
@@ -516,7 +562,7 @@ td:nth-child(2) {
     right: 10px;
   }
   
-  .options {
+  #options {
     position: fixed;
     height: 100px;
     width: 85px;
@@ -577,7 +623,7 @@ td:nth-child(2) {
     background-color: none;
   }
 
-  .features {
+  #features {
     position: fixed;
     height: 300px;
     width: 290px;
@@ -608,7 +654,7 @@ td:nth-child(2) {
     
   }
 
-  .map {
+  #map {
     
   }
 
@@ -627,7 +673,7 @@ td:nth-child(2) {
   }
 */
 
-  .options {
+  #options {
     
   }
 }
@@ -657,7 +703,7 @@ td:nth-child(2) {
   }
 */
 
-  .features {
+  #features {
     height: 250px;
     width: 240px;
   }
