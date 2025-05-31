@@ -144,7 +144,7 @@ nav {
   left: 0;
   right: 0;
   bottom: 0;
-  position: fixed
+  position: fixed;
 }
 
 /* map */
@@ -162,13 +162,14 @@ nav {
   height: 100%;
 }
 
-#mapContainer.left {
+#mapContainer.left, #mapContainer.right {
   position: absolute;
-  left: 0px;
+  width: calc(100% - 350px);
 }
 
-#mapContainer.right {
-  position: absolute;
+#mapContainer.left.right {
+  width: 100%;
+  left: 0px;
   right: 0px;
 }
 
@@ -211,8 +212,9 @@ nav {
 .arrow {
   margin:auto
 }
+
 #info {
-  position: fixed;
+  position: absolute;
   margin: 10px auto;
   padding: 5px;
   border: none;
@@ -372,7 +374,7 @@ img {
 }
 
 #features.hide {
-  margin-left: -300px;
+  margin-left: -350px;
 }
 
 input {
@@ -507,7 +509,7 @@ td:nth-child(2) {
 }
 
 #options.hide {
-  margin-right: -300px;
+  margin-right: -350px;
 }
 
 #refresh {
@@ -524,12 +526,33 @@ td:nth-child(2) {
 }
 
 @media only screen and (max-width: 1920px) {
+
+  #mapContainer.left, #mapContainer.right {
+    width: calc(100% - 300px);
+  }
+
+  #mapContainer.left {
+    right: 300px
+  }
+
+  #mapContainer.right {
+    left: 300px
+  }
+
   #features {
     max-width: 300px;
+  }
+
+  #features.hide {
+    margin-left: -300px;
   }
   
   #options {
     max-width: 300px;
+  }
+
+  #options.hide {
+    margin-right: -300px;
   }
 
   #left-drawer {
@@ -558,20 +581,7 @@ td:nth-child(2) {
     max-width: 97vw;
   }
 
-  #menu-legend {
-    right: 10px;
-  }
-  
-  #options {
-    position: fixed;
-    height: 100px;
-    width: 85px;
-    margin-right: 10px;
-    bottom: 50px;
-    overflow-y: hidden;
-    box-shadow: 0 0 3px #000c;
-  }
-
+  /*
   #refresh {
     display: none;
   }
@@ -591,6 +601,7 @@ td:nth-child(2) {
   #reset {
     font-size: 13px
   }
+  */
 }
 
 @media only screen and (max-width: 1023px) {
@@ -617,24 +628,7 @@ td:nth-child(2) {
     height: 42px;
   }
 
-  .content {
-    flex: none;
-    background: none;
-    background-color: none;
-  }
-
-  #features {
-    position: fixed;
-    height: 300px;
-    width: 290px;
-    margin: 25px 25px;
-    box-shadow: 0 0 3px #000c;
-  }
-
-  .heroContent {
-    display: none;
-  }
-
+  /*
   #alt-title {
     display: block; 
     position: fixed;
@@ -649,6 +643,7 @@ td:nth-child(2) {
     background: linear-gradient(to bottom, beige, white);
     box-shadow: 0 0 3px #000c;
   }
+  */
 
   .add-location-form {
     
@@ -679,33 +674,56 @@ td:nth-child(2) {
 }
 
 @media only screen and (max-width: 640px) {
-
   #alt-title {
     width: 110px;
     padding: 0px;
   }
 
-  /*
-  #update {
-    right: 10px;
-    bottom: 40px;
-    font-size: 12px;
-    width: 195px;
-    padding: 0px 10px 0px 10px
+  #mapContainer.left, #mapContainer.right {
+    width: calc(100% - 250px);
   }
 
-  #update.hide {
-    right: 42.5px;
-    bottom: 47px;
-    font-size: 8px;
-    width: 130px;
-    padding: 0px 10px 0px 10px
+  #mapContainer.left {
+    right: 250px
   }
-*/
+
+  #mapContainer.right {
+    left: 250px
+  }
+
+
+  /*
+    #update {
+      right: 10px;
+      bottom: 40px;
+      font-size: 12px;
+      width: 195px;
+      padding: 0px 10px 0px 10px
+    }
+
+    #update.hide {
+      right: 42.5px;
+      bottom: 47px;
+      font-size: 8px;
+      width: 130px;
+      padding: 0px 10px 0px 10px
+    }
+  */
 
   #features {
-    height: 250px;
-    width: 240px;
+    max-width: 250px;
+  }
+
+  #options {
+    max-width: 250px;
+  }
+
+  #left-drawer {
+    left: 250px;
+  }
+
+  #right-drawer {
+    right: 250px
   }
   
   .mode:before {

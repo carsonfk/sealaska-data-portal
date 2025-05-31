@@ -77,14 +77,14 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
 
   useEffect(() => {
     if (map.current) {
-      console.log(sidebars)
       var classes = document.getElementById("mapContainer").classList;
-      console.log(classes)
       if ((sidebars[0] && classes.contains("left")) || (!sidebars[0] && !classes.contains("left"))) {
         classes.toggle("left");
+        console.log("hi left")
       }
       if ((sidebars[1] && classes.contains("right")) || (!sidebars[1] && !classes.contains("right"))) {
         classes.toggle("right");
+        console.log("hi right")
       }
       map.current.resize();
     }

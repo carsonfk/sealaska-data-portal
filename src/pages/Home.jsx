@@ -43,7 +43,7 @@ export default function Home(props){
 	//	authentication: authentication
 	//  });
 
-	//sort provided JSON using sort parameter
+	//sort provided JSON using sort state
 	function sortJSON(locations) {
 		if (sort === 'newest') {
 			let locationsSort = []; 
@@ -93,20 +93,16 @@ export default function Home(props){
 		var features = document.getElementById("features");
 		left.onclick = () => {
 			features.classList.toggle("hide");
-			left.classList.toggle("hide")
-			setTimeout(() => {
-				setSidebars([!sidebars[0], sidebars[1]]);
-			}, 1);
+			left.classList.toggle("hide");
+			setSidebars(sidebars => [!sidebars[0], sidebars[1]]);
 		};
 
 		let right = document.getElementById("right-drawer")
 		let options = document.getElementById("options");
 		right.onclick = () => {
 			options.classList.toggle("hide");
-			right.classList.toggle("hide")
-			setTimeout(() => {
-				setSidebars([sidebars[0], !sidebars[1]]);
-			}, 1);
+			right.classList.toggle("hide");
+			setSidebars(sidebars => [sidebars[0], !sidebars[1]]);
 		};
 	}, []);
 
