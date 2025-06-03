@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useRef} from "react";
+import { useSearchParams } from "react-router-dom";
 import AddFeatureForm from "../components/AddFeatureForm";
 import Map from "../components/Map";
 import ListFeatures from "../components/ListFeatures";
@@ -13,6 +14,7 @@ import { moveItem, getSelf } from "@esri/arcgis-rest-portal";
 //import "dotenv/config";
 
 export default function Home(props){
+	const [searchParams, setSearchParams] = useSearchParams();
 	const [data, setData] = useState();
 	const [target, setTarget] = useState([-1, 'none']);
 	//const [filter, setFilter] = useState('null')
@@ -23,7 +25,10 @@ export default function Home(props){
 	const mapRef = useRef(null);
 	//const timerRef = useRef(null);
 	const [temp, setTemp] = useState();
-	const [sidebars, setSidebars] = useState([true, true]);
+	const [sidebars, setSidebars] = useState();
+
+	const leftParam = searchParams.get('left');
+	const rightParam = searchParams.get('right');
 
 	//const authentication = await ArcGISIdentityManager.signIn({
 	//	username: process.env.ARCGIS_USERNAME,
@@ -53,6 +58,18 @@ export default function Home(props){
 			locations = locationsSort;
 		}
 		return locations;
+	}
+
+	function updateParam(key, value) {
+        const newParams = new URLSearchParams(searchParams); // Copy existing params
+        newParams.set(key, value); // Update only the desired param
+        setSearchParams(newParams); // Apply changes
+    };
+
+	function hidden(side) {
+		let val;
+		searchParams.get(side) ? val = "hide": val = null;
+		return val;
 	}
 
     const handleModeSubmit = (selectedMode) => { //from form jsx - this has to do with updating map mode value when the map mode form is submitted
@@ -89,20 +106,40 @@ export default function Home(props){
 	}
 
 	useEffect(() => {
+		var leftInit, rightInit;
+    	searchParams.get("left") ? leftInit = false : leftInit = true;
+		searchParams.get("right") ? rightInit = false : rightInit = true;
+		setSidebars([leftInit, rightInit]);
+		console.log(leftInit, rightInit);
+
 		var left = document.getElementById("left-drawer");
 		var features = document.getElementById("features");
 		left.onclick = () => {
+			setSidebars(sidebars => [!sidebars[0], sidebars[1]]);
 			features.classList.toggle("hide");
 			left.classList.toggle("hide");
-			setSidebars(sidebars => [!sidebars[0], sidebars[1]]);
+			if (!features.classList.contains("hide")) {
+            	setSearchParams(searchParams.delete("left"));
+				console.log('visible:' + searchParams.has("left"));
+			} else {
+				updateParam(left, false)
+				console.log('visible:' + searchParams.has("left"));
+			}
 		};
 
 		let right = document.getElementById("right-drawer")
 		let options = document.getElementById("options");
 		right.onclick = () => {
+			setSidebars(sidebars => [sidebars[0], !sidebars[1]]);
 			options.classList.toggle("hide");
 			right.classList.toggle("hide");
-			setSidebars(sidebars => [sidebars[0], !sidebars[1]]);
+			if (!options.classList.contains("hide")) {
+            	setSearchParams(searchParams.delete("right"));
+				console.log("visible");
+			} else {
+				updateParam(right, false)
+				console.log("hidden");
+			}
 		};
 	}, []);
 
@@ -191,22 +228,22 @@ export default function Home(props){
         <main>
             
 			<div className="content">
-				<div id="left-drawer">
+				<div id="left-drawer" className={hidden("left")}>
 					<p className="arrow">{"<"}</p>
 				</div>
-				<div id="features">
+				<div id="features" className={hidden("left")}>
 					<Hero scrollToMap={scrollToMap}/>
 					<ViewContributeForm mode={mapMode} onSubmit={handleModeSubmit}/>
 					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits} onReset={handleReset} submitSwap={handleFormSubmit}/>
 					<ListFeatures locations={data} mode={mapMode} target={target} onCenter={handleCenter}/>
 				</div>
 				<div id="map">
-					<Map locations={data} mode={mapMode} target={target} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection} onTemp={handleTemp} sidebars={sidebars}/>
+					<Map locations={data} mode={mapMode} target={target} selectionCoordinates={currentSelection} sidebars={sidebars} onSelect={handleCurrentSelection} onTemp={handleTemp}/>
 				</div>
-				<div id="right-drawer">
+				<div id="right-drawer" className={hidden("right")}>
 					<p className="arrow">{">"}</p>
 				</div>
-				<div id="options">
+				<div id="options" className={hidden("right")}>
 					<Options onReset={handleReset} reset={reset}/>
 				</div>
 			</div>

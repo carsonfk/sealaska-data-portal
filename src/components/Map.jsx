@@ -3,16 +3,16 @@ import { useSearchParams } from "react-router-dom";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-export default function Map( {locations, mode, target, selectionCoordinates, onSelect, onTemp, sidebars}) {
+export default function Map( {locations, mode, target, selectionCoordinates, sidebars, onSelect, onTemp}) {
   const mapContainer = useRef(null);
   const map = useRef(null);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [lng, setLng] = useState(-103);
   const [lat, setLat] = useState(27);
   const [zoom, setZoom] = useState(2);
   const [featureLocations, setFeatureLocations] = useState([]);
   const [timer, setTimer] = useState([]);
   const [styleSwap, setStyleSwap] = useState();
-  const [searchParams, setSearchParams] = useSearchParams();
   const [marker, setMarker] = useState(new mapboxgl.Marker({
     id: 'marker',
     draggable: true
@@ -22,7 +22,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
     closeButton: false
   }));
 
-  const paramValue = searchParams.get('mapStyle');
+  const mapParam = searchParams.get('mapStyle');
 
   //begins popup construction with or without image
   function handlePopup(feature) {
@@ -78,13 +78,15 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
   useEffect(() => {
     if (map.current) {
       var classes = document.getElementById("mapContainer").classList;
-      if ((sidebars[0] && classes.contains("left")) || (!sidebars[0] && !classes.contains("left"))) {
-        classes.toggle("left");
+      if ((sidebars[0] && classes.contains("no-left")) || (!sidebars[0] && !classes.contains("no-left"))) {
+        classes.toggle("no-left");
+        document.getElementById("alt-title").classList.toggle("no-left");
         console.log("hi left")
       }
-      if ((sidebars[1] && classes.contains("right")) || (!sidebars[1] && !classes.contains("right"))) {
-        classes.toggle("right");
-        console.log("hi right")
+      if ((sidebars[1] && classes.contains("no-right")) || (!sidebars[1] && !classes.contains("no-right"))) {
+        classes.toggle("no-right");
+        document.getElementById("menu-legend").classList.toggle("no-right");
+        console.log("hi right");
       }
       map.current.resize();
     }
@@ -291,7 +293,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
             setSearchParams(searchParams);
           } else {
             map.current.setStyle('mapbox://styles/mapbox/' + layerId);
-            setSearchParams({ mapStyle: layerId});
+            setSearchParams({mapStyle: layerId});
           }
         }
       };
@@ -507,12 +509,12 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
   return (
     <>
       <div id="mapContainer" ref={mapContainer} />
-      <div id="info">Hover to see coordinates!</div>
-      <div id="update" className="hide">
+      <div id="info" className="map-element">Hover to see coordinates!</div>
+      <div id="update" className="map-element hide">
         <div id="location-msg">Locations Updated</div>
         <div id="location-close">CLOSE</div>
       </div>
-      <div id="menu-legend" className="flex-vertical">
+      <div id="menu-legend" className="flex-vertical map-element">
         <div id="menu-container">
           <img id="menu-icon" alt="Image from icons.com" src="https://images.icon-icons.com/2030/PNG/512/layers_icon_124022.png"></img>
           <div id="basemap-menu" className="flex-vertical hide">
@@ -521,15 +523,15 @@ export default function Map( {locations, mode, target, selectionCoordinates, onS
               <label for="satellite-streets-v12">Satellite</label>
             </div>
             <div id="menu-item">
-              <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors" defaultChecked={paramValue === "outdoors-v12"}/>
+              <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors" defaultChecked={mapParam === "outdoors-v12"}/>
               <label for="outdoors-v12">Outdoors</label>
             </div>
             <div id="menu-item">
-              <input id="dark-v11" type="radio" name="rtoggle" value="dark" defaultChecked={paramValue === "dark-v11"}/>
+              <input id="dark-v11" type="radio" name="rtoggle" value="dark" defaultChecked={mapParam === "dark-v11"}/>
               <label for="dark-v11">Dark</label>
             </div>
             <div id="menu-item">
-              <input id="light-v11" type="radio" name="rtoggle" value="light" defaultChecked={paramValue === "light-v11"}/>
+              <input id="light-v11" type="radio" name="rtoggle" value="light" defaultChecked={mapParam === "light-v11"}/>
               <label for="light-v11">Light</label>
             </div>
           </div>
