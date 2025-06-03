@@ -1,12 +1,13 @@
 import React, {useState, useEffect, useRef} from "react";
 import { useSearchParams } from "react-router-dom";
+import {getDatabase, ref, onValue, get, orderByChild, equalTo, query } from 'firebase/database'
 import AddFeatureForm from "../components/AddFeatureForm";
 import Map from "../components/Map";
 import ListFeatures from "../components/ListFeatures";
-import {getDatabase, ref, onValue, get, orderByChild, equalTo, query } from 'firebase/database'
 import Hero from "../components/Hero";
 import ViewContributeForm from "../components/ViewContributeForm";
 import Options from "../components/Options";
+import { updateParam } from "../functions";
 
 import { createApiKey } from "@esri/arcgis-rest-developer-credentials";
 import { ArcGISIdentityManager } from "@esri/arcgis-rest-request";
@@ -60,11 +61,21 @@ export default function Home(props){
 		return locations;
 	}
 
-	function updateParam(key, value) {
-        const newParams = new URLSearchParams(searchParams); // Copy existing params
-        newParams.set(key, value); // Update only the desired param
-        setSearchParams(newParams); // Apply changes
-    };
+	function clickInit(side) {
+		let sidebar = document.getElementsByClassName(side);
+		sidebar[0].onclick = () => {
+			setSidebars(sidebars => [side === "left" ? !sidebars[0] : sidebars[0], 
+				side === "right" ? !sidebars[1] : sidebars[1]]);
+			sidebar[0].classList.toggle("hide");
+			sidebar[1].classList.toggle("hide");
+			if (sidebar[1].classList.contains("hide")) {
+				setSearchParams(updateParam(searchParams, side, false));
+			} else {
+				searchParams.delete(side);
+				setSearchParams(searchParams);
+			}
+		};
+	}
 
 	function hidden(side) {
 		let val;
@@ -110,37 +121,9 @@ export default function Home(props){
     	searchParams.get("left") ? leftInit = false : leftInit = true;
 		searchParams.get("right") ? rightInit = false : rightInit = true;
 		setSidebars([leftInit, rightInit]);
-		console.log(leftInit, rightInit);
 
-		var left = document.getElementById("left-drawer");
-		var features = document.getElementById("features");
-		left.onclick = () => {
-			setSidebars(sidebars => [!sidebars[0], sidebars[1]]);
-			features.classList.toggle("hide");
-			left.classList.toggle("hide");
-			if (!features.classList.contains("hide")) {
-            	setSearchParams(searchParams.delete("left"));
-				console.log('visible:' + searchParams.has("left"));
-			} else {
-				updateParam(left, false)
-				console.log('visible:' + searchParams.has("left"));
-			}
-		};
-
-		let right = document.getElementById("right-drawer")
-		let options = document.getElementById("options");
-		right.onclick = () => {
-			setSidebars(sidebars => [sidebars[0], !sidebars[1]]);
-			options.classList.toggle("hide");
-			right.classList.toggle("hide");
-			if (!options.classList.contains("hide")) {
-            	setSearchParams(searchParams.delete("right"));
-				console.log("visible");
-			} else {
-				updateParam(right, false)
-				console.log("hidden");
-			}
-		};
+		clickInit('left');
+		clickInit('right');
 	}, []);
 
 	useEffect(() => {
@@ -226,12 +209,11 @@ export default function Home(props){
 		</header>
 		
         <main>
-            
 			<div className="content">
-				<div id="left-drawer" className={hidden("left")}>
+				<div id="left-drawer" className={"left " + hidden("left")}>
 					<p className="arrow">{"<"}</p>
 				</div>
-				<div id="features" className={hidden("left")}>
+				<div id="features" className={"left " + hidden("left")}>
 					<Hero scrollToMap={scrollToMap}/>
 					<ViewContributeForm mode={mapMode} onSubmit={handleModeSubmit}/>
 					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits} onReset={handleReset} submitSwap={handleFormSubmit}/>
@@ -240,10 +222,10 @@ export default function Home(props){
 				<div id="map">
 					<Map locations={data} mode={mapMode} target={target} selectionCoordinates={currentSelection} sidebars={sidebars} onSelect={handleCurrentSelection} onTemp={handleTemp}/>
 				</div>
-				<div id="right-drawer" className={hidden("right")}>
+				<div id="right-drawer" className={"right " + hidden("right")}>
 					<p className="arrow">{">"}</p>
 				</div>
-				<div id="options" className={hidden("right")}>
+				<div id="options" className={"right " + hidden("right")}>
 					<Options onReset={handleReset} reset={reset}/>
 				</div>
 			</div>

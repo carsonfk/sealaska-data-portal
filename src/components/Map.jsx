@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { updateParam } from "../functions";
 
 export default function Map( {locations, mode, target, selectionCoordinates, sidebars, onSelect, onTemp}) {
   const mapContainer = useRef(null);
@@ -74,48 +75,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
         .addTo(map.current);
     }
   }
-
-  useEffect(() => {
-    if (map.current) {
-      var classes = document.getElementById("mapContainer").classList;
-      if ((sidebars[0] && classes.contains("no-left")) || (!sidebars[0] && !classes.contains("no-left"))) {
-        classes.toggle("no-left");
-        document.getElementById("alt-title").classList.toggle("no-left");
-        console.log("hi left")
-      }
-      if ((sidebars[1] && classes.contains("no-right")) || (!sidebars[1] && !classes.contains("no-right"))) {
-        classes.toggle("no-right");
-        document.getElementById("menu-legend").classList.toggle("no-right");
-        console.log("hi right");
-      }
-      map.current.resize();
-    }
-  }, [sidebars])
-
-  useEffect(() => {
-    if (locations) {
-      let update = document.getElementById("update");
-      if (!update.classList.contains("hide")) { // case 1: update msg is visible because of recent refresh -> reset popup
-        update.classList.toggle("hide");
-        setTimeout(() => {
-          update.classList.toggle("hide");
-        }, 100)
-      } else { // case 2: update msg is hidden -> make visible
-        update.classList.toggle("hide");
-      }
-      if (timer.length !== 0) { //restart update msg hide timer if ongoing
-        clearTimeout(timer);
-      }
-      setTimer(setTimeout(() => { //set update msg hide timer
-        if (!update.classList.contains("hide")) {
-          update.classList.toggle("hide");
-        }
-      }, 7000));
-
-      popup.remove();
-      setFeatureLocations(locations); //setState of features to jsonified features
-    }
-  }, [locations]); //fire this whenever the features put into the map change
 
   //updates marker coordinates to drop location, or rejects drop and returns marker to existing selection
   const onDragEnd = 
@@ -198,6 +157,48 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   //    console.log('hello');
   //  }
   //const removePopupRefTest = useRef(removePopupTest);
+
+  useEffect(() => {
+    if (map.current) {
+      var classes = document.getElementById("mapContainer").classList;
+      if ((sidebars[0] && classes.contains("no-left")) || (!sidebars[0] && !classes.contains("no-left"))) {
+        classes.toggle("no-left");
+        document.getElementById("alt-title").classList.toggle("no-left");
+        //console.log("hi left")
+      }
+      if ((sidebars[1] && classes.contains("no-right")) || (!sidebars[1] && !classes.contains("no-right"))) {
+        classes.toggle("no-right");
+        document.getElementById("menu-legend").classList.toggle("no-right");
+        //console.log("hi right");
+      }
+      map.current.resize();
+    }
+  }, [sidebars])
+
+  useEffect(() => {
+    if (locations) {
+      let update = document.getElementById("update");
+      if (!update.classList.contains("hide")) { // case 1: update msg is visible because of recent refresh -> reset popup
+        update.classList.toggle("hide");
+        setTimeout(() => {
+          update.classList.toggle("hide");
+        }, 100)
+      } else { // case 2: update msg is hidden -> make visible
+        update.classList.toggle("hide");
+      }
+      if (timer.length !== 0) { //restart update msg hide timer if ongoing
+        clearTimeout(timer);
+      }
+      setTimer(setTimeout(() => { //set update msg hide timer
+        if (!update.classList.contains("hide")) {
+          update.classList.toggle("hide");
+        }
+      }, 7000));
+
+      popup.remove();
+      setFeatureLocations(locations); //setState of features to jsonified features
+    }
+  }, [locations]); //fire this whenever the features put into the map change
 
   useEffect(() => {
     if (selectionCoordinates[1] === 'box') {
@@ -293,7 +294,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
             setSearchParams(searchParams);
           } else {
             map.current.setStyle('mapbox://styles/mapbox/' + layerId);
-            setSearchParams({mapStyle: layerId});
+            setSearchParams(updateParam(searchParams, 'mapStyle', layerId));
           }
         }
       };

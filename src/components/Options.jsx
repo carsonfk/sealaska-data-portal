@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from "react";
-import getTimestampAK from "../functions";
+import { getTimestampAK } from "../functions";
 
 export default function Options({onReset, reset}){
 

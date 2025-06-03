@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getDatabase, ref, set as firebaseSet, push } from 'firebase/database'
 //import FilterForm from './FilterForm'
-import getTimestampAK from "../functions";
+import { getTimestampAK } from "../functions";
 
 export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onReset, submitSwap} ) {
     const [form, setForm] = useState({
