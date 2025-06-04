@@ -86,6 +86,15 @@ export default function Home(props){
 		return locations;
 	}
 
+	useEffect(() => {
+		if (!searchParams.get("right")) {
+			searchParams.set("right", false);
+			setSearchParams(searchParams);
+			console.log("lalala")
+		};
+	}, [searchParams, setSearchParams]);
+
+
     const handleModeSubmit = (selectedMode) => { //from form jsx - this has to do with updating map mode value when the map mode form is submitted
 		if (mapMode !== selectedMode) {
 			setMapMode(selectedMode);
