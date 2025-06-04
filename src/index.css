@@ -208,8 +208,25 @@ nav {
   right: 0px;
 }
 
+#left-drawer > img {
+  transform: rotate(270deg) translateY(-6px);
+}
+
+#right-drawer > img {
+  transform: rotate(90deg) translateY(6px);
+}
+
+#left-drawer.hide > img {
+  transform: rotate(90deg) translateY(6px);
+}
+
+#right-drawer.hide > img {
+  transform: rotate(270deg) translateY(-6px);;
+}
+
 .arrow {
-  margin:auto
+  margin: auto;
+  height: 10px;
 }
 
 .map-element {
@@ -276,7 +293,7 @@ nav {
 
 #menu-legend {
   right: 360px;
-  top: 130px;
+  top: 110px;
 }
 
 #menu-legend.no-right {
@@ -365,6 +382,10 @@ nav {
   left: 0;
   width: 10%;
   height: 10%;
+}
+
+.mapboxgl-ctrl {
+  background: linear-gradient(to bottom, beige, white) !important;
 }
 
 img {
