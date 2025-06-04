@@ -49,18 +49,15 @@ export default function Home(props){
 	//	authentication: authentication
 	//  });
 
-	//sort provided JSON using sort state
-	function sortJSON(locations) {
-		if (sort === 'newest') {
-			let locationsSort = []; 
-			for (let i = locations.length - 1; i > -1; i--) {
-				locationsSort.push(locations[i]);
-			}
-			locations = locationsSort;
-		}
-		return locations;
+	//returns class to hide sidebars
+	function hidden(side) {
+		let val;
+		searchParams.get(side) ? val = "hide": val = null;
+		console.log(side, val);
+		return val;
 	}
 
+	//initialize click event
 	function clickInit(side) {
 		let sidebar = document.getElementsByClassName(side);
 		sidebar[0].onclick = () => {
@@ -77,10 +74,16 @@ export default function Home(props){
 		};
 	}
 
-	function hidden(side) {
-		let val;
-		searchParams.get(side) ? val = "hide": val = null;
-		return val;
+	//sort provided JSON using sort state
+	function sortJSON(locations) {
+		if (sort === 'newest') {
+			let locationsSort = []; 
+			for (let i = locations.length - 1; i > -1; i--) {
+				locationsSort.push(locations[i]);
+			}
+			locations = locationsSort;
+		}
+		return locations;
 	}
 
     const handleModeSubmit = (selectedMode) => { //from form jsx - this has to do with updating map mode value when the map mode form is submitted
@@ -118,9 +121,14 @@ export default function Home(props){
 
 	useEffect(() => {
 		var leftInit, rightInit;
-    	searchParams.get("left") ? leftInit = false : leftInit = true;
-		searchParams.get("right") ? rightInit = false : rightInit = true;
-		setSidebars([leftInit, rightInit]);
+		if (window.innerWidth <= 878) {
+			searchParams.get("left") ? leftInit = false : leftInit = true;
+			rightInit = false;
+		} else {
+			searchParams.get("left") ? leftInit = false : leftInit = true;
+			searchParams.get("right") ? rightInit = false : rightInit = true;
+		}
+			setSidebars([leftInit, rightInit]);
 
 		clickInit('left');
 		clickInit('right');

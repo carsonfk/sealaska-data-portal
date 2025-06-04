@@ -14,9 +14,9 @@ export function getTimestampAK() {
 
 export function updateParam(searchParams, key, value) {
 	if (searchParams.has(key)) {
-        searchParams.append(key, value);
+        searchParams.set(key, value);
 	} else {
-		searchParams.set(key, value);
+		searchParams.append(key, value);
 	}
 	return searchParams;
 };

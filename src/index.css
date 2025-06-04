@@ -384,7 +384,7 @@ nav {
   height: 10%;
 }
 
-.mapboxgl-ctrl {
+.mapboxgl-ctrl-group {
   background: linear-gradient(to bottom, beige, white) !important;
 }
 
@@ -745,8 +745,16 @@ td:nth-child(2) {
     max-width: 250px;
   }
 
+  #features.hide {
+    margin-left: -250px;
+  }
+
   #options {
     max-width: 250px;
+  }
+
+  #options.hide {
+    margin-right: -250px;
   }
 
   #left-drawer {
@@ -785,7 +793,7 @@ td:nth-child(2) {
     font-size: 18px;
   }
   
-  h6, p, tr, label, input, button {
+  h6, p, tr, label, input, button, li {
     font-size: 13px;
   }
 
