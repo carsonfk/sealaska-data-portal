@@ -2,7 +2,10 @@
 
 This repository contains the client-side code for a webpage displaying data reflecting Sealaska land status and use, including community-provided input submitted using this webpage.
 
-This code modifies and fetches from a firebase database, which stores the community-provided data.
+This code:
+- Uses Mapbox GL JS library for base map
+- Modifies and pulls from a firebase database for community/Sealaska-provided posts
+- Makes requests to ArcGIS REST for static map layers
 
 ## Developer(s)
 
