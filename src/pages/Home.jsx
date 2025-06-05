@@ -87,7 +87,7 @@ export default function Home(props){
 	}
 
 	useEffect(() => {
-		if (!searchParams.get("right")) {
+		if (!searchParams.get("right") && window.innerWidth <= 878) {
 			searchParams.set("right", false);
 			setSearchParams(searchParams);
 			console.log("lalala")
