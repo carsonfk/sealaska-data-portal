@@ -156,6 +156,10 @@ nav {
   background: black;
 }
 
+#map.light {
+  background: white;
+}
+
 #mapContainer {
   position: absolute;
   width: calc(100% - 700px);

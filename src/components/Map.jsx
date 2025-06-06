@@ -284,6 +284,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
 
     let inputs = document.getElementById('basemap-menu').getElementsByTagName('input');
     for (let input of inputs) {
+      let mapElement = document.getElementById("map");
       input.onclick = (layer) => {
        let layerId = layer.target.id;
         if (!map.current.style.globalId.includes(layerId)) {
@@ -295,6 +296,14 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
           } else {
             map.current.setStyle('mapbox://styles/mapbox/' + layerId);
             setSearchParams(updateParam(searchParams, 'mapStyle', layerId));
+          }
+
+          if (input.classList.contains("light")) {
+            mapElement.classList.add("light");
+            console.log(input.classList+ " light")
+          } else {
+            mapElement.classList.remove("light")
+            console.log(input.classList + " dark")
           }
         }
       };
@@ -524,7 +533,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
               <label for="satellite-streets-v12">Satellite</label>
             </div>
             <div id="menu-item">
-              <input id="outdoors-v12" type="radio" name="rtoggle" value="outdoors" defaultChecked={mapParam === "outdoors-v12"}/>
+              <input id="outdoors-v12" classList="light" type="radio" name="rtoggle" value="outdoors" defaultChecked={mapParam === "outdoors-v12"}/>
               <label for="outdoors-v12">Outdoors</label>
             </div>
             <div id="menu-item">
@@ -532,7 +541,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
               <label for="dark-v11">Dark</label>
             </div>
             <div id="menu-item">
-              <input id="light-v11" type="radio" name="rtoggle" value="light" defaultChecked={mapParam === "light-v11"}/>
+              <input id="light-v11" classList="light" type="radio" name="rtoggle" value="light" defaultChecked={mapParam === "light-v11"}/>
               <label for="light-v11">Light</label>
             </div>
           </div>
