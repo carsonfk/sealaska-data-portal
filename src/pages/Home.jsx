@@ -51,25 +51,46 @@ export default function Home(props){
 
 	//returns class to hide sidebars
 	function hidden(side) {
+		if (side === "right" && window.innerWidth <= 878) {
+			return "hide";
+		}
+
 		let val;
 		searchParams.get(side) ? val = "hide": val = null;
-		console.log(side, val);
+		//console.log(side, val);
 		return val;
 	}
 
 	//initialize click event
 	function clickInit(side) {
+		let other;
+		(side === "left") ? other = "right" : other = "left";
 		let sidebar = document.getElementsByClassName(side);
+		let sidebar2 = document.getElementsByClassName(other);
 		sidebar[0].onclick = () => {
-			setSidebars(sidebars => [side === "left" ? !sidebars[0] : sidebars[0], 
-				side === "right" ? !sidebars[1] : sidebars[1]]);
-			sidebar[0].classList.toggle("hide");
-			sidebar[1].classList.toggle("hide");
-			if (sidebar[1].classList.contains("hide")) {
-				setSearchParams(updateParam(searchParams, side, false));
+			if (window.innerWidth <= 878) {
+				setSidebars(sidebars => [!sidebars[0], !sidebars[1]]);
+				sidebar[0].classList.toggle("hide");
+				sidebar[1].classList.toggle("hide");
+				sidebar2[0].classList.toggle("hide");
+				sidebar2[1].classList.toggle("hide");
+				if (sidebar[1].classList.contains("hide")) {
+					setSearchParams(updateParam(searchParams, side, false));
+				} else {
+					searchParams.delete(side);
+					setSearchParams(searchParams);
+				}
 			} else {
-				searchParams.delete(side);
-				setSearchParams(searchParams);
+				setSidebars(sidebars => [side === "left" ? !sidebars[0] : sidebars[0], 
+					side === "right" ? !sidebars[1] : sidebars[1]]);
+				sidebar[0].classList.toggle("hide");
+				sidebar[1].classList.toggle("hide");
+				if (sidebar[1].classList.contains("hide")) {
+					setSearchParams(updateParam(searchParams, side, false));
+				} else {
+					searchParams.delete(side);
+					setSearchParams(searchParams);
+				}
 			}
 		};
 	}
@@ -85,15 +106,6 @@ export default function Home(props){
 		}
 		return locations;
 	}
-
-	useEffect(() => {
-		if (!searchParams.get("right") && window.innerWidth <= 878) {
-			searchParams.set("right", false);
-			setSearchParams(searchParams);
-			console.log("lalala")
-		};
-	}, [searchParams, setSearchParams]);
-
 
     const handleModeSubmit = (selectedMode) => { //from form jsx - this has to do with updating map mode value when the map mode form is submitted
 		if (mapMode !== selectedMode) {
@@ -130,6 +142,12 @@ export default function Home(props){
 
 	useEffect(() => {
 		var leftInit, rightInit;
+		if (!searchParams.get("right") && window.innerWidth <= 878) {
+			searchParams.set("right", false);
+			setSearchParams(searchParams);
+			console.log("lalala")
+		};
+
 		if (window.innerWidth <= 878) {
 			searchParams.get("left") ? leftInit = false : leftInit = true;
 			rightInit = false;
