@@ -69,12 +69,14 @@ export default function Home(props){
 		let sidebar = document.getElementsByClassName(side);
 		let sidebar2 = document.getElementsByClassName(other);
 		sidebar[0].onclick = () => {
-			if (window.innerWidth <= 878) {
-				sidebar[0].classList.toggle("hide");
-				sidebar[1].classList.toggle("hide");
+			sidebar[0].classList.toggle("hide");
+			sidebar[1].classList.toggle("hide");
+			if (sidebar[1].classList.contains('hide')) { //exits view mode when closing left sidebar
+				setMapMode('view');
+			}
 
+			if (window.innerWidth <= 878) {
 				if (!searchParams.get(other)) { //if opposite sidebar is visible
-					console.log("huh?")
 					sidebar2[0].classList.toggle("hide");
 					sidebar2[1].classList.toggle("hide");
 					setSearchParams(updateParam(searchParams, other, false));
@@ -93,8 +95,6 @@ export default function Home(props){
 			} else {
 				setSidebars(sidebars => [side === "left" ? !sidebars[0] : sidebars[0], 
 					side === "right" ? !sidebars[1] : sidebars[1]]);
-				sidebar[0].classList.toggle("hide");
-				sidebar[1].classList.toggle("hide");
 				if (sidebar[1].classList.contains("hide")) {
 					setSearchParams(updateParam(searchParams, side, false));
 				} else {
@@ -133,6 +133,7 @@ export default function Home(props){
 			setMapMode(selectedMode);
 		}
 	}
+
     const handleCurrentSelection = (coordinates) => { //from map jsx - updates current point selection (will default to empty when mode is set to view)
 		if (coordinates.length === 0) {
 			setCurrentSelection([[], 'map']);
@@ -140,6 +141,7 @@ export default function Home(props){
 			setCurrentSelection([coordinates, 'map']);
 		}
     }
+
 	const handleEdits = (coordinates) => { //from addfeature jsx - updates current point selection (will default to empty when mode is set to view)
         setCurrentSelection([coordinates, 'box']);
     }
@@ -179,17 +181,18 @@ export default function Home(props){
 	}, []);
 
 	useEffect(() => {
-		async function contributeMode() { //unused
-		}
+		//async function contributeMode() { //unused
+		//}
 
-		async function viewMode() { //unused
-		}
+		//async function viewMode() { //unused
+		//}
 
-		if (mapMode === 'view'){
-			viewMode();
-		} else if (mapMode === 'contribute'){
-			contributeMode();
-		}
+		//if (mapMode === 'view'){
+		//	viewMode();
+		//} else if (mapMode === 'contribute'){
+		//	contributeMode();
+		//}
+		console.log(mapMode)
 	}, [mapMode]) //anytime mapMode is updated
 	
 	useEffect(()=>{ //this pulls data from the database on inital load and reset
@@ -262,10 +265,10 @@ export default function Home(props){
 		
         <main>
 			<div className="content">
-				<div id="left-drawer" className={"left " + hidden("left")}>
+				<div id="left-drawer" className={"main-container left " + hidden("left")}>
 					<img id="arrow-left" className="arrow" alt="Image from pictarts.com" src="https://pictarts.com/21/material/01-vector/m-0027-arrow.png"></img>
 				</div>
-				<div id="features" className={"left " + hidden("left")}>
+				<div id="features" className={"main-container left " + hidden("left")}>
 					<Hero scrollToMap={scrollToMap}/>
 					<ViewContributeForm mode={mapMode} onSubmit={handleModeSubmit}/>
 					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits} onReset={handleReset} submitSwap={handleFormSubmit}/>
@@ -274,10 +277,10 @@ export default function Home(props){
 				<div id="map">
 					<Map locations={data} mode={mapMode} target={target} selectionCoordinates={currentSelection} sidebars={sidebars} onSelect={handleCurrentSelection} onTemp={handleTemp}/>
 				</div>
-				<div id="right-drawer" className={"right " + hidden("right")}>
+				<div id="right-drawer" className={"main-container right " + hidden("right")}>
 					<img id="arrow-right" className="arrow" alt="Image from pictarts.com" src="https://pictarts.com/21/material/01-vector/m-0027-arrow.png"></img>
 				</div>
-				<div id="options" className={"right " + hidden("right")}>
+				<div id="options" className={"main-container right " + hidden("right")}>
 					<Options onReset={handleReset} reset={reset}/>
 				</div>
 			</div>

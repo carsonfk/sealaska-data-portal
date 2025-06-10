@@ -519,14 +519,15 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   return (
     <>
       <div id="mapContainer" ref={mapContainer} />
-      <div id="info" className="map-element">Hover to see coordinates!</div>
+      <div id="alt-title" className="main-container">Sealaska Data Portal</div>
+      <div id="info" className="main-container map-element">Hover to see coordinates!</div>
       <div id="update" className="map-element hide">
         <div id="location-msg">Locations Updated</div>
         <div id="location-close">CLOSE</div>
       </div>
       <div id="menu-legend" className="flex-vertical map-element">
-        <div id="menu-container">
-          <img id="menu-icon" alt="Image from icons.com" src="https://images.icon-icons.com/2030/PNG/512/layers_icon_124022.png"></img>
+        <div id="menu-container" className="main-container">
+          <img id="menu-icon" className="icon" alt="Image from icons.com" src="https://images.icon-icons.com/2030/PNG/512/layers_icon_124022.png"></img>
           <div id="basemap-menu" className="flex-vertical hide">
             <div id="menu-item">
               <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" defaultChecked={!searchParams.get("mapStyle")}/>
@@ -560,8 +561,8 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
             </div>
           </div>
         </div>
-        <div id="legend-container">
-          <img id="legend-icon" alt="Image from freeiconspng.com" src="https://www.freeiconspng.com/uploads/black-key-icon-7.png"></img>
+        <div id="legend-container" className="main-container">
+          <img id="legend-icon" className="icon" alt="Image from freeiconspng.com" src="https://www.freeiconspng.com/uploads/black-key-icon-7.png"></img>
           <div id="legend" className="flex-vertical hide">
             <div id="legend-item">
               <h2>hello world!</h2>
@@ -569,7 +570,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
           </div>
         </div>
       </div>
-      <div id="alt-title">Sealaska Data Portal</div>
     </>
   );
 }

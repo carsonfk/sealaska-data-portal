@@ -114,7 +114,7 @@ nav {
   font-weight: bold;
 }
 
-/* nav menu */
+/* nav menu content */
 #menu-checkbox {
   display: none;
 }
@@ -136,7 +136,7 @@ nav {
   background-image: url("../public/assets/close.svg");
 }
 
-/* content */
+/* main page content */
 .content {
   position: fixed;
   width: 100%;
@@ -145,6 +145,16 @@ nav {
   left: 0;
   right: 0;
   bottom: 0;
+}
+
+.main-container {
+  background: linear-gradient(to bottom, beige, white);
+  border: none;
+  border-radius: 4px;
+}
+
+.mapboxgl-ctrl-group {
+  background: linear-gradient(to bottom, beige, white) !important;
 }
 
 /* map */
@@ -172,14 +182,11 @@ nav {
 
 #mapContainer.no-left.no-right {
   width: 100%;
-  left: 0px;
-  right: 0px;
 }
 
 #left-drawer, #right-drawer {
   display: flex;
   flex-direction: row;
-  background: linear-gradient(to bottom, beige, white);
   position: absolute;
   margin: auto;
   align-self: center;
@@ -241,11 +248,8 @@ nav {
 #info {
   top: 10px;
   padding: 5px;
-  border: none;
-  border-radius: 3px;
   font-size: 12px;
   text-align: center;
-  background: linear-gradient(to bottom, beige, white);
   box-shadow: 0 0 3px #000c;
   justify-self: center;
 }
@@ -253,7 +257,6 @@ nav {
 #update {
   bottom: 30px;
   padding: 0px 20px 0px 20px;
-  border-radius: 3px;
   font-size: 15px;
   background: black;
   box-shadow: 0 0 2px #000c;
@@ -295,6 +298,7 @@ nav {
   flex-direction: row;
 }
 
+/* map style and legend menus */
 #menu-legend {
   right: 360px;
   top: 110px;
@@ -304,27 +308,32 @@ nav {
   right: 10px;
 }
 
-
 #menu-legend > div {
   display: inherit;
   flex-direction: inherit;
   width: fit-content;
   align-self: flex-end;
+  font-size: 15px;
+  box-shadow: 0 0 2px #000c;
 }
 
-/* map style menu */
 #menu-container {
-  border: none;
-  border-radius: 3px;
-  font-size: 15px;
-  background: linear-gradient(to bottom, beige, white);
-  z-index: 10;
-  box-shadow: 0 0 2px #000c;
   margin-bottom: 12px;
 }
 
-#menu-icon:hover, #refresh-small:hover, #menu-item {
+.icon {
+  width: 29px;
+  margin-right: 0px;
+  border: none;
+  border-radius: 4px;
+}
+
+.icon:hover, #refresh-small:hover, #menu-item {
   cursor: pointer;
+}
+
+.icon:hover {
+  backdrop-filter:  brightness(0.95);
 }
 
 #basemap-menu, #layer-menu {
@@ -339,22 +348,6 @@ nav {
   display: none;
 }
 
-#menu-icon, #legend-icon {
-  width: 30px;
-  margin-right: 0px;
-}
-
-/* map legend */
-#legend-container {
-  border: none;
-  border-radius: 3px;
-  font-size: 15px;
-  background: linear-gradient(to bottom, beige, white);
-  z-index: 10;
-  box-shadow: 0 0 2px #000c;
-}
-
-
 #alt-title {
   display: none;
   position: fixed;
@@ -362,11 +355,8 @@ nav {
   left: 10px;
   margin: 10px auto;
   padding: 3px;
-  border: none;
-  border-radius: 3px;
   font-size: 20px;
   text-align: center;
-  background: linear-gradient(to bottom, beige, white);
   box-shadow: 0 0 3px #000c;
 }
 
@@ -388,10 +378,6 @@ nav {
   height: 10%;
 }
 
-.mapboxgl-ctrl-group {
-  background: linear-gradient(to bottom, beige, white) !important;
-}
-
 img {
   max-width: 200px;
   max-height: 150px;
@@ -410,10 +396,8 @@ img {
   overflow-x: hidden; /* figure out why this is needed */
   box-shadow:0 0 5px #000c;
   z-index:2;
-  background: linear-gradient(to bottom, beige, white);
   padding: 10px;
   text-align: center;
-  border-radius: 3px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   align-items: center; /* Vertically center content */
 }
@@ -424,6 +408,12 @@ img {
 
 input {
   cursor: pointer;
+}
+
+.button:hover {
+  backdrop-filter: brightness(0.95);
+  filter: brightness(0.95);
+  box-shadow: 0 0 2px #000c;
 }
 
 /* map mode, sharing mode */
@@ -539,16 +529,14 @@ td:nth-child(2) {
   color: black;
   box-shadow:0 0 5px #000c;
   z-index:2;
-  background: linear-gradient(to bottom, beige, white);
   padding: 10px;
   text-align: center;
-  border-radius: 3px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   align-items: center; /* Vertically center content */
 }
 
 #options, #features, #right-drawer, #left-drawer, #menu-legend {
-  transition: all 0.2s;
+  transition: all 0.1s;
 }
 
 #options.hide {
@@ -565,7 +553,7 @@ td:nth-child(2) {
 
 /* about page */
 #about {
-  background: linear-gradient(to bottom, beige, white);
+  
 }
 
 @media only screen and (max-width: 1920px) {
@@ -838,7 +826,7 @@ td:nth-child(2) {
   }
 
   #options {
-    max-width: 250px;
+    max-width: 200px;
   }
 
   #options.hide {

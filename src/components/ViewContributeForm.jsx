@@ -17,9 +17,9 @@ export default function ViewContributeForm( {mode, onSubmit} ) {
         <form>
             <div className="select-type">
                 <input type="radio" className="mode-input" id="view" name="map-mode" value="view" defaultChecked/>
-                <label className="mode" for="view">View</label>
+                <label className="button mode" for="view">View</label>
                 <input type="radio" className="mode-input" id="contribute" name="map-mode" value="contribute"/>
-                <label className="mode" for="contribute">Contribute</label>
+                <label className="button mode" for="contribute">Contribute</label>
             </div>
         </form>
     )
