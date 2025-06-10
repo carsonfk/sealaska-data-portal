@@ -25,6 +25,7 @@ export default function Home(props){
     const [currentSelection, setCurrentSelection] = useState([[], 'none']);
 	const mapRef = useRef(null);
 	//const timerRef = useRef(null);
+	const windowWidth = useRef(window.innerWidth);
 	const [temp, setTemp] = useState();
 	const [sidebars, setSidebars] = useState();
 
@@ -51,7 +52,7 @@ export default function Home(props){
 
 	//returns class to hide sidebars
 	function hidden(side) {
-		if (side === "right" && window.innerWidth <= 878) {
+		if (side === "right" && !searchParams.get('left') && window.innerWidth <= 878) {
 			return "hide";
 		}
 
@@ -69,11 +70,20 @@ export default function Home(props){
 		let sidebar2 = document.getElementsByClassName(other);
 		sidebar[0].onclick = () => {
 			if (window.innerWidth <= 878) {
-				setSidebars(sidebars => [!sidebars[0], !sidebars[1]]);
 				sidebar[0].classList.toggle("hide");
 				sidebar[1].classList.toggle("hide");
-				sidebar2[0].classList.toggle("hide");
-				sidebar2[1].classList.toggle("hide");
+
+				if (!searchParams.get(other)) { //if opposite sidebar is visible
+					console.log("huh?")
+					sidebar2[0].classList.toggle("hide");
+					sidebar2[1].classList.toggle("hide");
+					setSearchParams(updateParam(searchParams, other, false));
+					setSidebars(sidebars => [!sidebars[0], !sidebars[1]]);
+				} else { //if opposite sidebar is hidden
+					setSidebars(sidebars => [side === "left" ? !sidebars[0] : sidebars[0], 
+						side === "right" ? !sidebars[1] : sidebars[1]]);
+				}
+
 				if (sidebar[1].classList.contains("hide")) {
 					setSearchParams(updateParam(searchParams, side, false));
 				} else {
@@ -106,6 +116,17 @@ export default function Home(props){
 		}
 		return locations;
 	}
+
+	const handleResize = () => { //right sidebar hidden on screen shrink (if left sidebar is visible)
+		windowWidth.current = window.innerWidth;
+		if (windowWidth.current <= 878 && !searchParams.get('left') && !searchParams.get('right')) {
+			let right = document.getElementsByClassName('right');
+			right[0].classList.remove('hide');
+			right[1].classList.remove('hide');
+			setSearchParams(updateParam(searchParams, 'right', false));
+			setSidebars(sidebars => [sidebars[0], !sidebars[1]]);
+		}
+	};
 
     const handleModeSubmit = (selectedMode) => { //from form jsx - this has to do with updating map mode value when the map mode form is submitted
 		if (mapMode !== selectedMode) {
@@ -142,23 +163,19 @@ export default function Home(props){
 
 	useEffect(() => {
 		var leftInit, rightInit;
-		if (!searchParams.get("right") && window.innerWidth <= 878) {
-			searchParams.set("right", false);
-			setSearchParams(searchParams);
+		if (!searchParams.get("right") && searchParams.get("right") && window.innerWidth <= 878) {
+			setSearchParams(updateParam(searchParams, "right", false));
 			console.log("lalala")
 		};
-
-		if (window.innerWidth <= 878) {
-			searchParams.get("left") ? leftInit = false : leftInit = true;
-			rightInit = false;
-		} else {
-			searchParams.get("left") ? leftInit = false : leftInit = true;
-			searchParams.get("right") ? rightInit = false : rightInit = true;
-		}
-			setSidebars([leftInit, rightInit]);
-
+		searchParams.get("left") ? leftInit = false : leftInit = true;
+		searchParams.get("right") ? rightInit = false : rightInit = true;
+		
+		setSidebars([leftInit, rightInit]);
 		clickInit('left');
 		clickInit('right');
+
+		window.addEventListener("resize", handleResize);
+   		return () => window.removeEventListener("resize", handleResize);
 	}, []);
 
 	useEffect(() => {
