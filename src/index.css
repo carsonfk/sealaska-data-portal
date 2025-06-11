@@ -184,7 +184,7 @@ nav {
   width: 100%;
 }
 
-#left-drawer, #right-drawer {
+.drawer {
   display: flex;
   flex-direction: row;
   position: absolute;
@@ -199,6 +199,10 @@ nav {
   width: 13px;
   z-index: 2;
   cursor: pointer;
+}
+
+.drawer:hover {
+  filter: brightness(0.95);
 }
 
 #left-drawer {
@@ -219,20 +223,12 @@ nav {
   right: 0px;
 }
 
-#left-drawer > img {
+#left-drawer > img, #right-drawer.hide > img {
   transform: rotate(270deg) translateY(-6px);
 }
 
-#right-drawer > img {
+#right-drawer > img, #left-drawer.hide > img {
   transform: rotate(90deg) translateY(6px);
-}
-
-#left-drawer.hide > img {
-  transform: rotate(90deg) translateY(6px);
-}
-
-#right-drawer.hide > img {
-  transform: rotate(270deg) translateY(-6px);;
 }
 
 .arrow {
@@ -333,7 +329,7 @@ nav {
 }
 
 .icon:hover {
-  backdrop-filter:  brightness(0.95);
+  backdrop-filter: brightness(0.95)
 }
 
 #basemap-menu, #layer-menu {
@@ -384,7 +380,8 @@ img {
   margin: 0 auto;
 }
 
-#features, #options {
+/* either sidebar */
+.sidebar {
   display:flex;
   flex:1;
   flex-direction: column;
@@ -400,7 +397,7 @@ img {
 
 }
 
-/* features */
+/* features sidebar */
 #features {
   left: 0;
   overflow-x: hidden; /* figure out why this is needed */
@@ -521,13 +518,13 @@ td:nth-child(2) {
   max-width: 113px;
 }
 
-/* options */
+/* options sidebar*/
 #options {
   right: 0;
 }
 
-#options, #features, #right-drawer, #left-drawer, #menu-legend {
-  transition: all 0.1s;
+.sidebar, .drawer, #menu-legend {
+  transition: all 0.15s;
 }
 
 #options.hide {
@@ -557,16 +554,12 @@ td:nth-child(2) {
     width: calc(100% - 300px);
   }
 
-  #features {
+  .sidebar {
     max-width: 300px;
   }
 
   #features.hide {
     margin-left: -300px;
-  }
-  
-  #options {
-    max-width: 300px;
   }
 
   #options.hide {
@@ -670,7 +663,7 @@ td:nth-child(2) {
     
   }
 
-/*
+  /*
   #update {
     right: 25px;
     bottom: 25px;
@@ -679,11 +672,7 @@ td:nth-child(2) {
   #update.hide {
     right: 75px;
   }
-*/
-
-  #options {
-    
-  }
+  */
 }
 
 @media only screen and (max-width: 640px) {
@@ -693,33 +682,29 @@ td:nth-child(2) {
   }
 
   /*
-    #update {
-      right: 10px;
-      bottom: 40px;
-      font-size: 12px;
-      width: 195px;
-      padding: 0px 10px 0px 10px
-    }
+  #update {
+    right: 10px;
+    bottom: 40px;
+    font-size: 12px;
+    width: 195px;
+    padding: 0px 10px 0px 10px
+  }
 
-    #update.hide {
-      right: 42.5px;
-      bottom: 47px;
-      font-size: 8px;
-      width: 130px;
-      padding: 0px 10px 0px 10px
-    }
+  #update.hide {
+    right: 42.5px;
+    bottom: 47px;
+    font-size: 8px;
+    width: 130px;
+    padding: 0px 10px 0px 10px
+  }
   */
 
-  #features {
+  .sidebar {
     max-width: 250px;
   }
 
   #features.hide {
     margin-left: -250px;
-  }
-
-  #options {
-    max-width: 250px;
   }
 
   #options.hide {
@@ -789,7 +774,6 @@ td:nth-child(2) {
     width: calc(100% - 200px);
   }
 
-
   /*
     #update {
       right: 10px;
@@ -808,16 +792,12 @@ td:nth-child(2) {
     }
   */
 
-  #features {
+  .sidebar {
     max-width: 200px;
   }
 
   #features.hide {
     margin-left: -200px;
-  }
-
-  #options {
-    max-width: 200px;
   }
 
   #options.hide {

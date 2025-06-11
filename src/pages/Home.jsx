@@ -265,10 +265,10 @@ export default function Home(props){
 		
         <main>
 			<div className="content">
-				<div id="left-drawer" className={"main-container left " + hidden("left")}>
+				<div id="left-drawer" className={"main-container drawer left " + hidden("left")}>
 					<img id="arrow-left" className="arrow" alt="Image from pictarts.com" src="https://pictarts.com/21/material/01-vector/m-0027-arrow.png"></img>
 				</div>
-				<div id="features" className={"main-container left " + hidden("left")}>
+				<div id="features" className={"main-container sidebar left " + hidden("left")}>
 					<Hero scrollToMap={scrollToMap}/>
 					<ViewContributeForm mode={mapMode} onSubmit={handleModeSubmit}/>
 					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits} onReset={handleReset} submitSwap={handleFormSubmit}/>
@@ -277,10 +277,10 @@ export default function Home(props){
 				<div id="map">
 					<Map locations={data} mode={mapMode} target={target} selectionCoordinates={currentSelection} sidebars={sidebars} onSelect={handleCurrentSelection} onTemp={handleTemp}/>
 				</div>
-				<div id="right-drawer" className={"main-container right " + hidden("right")}>
+				<div id="right-drawer" className={"main-container drawer right " + hidden("right")}>
 					<img id="arrow-right" className="arrow" alt="Image from pictarts.com" src="https://pictarts.com/21/material/01-vector/m-0027-arrow.png"></img>
 				</div>
-				<div id="options" className={"main-container right " + hidden("right")}>
+				<div id="options" className={"main-container sidebar right " + hidden("right")}>
 					<Options onReset={handleReset} reset={reset}/>
 				</div>
 			</div>
