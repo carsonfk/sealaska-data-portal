@@ -384,22 +384,26 @@ img {
   margin: 0 auto;
 }
 
-/* features */
-#features {
+#features, #options {
   display:flex;
   flex:1;
   flex-direction: column;
   bottom: 0;
-  left: 0;
   max-width: 350px;
   overflow-y: scroll;
-  overflow-x: hidden; /* figure out why this is needed */
-  box-shadow:0 0 5px #000c;
+  color: black;
   z-index:2;
   padding: 10px;
   text-align: center;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   align-items: center; /* Vertically center content */
+
+}
+
+/* features */
+#features {
+  left: 0;
+  overflow-x: hidden; /* figure out why this is needed */
 }
 
 #features.hide {
@@ -519,20 +523,7 @@ td:nth-child(2) {
 
 /* options */
 #options {
-  display:flex;
-  flex:1;
-  flex-direction: column;
-  bottom: 0;
   right: 0;
-  max-width: 350px;
-  overflow-y: scroll;
-  color: black;
-  box-shadow:0 0 5px #000c;
-  z-index:2;
-  padding: 10px;
-  text-align: center;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  align-items: center; /* Vertically center content */
 }
 
 #options, #features, #right-drawer, #left-drawer, #menu-legend {
@@ -795,7 +786,7 @@ td:nth-child(2) {
 @media only screen and (max-width: 478px) {
   
   #mapContainer.no-left, #mapContainer.no-right {
-    width: 50%
+    width: calc(100% - 200px);
   }
 
 
@@ -822,7 +813,7 @@ td:nth-child(2) {
   }
 
   #features.hide {
-    margin-left: -250px;
+    margin-left: -200px;
   }
 
   #options {
@@ -830,14 +821,14 @@ td:nth-child(2) {
   }
 
   #options.hide {
-    margin-right: -250px;
+    margin-right: -200px;
   }
 
   #left-drawer {
-    left: 250px;
+    left: 200px;
   }
 
   #right-drawer {
-    right: 250px
+    right: 200px
   }
 }

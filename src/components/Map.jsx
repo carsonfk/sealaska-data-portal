@@ -518,7 +518,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   return (
     <>
       <div id="mapContainer" ref={mapContainer} />
-      <div id="alt-title" className="main-container">Sealaska Data Portal</div>
+      <div id="alt-title" className="main-container ">Sealaska Data Portal</div>
       <div id="info" className="main-container map-element">Hover to see coordinates!</div>
       <div id="update" className="map-element hide">
         <div id="location-msg">Locations Updated</div>
