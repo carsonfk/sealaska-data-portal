@@ -215,9 +215,9 @@ export default function Home(props){
 					}","sharing":"${
 					row.val().sharing
 					}","reviewed":"${
-					row.val().globalid
-					}","reviewed":"${
 					row.val().reviewed
+					}","account":"${
+					row.val().account
 					}","timestamp":{"date":"${
 						row.val().timestamp.date
 						}","time":"${

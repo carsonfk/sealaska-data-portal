@@ -11,7 +11,8 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
         image: "",
         details: "",
         sharing: "public",
-        reviewed: false
+        reviewed: false,
+        account: "anon"
     });
 
     function imageToBase64(img) {

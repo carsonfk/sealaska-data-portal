@@ -428,13 +428,12 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
           "circle-radius": 6,
           "circle-stroke-width": 2,
           'circle-color': [
-                        'match',
-                        ['get', 'reviewed'],
-                        'true',
-                        'orange',
-                        'false',
-                        '#ccc',
-                        'white'
+                        'case',
+                        ['==', ['get', 'account'], 'anon'],
+                        ['match', ['get', 'reviewed'], 'true', 'orange', 'false', '#ccc', '#808080'],
+                        ['==', ['get', 'account'], 'sealaska'],
+                        ['match', ['get', 'reviewed'], 'true', '#CD202D', 'false', '#CD202D', '#808080'],
+                        'white' // Default color
                     ],
           "circle-stroke-color": "white"
         }
