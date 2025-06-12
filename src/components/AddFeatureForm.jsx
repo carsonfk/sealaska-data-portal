@@ -149,15 +149,16 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
                     <div className="sharing-buttons">
                         <div className="interactive menu-item">
                             <input type="radio" className="sharing-input" id="public" name="sharing-type" value="public" defaultChecked onChange={(e) => updateForm({ sharing: "public" })}/>
-                            <label className="sharing" htmlFor="public">Public post</label>
+                            <label className="sharing" htmlFor="public">Everyone</label>
                         </div>
                         <div className="interactive menu-item">
                             <input type="radio" className="sharing-input" id="sealaska" name="sharing-type" value="sealaska" onChange={(e) => updateForm({ sharing: "sealaska" })}/>
-                            <label className="sharing" htmlFor="sealaska">Sealaska-only post</label>
+                            <label className="sharing" htmlFor="sealaska">Sealaska</label>
                         </div>
                     </div>
                     <br></br>
                     <label for="image">Choose a photo (optional):</label>
+                    <br></br>
                     <div className="interactive">
                         <input type="file" id="image" name="image" accept="image/png, image/jpeg"/>
                     </div>
