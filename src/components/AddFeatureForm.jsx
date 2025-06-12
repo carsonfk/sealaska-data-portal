@@ -145,20 +145,23 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
                         onChange={(e) => updateForm({ details: e.target.value }, '')}
                     />
                     <br></br>
-                    <div className="sharing-buttons" >
-                        <label htmlFor="sharing"><b>Sharing:</b></label>
-
-                        <input style={{width: '20px', height: '20px', marginRight: '10px' }} type="radio" className="sharing-input" id="public" name="sharing-type" value="public" defaultChecked onChange={(e) => updateForm({ sharing: "public" })}/>
-                        <label className="sharing" htmlFor="public">Share to public: </label>
-                        <input style={{width: '20px', height: '20px', marginRight: '10px' }} type="radio" className="sharing-input" id="sealaska" name="sharing-type" value="sealaska" onChange={(e) => updateForm({ sharing: "sealaska" })}/>
-                        <label className="sharing" htmlFor="sealaska">For Sealaska use only: </label>
+                    <label htmlFor="sharing">Sharing:</label>
+                    <div className="interactive sharing-buttons">
+                        <div className="menu-item">
+                            <input type="radio" className="sharing-input" id="public" name="sharing-type" value="public" defaultChecked onChange={(e) => updateForm({ sharing: "public" })}/>
+                            <label className="sharing" htmlFor="public">Public post</label>
+                        </div>
+                        <div className="menu-item">
+                            <input type="radio" className="sharing-input" id="sealaska" name="sharing-type" value="sealaska" onChange={(e) => updateForm({ sharing: "sealaska" })}/>
+                            <label className="sharing" htmlFor="sealaska">Sealaska-only post</label>
+                        </div>
                     </div>
                     <br></br>
-                    <div>
-                        <label for="image">Choose a photo (optional):</label>
+                    <label for="image">Choose a photo (optional):</label>
+                    <div className="interactive">
                         <input type="file" id="image" name="image" accept="image/png, image/jpeg"/>
                     </div>
-                    <button className="addLocation" type="submit">Submit your Location</button>
+                    <button className="interactive addLocation" type="submit">Submit your Location</button>
                     <div id="error" hide="true"></div>
                 </form>
             </div>

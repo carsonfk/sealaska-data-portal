@@ -81,6 +81,9 @@ export default function Home(props){
 					sidebar2[1].classList.toggle("hide");
 					setSearchParams(updateParam(searchParams, other, false));
 					setSidebars(sidebars => [!sidebars[0], !sidebars[1]]);
+					if (other === "left") {
+						setMapMode("view");
+					}
 				} else { //if opposite sidebar is hidden
 					setSidebars(sidebars => [side === "left" ? !sidebars[0] : sidebars[0], 
 						side === "right" ? !sidebars[1] : sidebars[1]]);
@@ -265,7 +268,7 @@ export default function Home(props){
 		
         <main>
 			<div className="content">
-				<div id="left-drawer" className={"main-container drawer left " + hidden("left")}>
+				<div id="left-drawer" className={"main-container interactive drawer left " + hidden("left")}>
 					<img id="arrow-left" className="arrow" alt="Image from pictarts.com" src="https://pictarts.com/21/material/01-vector/m-0027-arrow.png"></img>
 				</div>
 				<div id="features" className={"main-container sidebar left " + hidden("left")}>
@@ -277,7 +280,7 @@ export default function Home(props){
 				<div id="map">
 					<Map locations={data} mode={mapMode} target={target} selectionCoordinates={currentSelection} sidebars={sidebars} onSelect={handleCurrentSelection} onTemp={handleTemp}/>
 				</div>
-				<div id="right-drawer" className={"main-container drawer right " + hidden("right")}>
+				<div id="right-drawer" className={"main-container interactive drawer right " + hidden("right")}>
 					<img id="arrow-right" className="arrow" alt="Image from pictarts.com" src="https://pictarts.com/21/material/01-vector/m-0027-arrow.png"></img>
 				</div>
 				<div id="options" className={"main-container sidebar right " + hidden("right")}>

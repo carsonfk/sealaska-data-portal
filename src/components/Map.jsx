@@ -251,7 +251,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
             ", " + Math.abs(parseFloat(JSON.stringify(mouseLng)).toFixed(4)) + ((mouseLng >= 0) ? "°E" : "°W");
     });
 
-    let close = document.getElementById("location-close");
+    let close = document.getElementById("msg-close");
     close.onclick = () => {
       let update = document.getElementById("update");
       update.classList.toggle("hide");
@@ -518,52 +518,52 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   return (
     <>
       <div id="mapContainer" ref={mapContainer} />
-      <div id="alt-title" className="main-container ">Sealaska Data Portal</div>
+      <div id="alt-title" className="main-container">Sealaska Data Portal</div>
       <div id="info" className="main-container map-element">Hover to see coordinates!</div>
       <div id="update" className="map-element hide">
         <div id="location-msg">Locations Updated</div>
-        <div id="location-close">CLOSE</div>
+        <div id="msg-close" className="interactive">CLOSE</div>
       </div>
       <div id="menu-legend" className="flex-vertical map-element">
         <div id="menu-container" className="main-container">
-          <img id="menu-icon" className="icon" alt="Image from icons.com" src="https://images.icon-icons.com/2030/PNG/512/layers_icon_124022.png"></img>
+          <img id="menu-icon" className="interactive icon" alt="Image from icons.com" src="https://images.icon-icons.com/2030/PNG/512/layers_icon_124022.png"></img>
           <div id="basemap-menu" className="flex-vertical hide">
-            <div id="menu-item">
+            <div className="interactive menu-item">
               <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" defaultChecked={!searchParams.get("mapStyle")}/>
               <label for="satellite-streets-v12">Satellite</label>
             </div>
-            <div id="menu-item">
+            <div className="interactive menu-item">
               <input id="outdoors-v12" className="light" type="radio" name="rtoggle" value="outdoors" defaultChecked={mapParam === "outdoors-v12"}/>
               <label for="outdoors-v12">Outdoors</label>
             </div>
-            <div id="menu-item">
+            <div className="interactive menu-item">
               <input id="dark-v11" type="radio" name="rtoggle" value="dark" defaultChecked={mapParam === "dark-v11"}/>
               <label for="dark-v11">Dark</label>
             </div>
-            <div id="menu-item">
+            <div className="interactive menu-item">
               <input id="light-v11" className="light" type="radio" name="rtoggle" value="light" defaultChecked={mapParam === "light-v11"}/>
               <label for="light-v11">Light</label>
             </div>
           </div>
           <div id="layer-menu" className="flex-vertical hide">
-            <div id="menu-item">
+            <div className="interactive menu-item">
               <input id="posts" type="checkbox" name="rtoggle" value="posts" defaultChecked/>
               <label for="posts">Posts</label>
             </div>
-            <div id="menu-item">
+            <div className="interactive menu-item">
               <input id="sealaska-lands" type="checkbox" name="rtoggle" value="sealaska-lands" defaultChecked/>
               <label for="sealaska-lands">Lands</label>
             </div>
-            <div id="menu-item">
+            <div className="interactive menu-item">
               <input id="roads" type="checkbox" name="rtoggle" value="roads" defaultChecked/>
               <label for="roads">Roads</label>
             </div>
           </div>
         </div>
         <div id="legend-container" className="main-container">
-          <img id="legend-icon" className="icon" alt="Image from freeiconspng.com" src="https://www.freeiconspng.com/uploads/black-key-icon-7.png"></img>
+          <img id="legend-icon" className="icon interactive" alt="Image from freeiconspng.com" src="https://www.freeiconspng.com/uploads/black-key-icon-7.png"></img>
           <div id="legend" className="flex-vertical hide">
-            <div id="legend-item">
+            <div className="interactive legend-item">
               <h2>hello world!</h2>
             </div>
           </div>

@@ -28,7 +28,7 @@ export default function NavBar() {
                 </div>
                 {/* sign in + menu toggle */}
                 <div className="nav-content">
-                    <a className="nav-link">Sign In</a>
+                    <a className="nav-link interactive">Sign In</a>
                     <label className="menu">
                         <input type='checkbox' name="menu-checkbox" id="menu-checkbox" onClick={toggleMenu}/><label for="menu-checkbox"></label>
                     </label>
