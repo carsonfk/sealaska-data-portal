@@ -3,24 +3,29 @@ import { getTimestampAK } from "../functions";
 
 export default function Options({onReset, reset}){
     
-    function onSubmit() {
-        onReset();
-        let testing = document.getElementById('refresh');
-        testing.classList.add('delay');
-        testing.classList.add('rotate');
+    function refreshAnimation() { //animated refresh icon
+        let refresh = document.getElementById('refresh');
+        refresh.classList.add('delay');
+        refresh.classList.add('rotate');
         setTimeout(() => {
-            testing.classList.add('no-transition');
+            refresh.classList.add('no-transition');
             setTimeout(() => {
-                testing.classList.remove('rotate');
+                refresh.classList.remove('rotate');
                 setTimeout(() => {
-                    testing.classList.remove('no-transition');
-                    testing.classList.remove('delay');
+                    refresh.classList.remove('no-transition');
+                    refresh.classList.remove('delay');
                 }, 100);
             }, 1);
         }, 200);
     }
 
+    function onSubmit() { //manual refresh
+        onReset();
+        refreshAnimation();
+    }
+
     useEffect(() => {
+        refreshAnimation();
         let tsAK = getTimestampAK();
         document.getElementById("reset").textContent = "Last Reset: " + tsAK.time + ", " + tsAK.date;
     }, [reset])
