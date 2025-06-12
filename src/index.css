@@ -65,12 +65,20 @@ body {
   color: #333;
 }
 
-.interactive, .interactive > *, tr {
-  cursor: pointer;
+.interactive, .interactive > *, tr { /* remove .interactive > *? */
   transition: all 0.2s;
 }
 
-.interactive:hover, .interactive:hover > *, tr:hover {
+.interactive, .interactive > *, tr {
+  cursor: pointer;
+}
+
+.mapboxgl-ctrl-group > button {
+  transition: all 0.2s !important;
+}
+
+
+.interactive:hover, tr:hover {
   backdrop-filter: brightness(0.95);
 }
 
