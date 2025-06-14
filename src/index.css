@@ -332,7 +332,7 @@ nav {
   margin-right: 4px;
 }
 
-#menu-container > div.hide, #legend-container > div.hide {
+#menu-container > .hide, #legend-container > .hide {
   display: none;
 }
 
@@ -554,6 +554,14 @@ td:nth-child(2) {
 
 .location {
   max-width: 113px;
+}
+
+#error {
+ display: block;
+}
+
+#error.hide {
+  display: none;
 }
 
 /* options sidebar*/

@@ -81,7 +81,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
             submitSwap();
         } else {
             //test error message
-            console.error("Error: one or more fields incomplete.")
+            document.getElementById('error').classList.remove('hide');
         }
     }
 
@@ -164,7 +164,9 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
                     </div>
                     <br></br>
                     <button className="interactive addLocation" type="submit">Submit your Location</button>
-                    <div id="error" hide="true"></div>
+                    <div id="error" className="hide">
+                        <p>error</p>
+                    </div>
                 </form>
             </div>
         )
