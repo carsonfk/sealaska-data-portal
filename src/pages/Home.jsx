@@ -6,7 +6,8 @@ import Map from "../components/Map";
 import ListFeatures from "../components/ListFeatures";
 import Hero from "../components/Hero";
 import ViewContributeForm from "../components/ViewContributeForm";
-import Options from "../components/Options";
+import Refresh from "../components/Refresh";
+import FilterForm from "../components/FilterForm";
 import { updateParam } from "../functions";
 
 import { createApiKey } from "@esri/arcgis-rest-developer-credentials";
@@ -283,7 +284,8 @@ export default function Home(props){
 					<img id="arrow-right" className="arrow" alt="Image from pictarts.com" src="https://pictarts.com/21/material/01-vector/m-0027-arrow.png"></img>
 				</div>
 				<div id="options" className={"main-container sidebar right " + hidden("right")}>
-					<Options onReset={handleReset} reset={reset}/>
+					<Refresh onReset={handleReset} reset={reset}/>
+					<FilterForm/>
 				</div>
 			</div>
         </main>

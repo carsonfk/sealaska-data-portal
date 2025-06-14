@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from "react";
 import { getTimestampAK } from "../functions";
 
-export default function Options({onReset, reset}){
+export default function Refresh({onReset, reset}){
     
     function refreshAnimation() { //animated refresh icon
         let refresh = document.getElementById('refresh');
@@ -32,10 +32,8 @@ export default function Options({onReset, reset}){
 
     return (
         <>
-        <div>
             <button id="refresh" class="icon interactive" type='submit' onClick={onSubmit}></button>
             <p id="reset">Last Reset: N/A</p>
-        </div>
         </>
     )
 
