@@ -265,7 +265,6 @@ export default function Home(props){
         <>
 		<header>
 		</header>
-		
         <main>
 			<div className="content">
 				<div id="left-drawer" className={"main-container interactive drawer left " + hidden("left")}>
@@ -288,9 +287,7 @@ export default function Home(props){
 				</div>
 			</div>
         </main>
-
         <footer>
-			
         </footer>
         </>
     )
