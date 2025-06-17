@@ -307,19 +307,6 @@ nav {
   
 }
 
-#refresh.no-transition {
-  transition: none;
-}
-
-#refresh.rotate {
-  transform: rotate(-360deg);
-}
-
-#refresh.delay {
-  backdrop-filter: brightness(1.0);
-  pointer-events: none;
-}
-
 #basemap-menu, #layer-menu {
   padding: 0px 5px 5px 5px;
 }
@@ -584,7 +571,21 @@ td:nth-child(2) {
   height: 40px;
   width: 40px;
   border: none;
+  border-radius: 15px;
   background-color: rgba(0, 0, 0, 0);
+}
+
+#refresh.no-transition {
+  transition: none;
+}
+
+#refresh.rotate {
+  transform: rotate(-360deg);
+}
+
+#refresh.delay {
+  backdrop-filter: brightness(1.0);
+  pointer-events: none;
 }
 
 /* about page */
