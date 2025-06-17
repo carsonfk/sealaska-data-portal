@@ -179,7 +179,6 @@ nav {
 
 .main-container {
   background: linear-gradient(to bottom, beige, white);
-  box-shadow: 0 0 3px #000c;
 }
 
 .main-container, .icon, .menu-item, #update {
@@ -189,6 +188,10 @@ nav {
 
 .mapboxgl-ctrl-group {
   background: linear-gradient(to bottom, beige, white) !important;
+}
+
+.main-container, .mapboxgl-ctrl-group {
+  box-shadow: 0 0 4px #000c !important;
 }
 
 /* map */
