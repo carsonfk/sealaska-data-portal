@@ -26,8 +26,8 @@ export default function Refresh({onReset, reset}){
 
     useEffect(() => {
         refreshAnimation();
-        let tsAK = getTimestampAK();
-        document.getElementById("reset").textContent = "Last Reset: " + tsAK.time + ", " + tsAK.date;
+        let ts = getTimestampAK();
+        document.getElementById("reset").textContent = "Last Reset: " + ts.time + ", " + ts.date;
     }, [reset])
 
     return (
