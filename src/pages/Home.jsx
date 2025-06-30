@@ -284,7 +284,7 @@ export default function Home(props){
 					<img id="arrow-right" className="arrow" alt="Image from pictarts.com" src="https://pictarts.com/21/material/01-vector/m-0027-arrow.png"></img>
 				</div>
 				<div id="options" className={"main-container sidebar right " + hidden("right")}>
-					<Refresh onReset={handleReset} reset={reset}/>
+					<Refresh onReset={handleReset} reset={reset} locations={data}/>
 					<FilterForm/>
 				</div>
 			</div>

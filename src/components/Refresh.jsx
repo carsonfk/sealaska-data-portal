@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useRef} from "react";
 import { getTimestampAK } from "../functions";
 
-export default function Refresh({onReset, reset}){
-    
+export default function Refresh({onReset, reset, locations}){
+
     function refreshAnimation() { //animated refresh icon
         let refresh = document.getElementById('refresh');
         refresh.classList.add('delay');
@@ -11,10 +11,10 @@ export default function Refresh({onReset, reset}){
             refresh.classList.add('no-transition');
             setTimeout(() => {
                 refresh.classList.remove('rotate');
-                setTimeout(() => {
-                    refresh.classList.remove('no-transition');
-                    refresh.classList.remove('delay');
-                }, 100);
+                //setTimeout(() => {
+                //    refresh.classList.remove('no-transition');
+                //    refresh.classList.remove('delay');
+                //}, 100);
             }, 1);
         }, 200);
     }
@@ -28,7 +28,13 @@ export default function Refresh({onReset, reset}){
         refreshAnimation();
         let ts = getTimestampAK();
         document.getElementById("reset").textContent = "Last Reset: " + ts.time + ", " + ts.date;
-    }, [reset])
+    }, [reset]);
+
+    useEffect(() => {
+        let refresh = document.getElementById('refresh');
+        refresh.classList.remove('no-transition');
+        refresh.classList.remove('delay');
+    }, [locations]);
 
     return (
         <>
