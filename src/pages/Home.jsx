@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from "react";
-import { useSearchParams } from "react-router-dom";
+import { useQueryParams } from "../functions";
 import {getDatabase, ref, onValue, get, orderByChild, equalTo, query } from 'firebase/database'
 import AddFeatureForm from "../components/AddFeatureForm";
 import Map from "../components/Map";
@@ -8,7 +8,6 @@ import Hero from "../components/Hero";
 import ViewContributeForm from "../components/ViewContributeForm";
 import Refresh from "../components/Refresh";
 import FilterForm from "../components/FilterForm";
-import { updateParam } from "../functions";
 
 import { createApiKey } from "@esri/arcgis-rest-developer-credentials";
 import { ArcGISIdentityManager } from "@esri/arcgis-rest-request";
@@ -16,7 +15,7 @@ import { moveItem, getSelf } from "@esri/arcgis-rest-portal";
 //import "dotenv/config";
 
 export default function Home(props){
-	const [searchParams, setSearchParams] = useSearchParams();
+	const { getParam, setParam } = useQueryParams();
 	const [data, setData] = useState();
 	const [target, setTarget] = useState([-1, 'none']);
 	//const [filter, setFilter] = useState('null')
@@ -30,8 +29,6 @@ export default function Home(props){
 	const [temp, setTemp] = useState();
 	const [sidebars, setSidebars] = useState();
 
-	const leftParam = searchParams.get('left');
-	const rightParam = searchParams.get('right');
 
 	//const authentication = await ArcGISIdentityManager.signIn({
 	//	username: process.env.ARCGIS_USERNAME,
@@ -53,13 +50,11 @@ export default function Home(props){
 
 	//returns class to hide sidebars
 	function hidden(side) {
-		if (side === "right" && !searchParams.get('left') && window.innerWidth <= 878) {
+		if (side === "right" && !getParam('left') && window.innerWidth <= 878) {
 			return "hide";
 		}
-
 		let val;
-		searchParams.get(side) ? val = "hide": val = null;
-		//console.log(side, val);
+		getParam(side) ? val = "hide": val = null;
 		return val;
 	}
 
@@ -77,10 +72,10 @@ export default function Home(props){
 			}
 
 			if (window.innerWidth <= 878) {
-				if (!searchParams.get(other)) { //if opposite sidebar is visible
+				if (!getParam(other)) { //if opposite sidebar is visible
 					sidebar2[0].classList.toggle("hide");
 					sidebar2[1].classList.toggle("hide");
-					setSearchParams(updateParam(searchParams, other, false));
+					setParam(other, false);
 					setSidebars(sidebars => [!sidebars[0], !sidebars[1]]);
 					if (other === "left") {
 						setMapMode("view");
@@ -91,19 +86,17 @@ export default function Home(props){
 				}
 
 				if (sidebar[1].classList.contains("hide")) {
-					setSearchParams(updateParam(searchParams, side, false));
+					setParam(side, false);
 				} else {
-					searchParams.delete(side);
-					setSearchParams(searchParams);
+					setParam(side, null);
 				}
 			} else {
 				setSidebars(sidebars => [side === "left" ? !sidebars[0] : sidebars[0], 
 					side === "right" ? !sidebars[1] : sidebars[1]]);
 				if (sidebar[1].classList.contains("hide")) {
-					setSearchParams(updateParam(searchParams, side, false));
+					setParam(side, false);
 				} else {
-					searchParams.delete(side);
-					setSearchParams(searchParams);
+					setParam(side, null);
 				}
 			}
 		};
@@ -123,11 +116,11 @@ export default function Home(props){
 
 	const handleResize = () => { //right sidebar hidden on screen shrink (if left sidebar is visible)
 		windowWidth.current = window.innerWidth;
-		if (windowWidth.current <= 878 && !searchParams.get('left') && !searchParams.get('right')) {
+		if (windowWidth.current <= 878 && !getParam('left') && !getParam('right')) {
 			let right = document.getElementsByClassName('right');
 			right[0].classList.remove('hide');
 			right[1].classList.remove('hide');
-			setSearchParams(updateParam(searchParams, 'right', false));
+			setParam('right', false);
 			setSidebars(sidebars => [sidebars[0], !sidebars[1]]);
 		}
 	};
@@ -169,12 +162,12 @@ export default function Home(props){
 
 	useEffect(() => {
 		var leftInit, rightInit;
-		if (!searchParams.get("right") && searchParams.get("right") && window.innerWidth <= 878) {
-			setSearchParams(updateParam(searchParams, "right", false));
-			console.log("lalala")
+		if (!getParam('right') && getParam('right') && window.innerWidth <= 878) {
+			setParam('right', false);
+			console.log('lalala')
 		};
-		searchParams.get("left") ? leftInit = false : leftInit = true;
-		searchParams.get("right") ? rightInit = false : rightInit = true;
+		getParam('left') ? leftInit = false : leftInit = true;
+		getParam("right") ? rightInit = false : rightInit = true;
 		
 		setSidebars([leftInit, rightInit]);
 		clickInit('left');

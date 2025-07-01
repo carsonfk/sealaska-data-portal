@@ -1,13 +1,14 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useQueryParams } from "../functions";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { updateParam } from "../functions";
+
+
 
 export default function Map( {locations, mode, target, selectionCoordinates, sidebars, onSelect, onTemp}) {
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { getParam, setParam } = useQueryParams();
   const [lng, setLng] = useState(-103);
   const [lat, setLat] = useState(27);
   const [zoom, setZoom] = useState(2);
@@ -22,8 +23,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
     closeOnClick: false,
     closeButton: false
   }));
-
-  const mapParam = searchParams.get('mapStyle');
 
   //begins popup construction with or without image
   function handlePopup(feature) {
@@ -233,8 +232,8 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
     if (map.current) return; // initialize map only once
 
     var style;
-    searchParams.get("mapStyle") ? style = "mapbox://styles/mapbox/" + 
-      searchParams.get("mapStyle") : style = "mapbox://styles/mapbox/satellite-streets-v12";
+    getParam("mapStyle") ? style = "mapbox://styles/mapbox/" + 
+      getParam("mapStyle") : style = "mapbox://styles/mapbox/satellite-streets-v12";
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: style,
@@ -291,11 +290,10 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
           setStyleSwap(layerId);
           if (layerId === 'satellite-streets-v12') {
             map.current.setStyle('mapbox://styles/mapbox/satellite-streets-v12');
-            searchParams.delete('mapStyle');
-            setSearchParams(searchParams);
+            setParam('mapStyle', null);
           } else {
             map.current.setStyle('mapbox://styles/mapbox/' + layerId);
-            setSearchParams(updateParam(searchParams, 'mapStyle', layerId));
+            setParam('mapStyle', layerId);
           }
 
           if (input.classList.contains("light")) {
@@ -529,19 +527,19 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
           <img id="menu-icon" className="interactive icon" alt="Image from icons.com" src="https://images.icon-icons.com/2030/PNG/512/layers_icon_124022.png"></img>
           <div id="basemap-menu" className="flex-vertical hide">
             <div className="interactive menu-item">
-              <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" defaultChecked={!searchParams.get("mapStyle")}/>
+              <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" defaultChecked={!getParam("mapStyle")}/>
               <label for="satellite-streets-v12">Satellite</label>
             </div>
             <div className="interactive menu-item">
-              <input id="outdoors-v12" className="light" type="radio" name="rtoggle" value="outdoors" defaultChecked={mapParam === "outdoors-v12"}/>
+              <input id="outdoors-v12" className="light" type="radio" name="rtoggle" value="outdoors" defaultChecked={getParam('mapStyle') === "outdoors-v12"}/>
               <label for="outdoors-v12">Outdoors</label>
             </div>
             <div className="interactive menu-item">
-              <input id="dark-v11" type="radio" name="rtoggle" value="dark" defaultChecked={mapParam === "dark-v11"}/>
+              <input id="dark-v11" type="radio" name="rtoggle" value="dark" defaultChecked={getParam('mapStyle') === "dark-v11"}/>
               <label for="dark-v11">Dark</label>
             </div>
             <div className="interactive menu-item">
-              <input id="light-v11" className="light" type="radio" name="rtoggle" value="light" defaultChecked={mapParam === "light-v11"}/>
+              <input id="light-v11" className="light" type="radio" name="rtoggle" value="light" defaultChecked={getParam('mapStyle') === "light-v11"}/>
               <label for="light-v11">Light</label>
             </div>
           </div>

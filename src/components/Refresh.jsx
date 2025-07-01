@@ -9,13 +9,7 @@ export default function Refresh({onReset, reset, locations}){
         refresh.classList.add('rotate');
         setTimeout(() => {
             refresh.classList.add('no-transition');
-            setTimeout(() => {
-                refresh.classList.remove('rotate');
-                //setTimeout(() => {
-                //    refresh.classList.remove('no-transition');
-                //    refresh.classList.remove('delay');
-                //}, 100);
-            }, 1);
+            refresh.classList.remove('rotate');
         }, 200);
     }
 
@@ -32,8 +26,12 @@ export default function Refresh({onReset, reset, locations}){
 
     useEffect(() => {
         let refresh = document.getElementById('refresh');
-        refresh.classList.remove('no-transition');
-        refresh.classList.remove('delay');
+        if (locations) {
+            refresh.classList.remove('no-transition');
+            refresh.classList.remove('delay');
+        } else {
+            refresh.classList.add('delay');
+        }
     }, [locations]);
 
     return (
