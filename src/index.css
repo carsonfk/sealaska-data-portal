@@ -129,7 +129,6 @@ nav {
   text-decoration: none;
   color: white;
   padding: 0px 30px 0px 0px;
-  
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 14px;
   font-size: 1rem;
@@ -166,15 +165,24 @@ nav {
   background-repeat: no-repeat;
 }
 
-/* main page content */
-.content {
+.main-layer {
+  display: flex;
+}
+
+/* main content layer */
+#content-layer {
   position: fixed;
   width: 100%;
-  display: flex;
   top: 70px;
   left: 0;
   right: 0;
   bottom: 0;
+}
+
+/*overlay layer*/
+#overlay-layer {
+  
+  justify-content: center;
 }
 
 .main-container {
@@ -252,7 +260,6 @@ nav {
   height: 28px;
   width: 200px;
   font-size: 10px;
-  z-index: -1;
 }
 
 #location-msg, #msg-close {
@@ -544,6 +551,10 @@ td:nth-child(2) {
 
 .location {
   max-width: 113px;
+}
+
+.location.change {
+  backdrop-filter: brightness(0);
 }
 
 #error {

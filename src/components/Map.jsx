@@ -24,6 +24,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
     closeButton: false
   }));
 
+
   //begins popup construction with or without image
   function handlePopup(feature) {
     let coordinates = feature.geometry.coordinates.slice();
@@ -474,9 +475,8 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   }, [featureLocations, styleSwap]); //everytime the featureLocations state or map style is changed
 
   useEffect(() => {
-
     let layerList = ["locations_layer", "transparent_layer"];
-    if (mode === 'view') { //added/removed from map in view mode
+    if (mode === 'view') { //events added and removed from map in view mode
       //map.current.getCanvas().style.cursor = ""
       map.current.off('click', addPointsRef.current);
       marker.off('dragend', dragEndRef.current);
@@ -493,9 +493,9 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
         defaultPointerRef.current = defaultPointer;
         map.current.on("mouseleave", layerList[i], defaultPointerRef.current);
       }
+      onSelect([]); //figure out how to not call on initialization
 
-      onSelect([]);
-    } else { //added/removed from map in contribute mode
+    } else { //events added and removed from map in contribute mode
       //map.current.getCanvas().style.cursor = "pointer"
       addPointsRef.current = addPoints;
       map.current.on('click', addPointsRef.current);
@@ -518,10 +518,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
       <div id="mapContainer" ref={mapContainer} />
       <div id="alt-title" className="main-container">Sealaska Data Portal</div>
       <div id="info" className="main-container map-element">Hover to see coordinates!</div>
-      <div id="update" className="map-element hide">
-        <div id="location-msg">Locations Updated</div>
-        <div id="msg-close" className="interactive">CLOSE</div>
-      </div>
       <div id="menu-legend" className="flex-vertical map-element">
         <div id="menu-container" className="main-container">
           <img id="menu-icon" className="interactive icon" alt="Image from icons.com" src="https://images.icon-icons.com/2030/PNG/512/layers_icon_124022.png"></img>

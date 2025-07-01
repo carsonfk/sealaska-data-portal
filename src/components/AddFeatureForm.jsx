@@ -53,6 +53,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
     }, [mode]); //fire this whenever the mode changes
 
     useEffect(() => {
+        console.log(selectionCoordinates[1]);
         if (selectionCoordinates[1] === 'map') {
             if (selectionCoordinates[0].length === 0) {
                 updateForm({ latitude: "", 

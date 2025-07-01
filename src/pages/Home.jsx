@@ -67,7 +67,7 @@ export default function Home(props){
 		sidebar[0].onclick = () => {
 			sidebar[0].classList.toggle("hide");
 			sidebar[1].classList.toggle("hide");
-			if (sidebar[1].classList.contains('hide')) { //exits view mode when closing left sidebar
+			if (sidebar[1].classList.contains('hide')) { //exits contribute mode when closing left sidebar
 				setMapMode('view');
 			}
 
@@ -260,7 +260,7 @@ export default function Home(props){
 		<header>
 		</header>
         <main>
-			<div className="content">
+			<div id="content-layer" className="main-layer">
 				<div id="left-drawer" className={"main-container interactive drawer left " + hidden("left")}>
 					<img id="arrow-left" className="arrow" alt="Image from pictarts.com" src="https://pictarts.com/21/material/01-vector/m-0027-arrow.png"></img>
 				</div>
@@ -279,6 +279,12 @@ export default function Home(props){
 				<div id="options" className={"main-container sidebar right " + hidden("right")}>
 					<Refresh onReset={handleReset} reset={reset} locations={data}/>
 					<FilterForm/>
+				</div>
+			</div>
+			<div id="overlay-layer" className="main-layer">
+				<div id="update" className="map-element hide">
+					<div id="location-msg">Locations Updated</div>
+					<div id="msg-close" className="interactive">CLOSE</div>
 				</div>
 			</div>
         </main>
