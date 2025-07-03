@@ -9,11 +9,6 @@ import ViewContributeForm from "../components/ViewContributeForm";
 import Refresh from "../components/Refresh";
 import FilterForm from "../components/FilterForm";
 
-import { createApiKey } from "@esri/arcgis-rest-developer-credentials";
-import { ArcGISIdentityManager } from "@esri/arcgis-rest-request";
-import { moveItem, getSelf } from "@esri/arcgis-rest-portal";
-//import "dotenv/config";
-
 export default function Home(props){
 	const { getParam, setParam } = useQueryParams();
 	const [data, setData] = useState();
@@ -29,25 +24,6 @@ export default function Home(props){
 	const [timerLong, setTimerLong] = useState();
 	const [timerShort, setTimerShort] = useState([]);
 	const [sidebars, setSidebars] = useState();
-
-
-	//const authentication = await ArcGISIdentityManager.signIn({
-	//	username: process.env.ARCGIS_USERNAME,
-	//	password: process.env.ARCGIS_PASSWORD,
-	//	portal: process.env.PORTAL_URL // OPTIONAL - For ArcGIS Enterprise only
-	//});
-
-	//const orgUrl = await getSelf({ authentication: authentication });
-
-	//const newKey = await createApiKey({
-	//	title: `API key ${Math.floor(Date.now() / 1000)}`,
-	//	description: "API Key generated with ArcGIS REST JS with spatial analysis and basemap privileges",
-	//	tags: ["api key", "basemaps", "spatial analysis", "authentication"],
-	  
-	//	generateToken1: true,
-	  
-	//	authentication: authentication
-	//  });
 
 	//returns class to hide sidebars
 	function hidden(side) {
@@ -291,7 +267,7 @@ export default function Home(props){
         <main>
 			<div id="content-layer" className="main-layer">
 				<div id="left-drawer" className={"main-container interactive drawer left " + hidden("left")}>
-					<img id="arrow-left" className="arrow" alt="Image from pictarts.com" src="https://pictarts.com/21/material/01-vector/m-0027-arrow.png"></img>
+					<img id="arrow-left" className="arrow" alt="From pictarts.com" src="https://pictarts.com/21/material/01-vector/m-0027-arrow.png"></img>
 				</div>
 				<div id="features" className={"main-container sidebar left " + hidden("left")}>
 					<Hero scrollToMap={scrollToMap}/>
@@ -303,7 +279,7 @@ export default function Home(props){
 					<Map locations={data} mode={mapMode} target={target} selectionCoordinates={currentSelection} sidebars={sidebars} onSelect={handleCurrentSelection} onTemp={handleTemp}/>
 				</div>
 				<div id="right-drawer" className={"main-container interactive drawer right " + hidden("right")}>
-					<img id="arrow-right" className="arrow" alt="Image from pictarts.com" src="https://pictarts.com/21/material/01-vector/m-0027-arrow.png"></img>
+					<img id="arrow-right" className="arrow" alt="From pictarts.com" src="https://pictarts.com/21/material/01-vector/m-0027-arrow.png"></img>
 				</div>
 				<div id="options" className={"main-container sidebar right " + hidden("right")}>
 					<Refresh onReset={handleReset} reset={reset} locations={data}/>

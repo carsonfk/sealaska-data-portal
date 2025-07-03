@@ -607,12 +607,6 @@ td:nth-child(2) {
   
 }
 
-@container (min-width: 600px) {
-  #update {
-    color: green !important;
-  }
-}
-
 @media only screen and (max-width: 1920px) {
 
   #mapContainer {

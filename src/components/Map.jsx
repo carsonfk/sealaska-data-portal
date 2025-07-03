@@ -24,7 +24,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   //initializes menu & legend click event
   function menuLegendClick(selected, other) {
     document.getElementById(selected.id + "-icon").onclick = () => {
-      console.log(selected);
       for (let item of selected.getElementsByTagName('div')) {
         item.classList.toggle("hide");
       }
@@ -179,12 +178,10 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
       if ((sidebars[0] && classes.contains("no-left")) || (!sidebars[0] && !classes.contains("no-left"))) {
         classes.toggle("no-left");
         document.getElementById("alt-title").classList.toggle("no-left");
-        //console.log("hi left")
       }
       if ((sidebars[1] && classes.contains("no-right")) || (!sidebars[1] && !classes.contains("no-right"))) {
         classes.toggle("no-right");
         document.getElementById("menu-legend").classList.toggle("no-right");
-        //console.log("hi right");
       }
       map.current.resize();
     }
@@ -498,7 +495,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
       <div id="info" className="main-container map-element">Hover to see coordinates!</div>
       <div id="menu-legend" className="flex-vertical map-element">
         <div id="menu" className="main-container">
-          <img id="menu-icon" className="interactive icon" alt="Image from icons.com" src="https://images.icon-icons.com/2030/PNG/512/layers_icon_124022.png"></img>
+          <img id="menu-icon" className="interactive icon" alt="From icons.com" src="https://images.icon-icons.com/2030/PNG/512/layers_icon_124022.png"></img>
           <div id="basemap-menu" className="flex-vertical hide">
             <div className="interactive menu-item">
               <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" defaultChecked={!getParam("mapStyle")}/>
@@ -533,7 +530,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
           </div>
         </div>
         <div id="legend" className="main-container">
-          <img id="legend-icon" className="icon interactive" alt="Image from freeiconspng.com" src="https://www.freeiconspng.com/uploads/black-key-icon-7.png"></img>
+          <img id="legend-icon" className="icon interactive" alt="From freeiconspng.com" src="https://www.freeiconspng.com/uploads/black-key-icon-7.png"></img>
           <div id="legend-elements" className="flex-vertical hide">
             <h2>Legend</h2>
             <div className="legend-item"><span style={{backgroundColor:'#f00'}}></span> Reviewed</div>
