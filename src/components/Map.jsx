@@ -24,6 +24,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   //initializes menu & legend click event
   function menuLegendClick(selected, other) {
     document.getElementById(selected.id + "-icon").onclick = () => {
+      console.log(selected);
       for (let item of selected.getElementsByTagName('div')) {
         item.classList.toggle("hide");
       }
@@ -533,10 +534,11 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
         </div>
         <div id="legend" className="main-container">
           <img id="legend-icon" className="icon interactive" alt="Image from freeiconspng.com" src="https://www.freeiconspng.com/uploads/black-key-icon-7.png"></img>
-          <div id="legend" className="flex-vertical hide">
-            <div className="interactive legend-item">
-              <h2>hello world!</h2>
-            </div>
+          <div id="legend-elements" className="flex-vertical hide">
+            <h2>Legend</h2>
+            <div className="legend-item"><span style={{backgroundColor:'#f00'}}></span> Reviewed</div>
+            <div className="legend-item"><span style={{backgroundColor:'#0f0'}}></span> Unreviewed</div>
+            <div className="legend-item"><span style={{backgroundColor:'#00f'}}></span> Sealaska</div>
           </div>
         </div>
       </div>
