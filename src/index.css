@@ -303,7 +303,7 @@ nav {
   font-size: 15px;
 }
 
-#menu-container {
+#menu {
   margin-bottom: 12px;
 }
 
@@ -329,7 +329,7 @@ nav {
   margin-right: 4px;
 }
 
-#menu-container > .hide, #legend-container > .hide {
+#menu > .hide, #legend > .hide {
   display: none;
 }
 
@@ -426,7 +426,7 @@ img {
   flex-direction: column;
   bottom: 0;
   max-width: 350px;
-  overflow-y: scroll;
+  overflow-y: auto;
   color: black;
   z-index:2;
   padding: 10px;

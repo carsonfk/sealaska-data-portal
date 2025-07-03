@@ -1,9 +1,7 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { useQueryParams } from "../functions";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-
-
 
 export default function Map( {locations, mode, target, selectionCoordinates, sidebars, onSelect, onTemp}) {
   const mapContainer = useRef(null);
@@ -13,7 +11,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   const [lat, setLat] = useState(27);
   const [zoom, setZoom] = useState(2);
   const [featureLocations, setFeatureLocations] = useState([]);
-  const [timer, setTimer] = useState([]);
   const [styleSwap, setStyleSwap] = useState();
   const [marker, setMarker] = useState(new mapboxgl.Marker({
     id: 'marker',
@@ -24,19 +21,22 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
     closeButton: false
   }));
 
-
-  //begins popup construction with or without image
-  function handlePopup(feature) {
-    let coordinates = feature.geometry.coordinates.slice();
-    let type = feature.properties.type.charAt(0).toUpperCase()
-      + feature.properties.type.slice(1);
-    let details = feature.properties.details;
-    let reviewed = feature.properties.reviewed === "true";
-    let timestamp = feature.properties.timestamp;
-    if (typeof timestamp === "string") {
-      timestamp = JSON.parse(timestamp);
+  //initializes menu & legend click event
+  function menuLegendClick(selected, other) {
+    document.getElementById(selected.id + "-icon").onclick = () => {
+      for (let item of selected.getElementsByTagName('div')) {
+        item.classList.toggle("hide");
+      }
+      for (let item of other.getElementsByTagName('div')) {
+        if (!item.classList.contains("hide")) {
+          item.classList.toggle("hide");
+        }
+      }
     }
+  }
 
+  //handles flying to provided coordinates
+  function flyTo(coordinates) {
     if (target[1] === 'list') {
       let lngDelta = Math.abs(map.current.getCenter().lng - coordinates[0]);
       let latDelta = Math.abs(map.current.getCenter().lat - coordinates[1]);
@@ -48,6 +48,20 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
       setLat(coordinates[1]);
       setZoom(map.current.getZoom());
     }
+  }
+  
+  //begins popup construction and fly with or without image
+  function handlePopup(feature) {
+    let coordinates = feature.geometry.coordinates.slice();
+    let type = feature.properties.type.charAt(0).toUpperCase()
+      + feature.properties.type.slice(1);
+    let details = feature.properties.details;
+    let reviewed = feature.properties.reviewed === "true";
+    let timestamp = feature.properties.timestamp;
+    if (typeof timestamp === "string") {
+      timestamp = JSON.parse(timestamp);
+    }
+    flyTo(coordinates);
 
     if (feature.properties.image !== "") {
       const img = new Image();
@@ -173,28 +187,10 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
       }
       map.current.resize();
     }
-  }, [sidebars])
+  }, [sidebars]);
 
   useEffect(() => {
     if (locations) {
-      let update = document.getElementById("update");
-      if (!update.classList.contains("hide")) { // case 1: update msg is visible because of recent refresh -> reset popup
-        update.classList.toggle("hide");
-        setTimeout(() => {
-          update.classList.toggle("hide");
-        }, 100)
-      } else { // case 2: update msg is hidden -> make visible
-        update.classList.toggle("hide");
-      }
-      if (timer.length !== 0) { //restart update msg hide timer if ongoing
-        clearTimeout(timer);
-      }
-      setTimer(setTimeout(() => { //set update msg hide timer
-        if (!update.classList.contains("hide")) {
-          update.classList.toggle("hide");
-        }
-      }, 7000));
-
       popup.remove();
       setFeatureLocations(locations); //setState of features to jsonified features
     }
@@ -251,40 +247,21 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
             ", " + Math.abs(parseFloat(JSON.stringify(mouseLng)).toFixed(4)) + ((mouseLng >= 0) ? "°E" : "°W");
     });
 
-    let close = document.getElementById("msg-close");
-    close.onclick = () => {
-      let update = document.getElementById("update");
-      update.classList.toggle("hide");
-    };
-
-    var menu1 = document.getElementById("menu-icon");
-    var menu2 = document.getElementById('menu-container').getElementsByTagName('div');
-    var legend1 = document.getElementById("legend-icon");
-    var legend2 = document.getElementById('legend-container').getElementsByTagName('div');
-    menu1.onclick = () => {
-      for (let item of menu2) {
-        item.classList.toggle("hide");
-      }
-      for (let item of legend2) {
-        if (!item.classList.contains("hide")) {
-          item.classList.toggle("hide");
-        }
-      }
-    }
-    legend1.onclick = () => {
-      for (let item of legend2) {
-        item.classList.toggle("hide");
-      }
-      for (let item of menu2) {
-        if (!item.classList.contains("hide")) {
-          item.classList.toggle("hide");
-        }
-      }
-    }
+    var menu = document.getElementById('menu');
+    var legend = document.getElementById('legend');
+    menuLegendClick(menu, legend);
+    menuLegendClick(legend, menu);
 
     let inputs = document.getElementById('basemap-menu').getElementsByTagName('input');
+    let mapElement = document.getElementById("map");
     for (let input of inputs) {
-      let mapElement = document.getElementById("map");
+      if (input.checked) {
+        if (input.classList.contains("light")) {
+          mapElement.classList.add("light");
+        } else {
+          mapElement.classList.remove("light");
+        }
+      }
       input.onclick = (layer) => {
        let layerId = layer.target.id;
         if (!map.current.style.globalId.includes(layerId)) {
@@ -299,16 +276,17 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
 
           if (input.classList.contains("light")) {
             mapElement.classList.add("light");
-            console.log(input.classList[0] + " light")
           } else {
-            mapElement.classList.remove("light")
-            console.log(input.classList[0] + " dark")
+            mapElement.classList.remove("light");
           }
         }
       };
     }
 
     map.current.on('load', function () {
+      //add map controls
+      map.current.addControl(new mapboxgl.NavigationControl());
+
       //add center for map animation
       map.current.addSource('center', {
         type: 'geojson',
@@ -454,7 +432,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
     //  const url = `https://www.google.com/maps/search/?api=1&query=${coordinates[1]},${coordinates[0]}`;
     //  window.open(url, "_blank");
     //});
-    map.current.addControl(new mapboxgl.NavigationControl());
 
     return () => {
       map.current.remove();
@@ -519,7 +496,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
       <div id="alt-title" className="main-container">Sealaska Data Portal</div>
       <div id="info" className="main-container map-element">Hover to see coordinates!</div>
       <div id="menu-legend" className="flex-vertical map-element">
-        <div id="menu-container" className="main-container">
+        <div id="menu" className="main-container">
           <img id="menu-icon" className="interactive icon" alt="Image from icons.com" src="https://images.icon-icons.com/2030/PNG/512/layers_icon_124022.png"></img>
           <div id="basemap-menu" className="flex-vertical hide">
             <div className="interactive menu-item">
@@ -554,7 +531,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
             </div>
           </div>
         </div>
-        <div id="legend-container" className="main-container">
+        <div id="legend" className="main-container">
           <img id="legend-icon" className="icon interactive" alt="Image from freeiconspng.com" src="https://www.freeiconspng.com/uploads/black-key-icon-7.png"></img>
           <div id="legend" className="flex-vertical hide">
             <div className="interactive legend-item">

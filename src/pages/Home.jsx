@@ -26,7 +26,8 @@ export default function Home(props){
 	const mapRef = useRef(null);
 	//const timerRef = useRef(null);
 	const windowWidth = useRef(window.innerWidth);
-	const [temp, setTemp] = useState();
+	const [timerLong, setTimerLong] = useState();
+	const [timerShort, setTimerShort] = useState([]);
 	const [sidebars, setSidebars] = useState();
 
 
@@ -161,6 +162,12 @@ export default function Home(props){
 	}
 
 	useEffect(() => {
+		let close = document.getElementById("msg-close");
+		close.onclick = () => {
+		let update = document.getElementById("update");
+		update.classList.toggle("hide");
+		};
+
 		var leftInit, rightInit;
 		if (!getParam('right') && getParam('right') && window.innerWidth <= 878) {
 			setParam('right', false);
@@ -243,11 +250,33 @@ export default function Home(props){
 		resetLoad();
 		console.log(reset);
 
-		clearTimeout(temp);
-		setTemp(setTimeout(() => {
+		clearTimeout(timerLong);
+		setTimerLong(setTimeout(() => {
 			setReset((reset) => reset + 1);
 		}, 300000));
 	}, [reset]);
+
+	useEffect(() => {
+		if (data) {
+			let update = document.getElementById("update");
+			if (!update.classList.contains("hide")) { // case 1: update msg is visible because of recent refresh -> reset popup
+				update.classList.toggle("hide");
+				setTimeout(() => {
+				update.classList.toggle("hide");
+				}, 100)
+			} else { // case 2: update msg is hidden -> make visible
+				update.classList.toggle("hide");
+			}
+			if (timerShort.length !== 0) { //restart update msg hide timer if ongoing
+				clearTimeout(timerShort);
+			}
+			setTimerShort(setTimeout(() => { //set update msg hide timer
+				if (!update.classList.contains("hide")) {
+				update.classList.toggle("hide");
+				}
+			}, 7000));
+		}
+	}, [data])
 
 	const scrollToMap = () => { //no longer functional or needed
 		if (mapRef.current) {
