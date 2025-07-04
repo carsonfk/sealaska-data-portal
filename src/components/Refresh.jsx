@@ -5,6 +5,9 @@ export default function Refresh({onReset, reset, locations}){
 
     function refreshAnimation() { //animated refresh icon
         let refresh = document.getElementById('refresh');
+        let refreshElements = document.getElementById('refresh-container').children;
+        refreshElements[0].classList.toggle('hide');
+        refreshElements[1].classList.toggle('hide');
         refresh.classList.add('delay');
         refresh.classList.add('rotate');
         setTimeout(() => {
@@ -19,14 +22,19 @@ export default function Refresh({onReset, reset, locations}){
     }
 
     useEffect(() => {
-        refreshAnimation();
+        if (reset == 0) {
+            refreshAnimation();
+        }
         let ts = getTimestampAK();
-        document.getElementById("reset").textContent = "Last Reset: " + ts.time + ", " + ts.date;
+        document.getElementById("last-reset").textContent = "Last Reset: " + ts.time + ", " + ts.date;
     }, [reset]);
 
     useEffect(() => {
         let refresh = document.getElementById('refresh');
+        let refreshElements = document.getElementById('refresh-container').children;
         if (locations) {
+            refreshElements[0].classList.toggle('hide');
+            refreshElements[1].classList.toggle('hide');
             refresh.classList.remove('no-transition');
             refresh.classList.remove('delay');
         } else {
@@ -36,8 +44,13 @@ export default function Refresh({onReset, reset, locations}){
 
     return (
         <>
-            <button id="refresh" class="icon interactive" type='submit' onClick={onSubmit}></button>
-            <p id="reset">Last Reset: N/A</p>
+            <button id="refresh" className="icon interactive" type='submit' onClick={onSubmit}></button>
+            <div id="refresh-container" className="refresh-container">
+                <div className="progress-bar-container hide">
+                    <div id="progress-bar" className="progress-bar"></div>
+                </div>
+                <p id="last-reset" className="">Last Reset: N/A</p>
+            </div>
         </>
     )
 

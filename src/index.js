@@ -25,21 +25,33 @@ const authentication = await ArcGISIdentityManager.signIn({
   portal: process.env.REACT_APP_ARCGIS_PORTAL_URL
 });
 
-const value = process.env.REACT_APP_ARCGIS_API_KEY || null;
+/*
+const expiration = new Date();
+expiration.setDate(expiration.getDate() + 90);
+expiration.setHours(23, 59, 59, 999);
+
+const newKey = await createApiKey({
+    title: `API key ${Math.floor(Date.now() / 1000)}`,
+    description: 'API Key generated with ArcGIS REST JS with spatial analysis and basemap privileges',
+    tags: ['api key', 'automation'],
+    privileges: ['premium:user:basemaps', 'premium:user:spatialanalysis'],
+    generateToken1: true,
+    apiToken1ExpirationDate: expiration,
+    authentication: authentication
+});
+console.log(`✅ New API key created: ${newKey.token1}`);
+*/
 
 // checks if API key exists
+const credential = await getApiKey({
+  itemId: process.env.REACT_APP_ARCGIS_API_KEY,
+  authentication: authentication
+});
 
-if (value) {
-  const credential = await getApiKey({
-    itemId: value,
-    authentication: authentication
-  });
+const { token1, token1ExpDate, token2, token2ExpDate } = credential;
+console.log (token1, token1ExpDate, token2, token2ExpDate);
 
-  const { token1, token1ExpDate, token2, token2ExpDate } = credential;
-} else {
-  const { token1, token1ExpDate, token2, token2ExpDate } = null;
-}
-
+/*
 const isExpired = (expDate) => {
   return !expDate || new Date(expDate).getTime() < Date.now();
 }
@@ -69,6 +81,7 @@ if (token1 && !isExpired(token1ExpDate)) {
   });
   console.log(`✅ New API key created: ${newKey.token1}`);
 }
+*/
 
 //const orgUrl = await getSelf({ authentication: authentication });
 
@@ -79,7 +92,7 @@ if (token1 && !isExpired(token1ExpDate)) {
 
 //  privileges: [
 //    "premium:user:spatialanalysis",
-//    "premium:user:basemaps" // Not available for ArcGIS Enterprise
+//    "premium:user:basemaps"
 //  ],
 	  
 //	generateToken1: true,
