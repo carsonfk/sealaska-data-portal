@@ -315,7 +315,7 @@ nav {
   
 }
 
-#basemap-menu, #layer-menu, #legend-elements {
+.menu-legend-subgroup {
   padding: 0px 5px 5px 5px;
 }
 
@@ -335,10 +335,19 @@ nav {
 
 .legend-key {
   display: inline-block;
-  border-radius: 50%;
-  width: 12px;
-  height: 12px;
+  width: 13px;
+  height: 13px;
   margin-right: 5px;
+}
+
+#locations-key {
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+#lands-key {
+  border-radius: 30%;
+  border: 2px solid currentcolor;
 }
 
 #alt-title {
@@ -454,7 +463,7 @@ img {
   margin-left: -350px;
 }
 
-.button:hover {
+.button:hover, .legend-key {
   box-shadow: 0 0 2px #000c;
 }
 

@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from "react";
-import { useQueryParams } from "../functions";
+import { useQueryParams, capitalizeFirst } from "../functions";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -87,6 +87,35 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
         .setLngLat(coordinates)
         .setHTML("Awaiting manual review")
         .addTo(map.current);
+    }
+  }
+
+  //if legend subgroup doesnt already exist, builds and adds to legend element
+  function buildLegend(name, items, colors) {
+    let legend = document.getElementById('legend');
+    if (!legend.querySelector('#' + name)) {
+      let legendSubgroup = document.createElement('div');
+      legendSubgroup.id = name;
+      legendSubgroup.className = 'flex-vertical menu-legend-subgroup hide'
+      legend.appendChild(legendSubgroup);
+      let subtitle = document.createElement('h4');
+      subtitle.innerHTML = capitalizeFirst(name);
+      legendSubgroup.appendChild(subtitle);
+      items.forEach((layer, i) =>{
+        const color = colors[i];
+        const item = document.createElement('div');
+        const key = document.createElement('span');
+        key.className = 'legend-key';
+        key.id = name + '-key';
+        key.style.backgroundColor = color;
+        key.style.color = color;
+
+        const value = document.createElement('span');
+        value.innerHTML = `${layer}`;
+        item.appendChild(key);
+        item.appendChild(value);
+        legendSubgroup.appendChild(item);
+      });
     }
   }
 
@@ -423,7 +452,9 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
         }
       });
 
-      const locationsLegend = [
+
+      //build legend based on enabled layers
+      const locationsItems = [
         'Reviewed',
         'Unreviewed',
         'Sealaska'
@@ -433,23 +464,21 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
         'orange',
         '#ccc',
         '#CD202D'
-      ]
+      ];
 
-      const legend = document.getElementById('legend-elements');
+      const taxBlocksItems = [
+        'Sealaska',
+        'Village Corporation'
+      ];
 
-      locationsLegend.forEach((layer, i) =>{
-        const color = locationsColors[i];
-        const item = document.createElement('div');
-        const key = document.createElement('span');
-        key.className = 'legend-key';
-        key.style.backgroundColor = color;
+      const taxBlocksColors = [
+        'rgba(250, 100, 100, 0.2)',
+        'rgba(200, 100, 240, 0.2)'
+      ];
 
-        const value = document.createElement('span');
-        value.innerHTML = `${layer}`;
-        item.appendChild(key);
-        item.appendChild(value);
-        legend.appendChild(item);
-      });
+      buildLegend('locations', locationsItems, locationsColors);
+      buildLegend('lands', taxBlocksItems, taxBlocksColors);
+      //buildLegend('roads', roadsItems, roadsColors);
 
 
 
@@ -531,7 +560,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
       <div id="menu-legend" className="flex-vertical map-element">
         <div id="menu" className="main-container">
           <img id="menu-icon" className="interactive icon" alt="From icons.com" src="https://images.icon-icons.com/2030/PNG/512/layers_icon_124022.png"></img>
-          <div id="basemap-menu" className="flex-vertical hide">
+          <div id="basemap-menu" className="flex-vertical menu-legend-subgroup hide">
             <div className="interactive menu-item">
               <input id="satellite-streets-v12" type="radio" name="rtoggle" value="satellite" defaultChecked={!getParam("mapStyle")}/>
               <label for="satellite-streets-v12">Satellite</label>
@@ -549,7 +578,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
               <label for="light-v11">Light</label>
             </div>
           </div>
-          <div id="layer-menu" className="flex-vertical hide">
+          <div id="layer-menu" className="flex-vertical menu-legend-subgroup hide">
             <div className="interactive menu-item">
               <input id="posts" type="checkbox" name="rtoggle" value="posts" defaultChecked/>
               <label for="posts">Posts</label>
@@ -566,8 +595,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
         </div>
         <div id="legend" className="main-container">
           <img id="legend-icon" className="icon interactive" alt="From freeiconspng.com" src="https://www.freeiconspng.com/uploads/black-key-icon-7.png"></img>
-          <div id="legend-elements" className="flex-vertical hide">
-          </div>
         </div>
       </div>
     </>

@@ -40,3 +40,8 @@ export function useQueryParams() {
   return { getParam, setParam, allParams: new URLSearchParams(window.location.search) };
 }
 
+//returns string with first letter capitalized
+export function capitalizeFirst(val) {
+    return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+}
+
