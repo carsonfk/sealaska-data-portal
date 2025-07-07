@@ -261,7 +261,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
         }
       }
       input.onclick = (layer) => {
-       let layerId = layer.target.id;
+      let layerId = layer.target.id;
         if (!map.current.style.globalId.includes(layerId)) {
           setStyleSwap(layerId);
           if (layerId === 'satellite-streets-v12') {
@@ -422,6 +422,41 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
           'circle-opacity': 0
         }
       });
+
+      const locationsLegend = [
+        'Reviewed',
+        'Unreviewed',
+        'Sealaska'
+      ];
+
+      const locationsColors = [
+        'orange',
+        '#ccc',
+        '#CD202D'
+      ]
+
+      const legend = document.getElementById('legend-elements');
+
+      locationsLegend.forEach((layer, i) =>{
+        const color = locationsColors[i];
+        const item = document.createElement('div');
+        const key = document.createElement('span');
+        key.className = 'legend-key';
+        key.style.backgroundColor = color;
+
+        const value = document.createElement('span');
+        value.innerHTML = `${layer}`;
+        item.appendChild(key);
+        item.appendChild(value);
+        legend.appendChild(item);
+      });
+
+
+
+
+
+
+
     });
 
     //redirect user to google maps for more info
@@ -532,13 +567,15 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
         <div id="legend" className="main-container">
           <img id="legend-icon" className="icon interactive" alt="From freeiconspng.com" src="https://www.freeiconspng.com/uploads/black-key-icon-7.png"></img>
           <div id="legend-elements" className="flex-vertical hide">
-            <h2>Legend</h2>
-            <div className="legend-item"><span style={{backgroundColor:'#f00'}}></span> Reviewed</div>
-            <div className="legend-item"><span style={{backgroundColor:'#0f0'}}></span> Unreviewed</div>
-            <div className="legend-item"><span style={{backgroundColor:'#00f'}}></span> Sealaska</div>
           </div>
         </div>
       </div>
     </>
   );
 }
+
+
+
+// <div className="legend-item"><span style={{backgroundColor:'#f00'}}></span> Reviewed</div>
+// <div className="legend-item"><span style={{backgroundColor:'#0f0'}}></span> Unreviewed</div>
+// <div className="legend-item"><span style={{backgroundColor:'#00f'}}></span> Sealaska</div>

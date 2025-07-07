@@ -299,7 +299,6 @@ nav {
   flex-direction: inherit;
   width: fit-content;
   align-self: flex-end;
-  font-size: 15px;
 }
 
 #menu {
@@ -316,13 +315,15 @@ nav {
   
 }
 
-#basemap-menu, #layer-menu {
+#basemap-menu, #layer-menu, #legend-elements {
   padding: 0px 5px 5px 5px;
 }
 
+/*
 .menu-item {
   padding: 2px;
 }
+*/
 
 .menu-item input{
   margin-right: 4px;
@@ -330,6 +331,14 @@ nav {
 
 #menu > .hide, #legend > .hide {
   display: none;
+}
+
+.legend-key {
+  display: inline-block;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  margin-right: 5px;
 }
 
 #alt-title {

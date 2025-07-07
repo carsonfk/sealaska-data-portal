@@ -14,22 +14,22 @@ export default function Refresh({onReset, reset, locations}){
             refresh.classList.add('no-transition');
             refresh.classList.remove('rotate');
         }, 200);
+        console.log("test1")
     }
 
     function onSubmit() { //manual refresh
         onReset();
-        refreshAnimation();
+        //refreshAnimation();
     }
 
     useEffect(() => {
-        if (reset == 0) {
-            refreshAnimation();
-        }
+        refreshAnimation();
         let ts = getTimestampAK();
         document.getElementById("last-reset").textContent = "Last Reset: " + ts.time + ", " + ts.date;
     }, [reset]);
 
     useEffect(() => {
+        console.log("test2")
         let refresh = document.getElementById('refresh');
         let refreshElements = document.getElementById('refresh-container').children;
         if (locations) {
