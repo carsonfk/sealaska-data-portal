@@ -520,6 +520,14 @@ img {
   width: 100%
 }
 
+#list-subtitle {
+  display: block;
+}
+
+#list-subtitle.hide {
+  display: none;
+}
+
 #feature-list {
   border-collapse: collapse;
   border-spacing: 0;

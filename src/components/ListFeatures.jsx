@@ -29,15 +29,19 @@ export default function ListFeatures( {locations, mode, onCenter, target, tableM
      "id": 2
      }
     ]
-
     const testjson = JSON.parse(JSON.stringify(test));
 
     function buildTablePosts() { //populates the table with available data
-        let reviewedCount = 0;
+        let reviewedCount = 0
         let unreviewedCount = 0;
         let json = locations; // revisit
-        let table = document.getElementsByTagName("table")[0];
+        let title = document.getElementById('list-title');
+        let subtitle = document.getElementById('list-subtitle');
+        let table = document.getElementById('feature-list');
         let row, cell1, cell2;
+
+        title.innerHTML = 'Posts';
+        subtitle.classList.remove('hide');
         if (table.childElementCount !== 0) {
             $("#feature-list tr").remove();
         }
@@ -76,14 +80,18 @@ export default function ListFeatures( {locations, mode, onCenter, target, tableM
         setRatio([reviewedCount, unreviewedCount]);
     }
 
-    function buildTableOther() {
+    function buildTableOther(layerName) {
+        let title = document.getElementById('list-title');
+        let subtitle = document.getElementById('list-subtitle');
         let table = document.getElementsByTagName("table")[0];
         let row, cell1, cell2;
+
+        title.innerHTML = layerName;
+        subtitle.classList.add('hide');
         if (table.childElementCount !== 0) {
             $("#feature-list tr").remove();
         }
 
-        console.log(testjson.length);
         //loops sorted json to construct table
         for (let i = 0; i < testjson.length; i++) {
             row = table.insertRow(-1);
@@ -115,9 +123,9 @@ export default function ListFeatures( {locations, mode, onCenter, target, tableM
         }
     }
 
-    function buildLayerMenu() {
-        let menuContainer = document.getElementById('table-layers');
-    }
+    //function buildLayerMenu() {
+    //    let menuContainer = document.getElementById('table-layers');
+    //}
 
     useEffect(() => {
 
@@ -129,7 +137,7 @@ export default function ListFeatures( {locations, mode, onCenter, target, tableM
             if (!tableMode) { //for testing only
                 buildTablePosts();
             } else {
-                buildTableOther();
+                buildTableOther('lands');
             };
         }
     }, [locations, mode, tableMode]); //fire this whenever the features put into the map change, map mode changes, or table mode changes
@@ -140,13 +148,17 @@ export default function ListFeatures( {locations, mode, onCenter, target, tableM
         };
     }, [target]);
 
+    useEffect(() => {
+        let subtitle = document.getElementById('list-subtitle');
+        subtitle.innerHTML = 'Reviewed: ' + ratio[0] + ' of ' + (ratio[0] + ratio[1]);
+    }, [ratio])
+
     if (mode === 'view') {
         return (
             <>
-            <div id='table-layers'></div>
             <div className="list-location">
-                <h2 >Locations</h2>
-                <p>Reviewed: {ratio[0]} of {ratio[0] + ratio[1]}</p>
+                <h3 id='list-title'>Loading...</h3>
+                <p id='list-subtitle' className='hide'></p>
                 <table id="feature-list"></table>
             </div>
             </>

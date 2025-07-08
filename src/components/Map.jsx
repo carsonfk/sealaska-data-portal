@@ -617,8 +617,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   );
 }
 
-
-
 // <div className="legend-item"><span style={{backgroundColor:'#f00'}}></span> Reviewed</div>
 // <div className="legend-item"><span style={{backgroundColor:'#0f0'}}></span> Unreviewed</div>
 // <div className="legend-item"><span style={{backgroundColor:'#00f'}}></span> Sealaska</div>
