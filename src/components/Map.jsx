@@ -466,6 +466,17 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
         '#CD202D'
       ];
 
+      const projectsItems = [
+        'Stream Restoration',
+        'Construction',
+        'Other'
+      ];
+
+      const projectsColors = [
+        'blue',
+        'yellow'
+      ];
+
       const taxBlocksItems = [
         'Sealaska',
         'Village Corporation'
@@ -476,16 +487,21 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
         'rgba(200, 100, 240, 0.2)'
       ];
 
+      const roadsItems = [
+        'Existing',
+        'Closed',
+        'Unknown'
+      ];
+
+      const roadsColors = [
+        'black',
+        'gray'
+      ];
+
       buildLegend('locations', locationsItems, locationsColors);
+      buildLegend('projects', projectsItems, projectsColors);
       buildLegend('lands', taxBlocksItems, taxBlocksColors);
-      //buildLegend('roads', roadsItems, roadsColors);
-
-
-
-
-
-
-
+      buildLegend('roads', roadsItems, roadsColors);
     });
 
     //redirect user to google maps for more info

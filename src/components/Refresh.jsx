@@ -14,7 +14,6 @@ export default function Refresh({onReset, reset, locations}){
             refresh.classList.add('no-transition');
             refresh.classList.remove('rotate');
         }, 200);
-        console.log("test1")
     }
 
     function onSubmit() { //manual refresh
@@ -29,7 +28,6 @@ export default function Refresh({onReset, reset, locations}){
     }, [reset]);
 
     useEffect(() => {
-        console.log("test2")
         let refresh = document.getElementById('refresh');
         let refreshElements = document.getElementById('refresh-container').children;
         if (locations) {

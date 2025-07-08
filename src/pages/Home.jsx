@@ -24,6 +24,7 @@ export default function Home(props){
 	const [timerLong, setTimerLong] = useState();
 	const [timerShort, setTimerShort] = useState([]);
 	const [sidebars, setSidebars] = useState();
+	const [tableMode, setTableMode] = useState({posts: true, projects: false, lands: false, roads: false}); //reconsider
 
 	//returns class to hide sidebars
 	function hidden(side) {
