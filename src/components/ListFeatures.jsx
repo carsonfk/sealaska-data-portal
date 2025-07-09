@@ -159,6 +159,24 @@ export default function ListFeatures( {locations, mode, onCenter, target, tableM
             <div className="list-location">
                 <h3 id='list-title'>Loading...</h3>
                 <p id='list-subtitle' className='hide'></p>
+                <div id='table-menu' className='flex-horizontal'>
+                    <div className="interactive menu-item">
+                        <input id="posts" className='table-menu-input' type="radio" name="rtoggle" value="posts" defaultChecked/>
+                        <label for="posts">Posts</label>
+                    </div>
+                    <div className="interactive menu-item">
+                        <input id="projects" className='table-menu-input' type="radio" name="rtoggle" value="projects"/>
+                        <label for="projects">Projects</label>
+                    </div>
+                    <div className="interactive menu-item">
+                        <input id="sealaska-lands" className='table-menu-input' type="radio" name="rtoggle" value="sealaska-lands"/>
+                        <label for="sealaska-lands">Lands</label>
+                    </div>
+                    <div className="interactive menu-item">
+                        <input id="roads" className='table-menu-input' type="radio" name="rtoggle" value="roads"/>
+                        <label for="roads">Roads</label>
+                    </div>
+                </div>
                 <table id="feature-list"></table>
             </div>
             </>

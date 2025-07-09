@@ -600,6 +600,10 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
               <label for="posts">Posts</label>
             </div>
             <div className="interactive menu-item">
+              <input id="projects" type="checkbox" name="rtoggle" value="projects" defaultChecked/>
+              <label for="projects">Projects</label>
+            </div>
+            <div className="interactive menu-item">
               <input id="sealaska-lands" type="checkbox" name="rtoggle" value="sealaska-lands" defaultChecked/>
               <label for="sealaska-lands">Lands</label>
             </div>

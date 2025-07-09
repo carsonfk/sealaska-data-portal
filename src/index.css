@@ -141,7 +141,7 @@ nav {
 }
 
 /* nav menu content */
-#menu-checkbox {
+#menu-checkbox /*, .table-menu-input*/ {
   display: none;
 }
 
@@ -526,6 +526,22 @@ img {
 
 #list-subtitle.hide {
   display: none;
+}
+
+#table-menu {
+  width: 100%;
+  justify-content: space-evenly;
+}
+
+#table-menu > * {
+  border-top: 3px solid #CD202D;
+  border-bottom: 3px solid #CD202D;
+  border-radius: 0px;
+  width: 25%;
+}
+
+.table-menu-input:checked {
+  
 }
 
 #feature-list {
