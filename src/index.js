@@ -19,11 +19,11 @@ import { ArcGISIdentityManager } from "@esri/arcgis-rest-request";
 import { moveItem, getSelf } from "@esri/arcgis-rest-portal";
 
 // pulls info from .env.local file
-const authentication = await ArcGISIdentityManager.signIn({
-  username: process.env.REACT_APP_ARCGIS_USERNAME,
-  password: process.env.REACT_APP_ARCGIS_PASSWORD,
-  portal: process.env.REACT_APP_ARCGIS_PORTAL_URL
-});
+//const authentication = await ArcGISIdentityManager.signIn({
+//  username: process.env.REACT_APP_ARCGIS_USERNAME,
+//  password: process.env.REACT_APP_ARCGIS_PASSWORD,
+//  portal: process.env.REACT_APP_ARCGIS_PORTAL_URL
+//});
 
 /*
 const expiration = new Date();
@@ -43,13 +43,13 @@ console.log(`✅ New API key created: ${newKey.token1}`);
 */
 
 // checks if API key exists
-const credential = await getApiKey({
-  itemId: process.env.REACT_APP_ARCGIS_API_KEY,
-  authentication: authentication
-});
+//const credential = await getApiKey({
+//  itemId: process.env.REACT_APP_ARCGIS_API_KEY,
+//  authentication: authentication
+//});
 
-const { token1, token1ExpDate, token2, token2ExpDate } = credential;
-console.log (token1, token1ExpDate, token2, token2ExpDate);
+//const { token1, token1ExpDate, token2, token2ExpDate } = credential;
+//console.log (token1, token1ExpDate, token2, token2ExpDate);
 
 /*
 const isExpired = (expDate) => {

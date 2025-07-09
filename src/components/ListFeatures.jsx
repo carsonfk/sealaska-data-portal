@@ -4,7 +4,7 @@ import $ from 'jquery';
 //import { getDatabase, ref, set as firebaseSet, push } from 'firebase/database'
 //import FilterForm from './FilterForm'
 
-export default function ListFeatures( {locations, mode, onCenter, target, tableMode, onTableMode} ) {
+export default function ListFeatures( {locations, mode, target, tableMode, onCenter, onTableMode} ) {
     const [ratio, setRatio] = useState([0,0]);
 
     let test = [
@@ -150,6 +150,10 @@ export default function ListFeatures( {locations, mode, onCenter, target, tableM
     }, [ , mode]);
 
     useEffect(() => {
+        console.log('table mode change')
+    }, [tableMode])
+
+    useEffect(() => {
         if (locations && mode === 'view') {
             for (let mode in tableMode) {
                 if (tableMode[mode][0]) {
@@ -165,7 +169,7 @@ export default function ListFeatures( {locations, mode, onCenter, target, tableM
             }
         }
         console.log("lalal");
-    }, [locations, mode, tableMode]); //fire this whenever the features put into the map change, map mode changes, or table mode changes
+    }, [locations, mode]); //fire this whenever the features put into the map change, map mode changes, or table mode changes
     
     useEffect(() => {
         if (mode === 'view' && (target[1] === 'map' || target[1] === 'reset')) {
