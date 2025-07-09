@@ -290,7 +290,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
         }
       }
       input.onclick = (layer) => {
-      let layerId = layer.target.id;
+        let layerId = layer.target.id;
         if (!map.current.style.globalId.includes(layerId)) {
           setStyleSwap(layerId);
           if (layerId === 'satellite-streets-v12') {
@@ -604,8 +604,8 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
               <label for="projects">Projects</label>
             </div>
             <div className="interactive menu-item">
-              <input id="sealaska-lands" type="checkbox" name="rtoggle" value="sealaska-lands" defaultChecked/>
-              <label for="sealaska-lands">Lands</label>
+              <input id="lands" type="checkbox" name="rtoggle" value="lands" defaultChecked/>
+              <label for="lands">Lands</label>
             </div>
             <div className="interactive menu-item">
               <input id="roads" type="checkbox" name="rtoggle" value="roads" defaultChecked/>

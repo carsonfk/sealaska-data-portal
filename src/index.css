@@ -141,7 +141,7 @@ nav {
 }
 
 /* nav menu content */
-#menu-checkbox /*, .table-menu-input*/ {
+#menu-checkbox, .table-menu-input {
   display: none;
 }
 

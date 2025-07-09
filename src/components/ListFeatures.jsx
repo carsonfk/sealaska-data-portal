@@ -1,9 +1,10 @@
 import React, { useState, useEffect, use } from "react";
+import { useQueryParams, capitalizeFirst } from "../functions";
 import $ from 'jquery';
 //import { getDatabase, ref, set as firebaseSet, push } from 'firebase/database'
 //import FilterForm from './FilterForm'
 
-export default function ListFeatures( {locations, mode, onCenter, target, tableMode} ) {
+export default function ListFeatures( {locations, mode, onCenter, target, tableMode, onTableMode} ) {
     const [ratio, setRatio] = useState([0,0]);
 
     let test = [
@@ -86,7 +87,7 @@ export default function ListFeatures( {locations, mode, onCenter, target, tableM
         let table = document.getElementsByTagName("table")[0];
         let row, cell1, cell2;
 
-        title.innerHTML = layerName;
+        title.innerHTML = capitalizeFirst(layerName);
         subtitle.classList.add('hide');
         if (table.childElementCount !== 0) {
             $("#feature-list tr").remove();
@@ -127,19 +128,43 @@ export default function ListFeatures( {locations, mode, onCenter, target, tableM
     //    let menuContainer = document.getElementById('table-layers');
     //}
 
+
     useEffect(() => {
-
-
-    }, [tableMode]); //fire this when table mode changes
+        if (mode === 'view') {
+            let inputs = document.getElementById('table-menu').getElementsByTagName('input');
+            for (let input of inputs) {
+                input.onclick = (test) => {
+                    if (!tableMode[test.target.id][1]) {
+                        let tableModeCopy = tableMode;
+                        for (let mode in tableModeCopy) {
+                            if (tableModeCopy[mode][1]) {
+                                tableModeCopy[mode][1] = false;
+                            }
+                        }
+                        tableMode[test.target.id][1] = true;
+                        onTableMode(tableModeCopy);
+                    }
+                }
+            }
+        }
+    }, [ , mode]);
 
     useEffect(() => {
         if (locations && mode === 'view') {
-            if (!tableMode) { //for testing only
-                buildTablePosts();
-            } else {
-                buildTableOther('lands');
-            };
+            for (let mode in tableMode) {
+                if (tableMode[mode][0]) {
+                    //add table input elements here
+                    if (tableMode[mode][1]) {
+                        if (mode === 'posts') { //reconsider
+                            buildTablePosts();
+                        } else {
+                            buildTableOther(mode);
+                        }
+                    }
+                }
+            }
         }
+        console.log("lalal");
     }, [locations, mode, tableMode]); //fire this whenever the features put into the map change, map mode changes, or table mode changes
     
     useEffect(() => {
@@ -161,19 +186,19 @@ export default function ListFeatures( {locations, mode, onCenter, target, tableM
                 <p id='list-subtitle' className='hide'></p>
                 <div id='table-menu' className='flex-horizontal'>
                     <div className="interactive menu-item">
-                        <input id="posts" className='table-menu-input' type="radio" name="rtoggle" value="posts" defaultChecked/>
+                        <input id="posts" className='table-menu-input' type="radio" name="rtoggle2" value="posts" defaultChecked/>
                         <label for="posts">Posts</label>
                     </div>
                     <div className="interactive menu-item">
-                        <input id="projects" className='table-menu-input' type="radio" name="rtoggle" value="projects"/>
+                        <input id="projects" className='table-menu-input' type="radio" name="rtoggle2" value="projects"/>
                         <label for="projects">Projects</label>
                     </div>
                     <div className="interactive menu-item">
-                        <input id="sealaska-lands" className='table-menu-input' type="radio" name="rtoggle" value="sealaska-lands"/>
-                        <label for="sealaska-lands">Lands</label>
+                        <input id="lands" className='table-menu-input' type="radio" name="rtoggle2" value="lands"/>
+                        <label for="lands">Lands</label>
                     </div>
                     <div className="interactive menu-item">
-                        <input id="roads" className='table-menu-input' type="radio" name="rtoggle" value="roads"/>
+                        <input id="roads" className='table-menu-input' type="radio" name="rtoggle2" value="roads"/>
                         <label for="roads">Roads</label>
                     </div>
                 </div>

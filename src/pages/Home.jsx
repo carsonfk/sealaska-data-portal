@@ -24,7 +24,7 @@ export default function Home(props){
 	const [timerLong, setTimerLong] = useState();
 	const [timerShort, setTimerShort] = useState([]);
 	const [sidebars, setSidebars] = useState();
-	const [tableMode, setTableMode] = useState({posts: true, projects: false, lands: false, roads: false}); //reconsider
+	const [tableMode, setTableMode] = useState({posts: [true, true], projects: [true, false], lands: [true, false], roads: [true, false]}); //reconsider
 
 	//returns class to hide sidebars
 	function hidden(side) {
@@ -107,7 +107,7 @@ export default function Home(props){
 		if (mapMode !== selectedMode) {
 			setMapMode(selectedMode);
 		}
-	}
+	};
 
     const handleCurrentSelection = (coordinates) => { //from map jsx - updates current point selection (will default to empty when mode is set to view)
 		if (coordinates.length === 0) {
@@ -115,28 +115,33 @@ export default function Home(props){
 		} else {
 			setCurrentSelection([coordinates, 'map']);
 		}
-    }
+    };
 
 	const handleEdits = (coordinates) => { //from addfeature jsx - updates current point selection (will default to empty when mode is set to view)
         setCurrentSelection([coordinates, 'box']);
-    }
+    };
 
 	const handleTemp = (id) => { //from map jsx - updates map center
 		setTarget([id, 'map']);
-	}
+	};
 
 	const handleCenter = (id) => { //from listfeatures jsx - updates map center
 		setTarget([id, 'list']);
-	}
+	};
 
 	const handleReset = () => {
 		setReset((reset) => reset + 1);
-	}
+	};
 
 	const handleFormSubmit = () => {
 		setMapMode('view');
 		//setTarget([, 'list'])
-	}
+	};
+
+	const handleTableMode = (mode) => {
+		console.log(mode);
+		setTableMode(mode);
+	};
 
 	useEffect(() => {
 		let close = document.getElementById("msg-close");
@@ -274,7 +279,7 @@ export default function Home(props){
 					<Hero scrollToMap={scrollToMap}/>
 					<ViewContributeForm mode={mapMode} onSubmit={handleModeSubmit}/>
 					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits} onReset={handleReset} submitSwap={handleFormSubmit}/>
-					<ListFeatures locations={data} mode={mapMode} target={target} onCenter={handleCenter}/>
+					<ListFeatures locations={data} mode={mapMode} target={target} tableMode={tableMode} onCenter={handleCenter} onTableMode={handleTableMode}/>
 				</div>
 				<div id="map">
 					<Map locations={data} mode={mapMode} target={target} selectionCoordinates={currentSelection} sidebars={sidebars} onSelect={handleCurrentSelection} onTemp={handleTemp}/>
