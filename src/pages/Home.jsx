@@ -138,11 +138,6 @@ export default function Home(props){
 		//setTarget([, 'list'])
 	};
 
-	const handleTableMode = (mode) => {
-		console.log(mode);
-		setTableMode(mode);
-	};
-
 	useEffect(() => {
 		let close = document.getElementById("msg-close");
 		close.onclick = () => {
@@ -153,7 +148,6 @@ export default function Home(props){
 		var leftInit, rightInit;
 		if (!getParam('right') && getParam('right') && window.innerWidth <= 878) {
 			setParam('right', false);
-			console.log('lalala')
 		};
 		getParam('left') ? leftInit = false : leftInit = true;
 		getParam("right") ? rightInit = false : rightInit = true;
@@ -279,7 +273,7 @@ export default function Home(props){
 					<Hero scrollToMap={scrollToMap}/>
 					<ViewContributeForm mode={mapMode} onSubmit={handleModeSubmit}/>
 					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits} onReset={handleReset} submitSwap={handleFormSubmit}/>
-					<ListFeatures locations={data} mode={mapMode} target={target} tableMode={tableMode} onCenter={handleCenter} onTableMode={handleTableMode}/>
+					<ListFeatures locations={data} mode={mapMode} target={target} onCenter={handleCenter}/>
 				</div>
 				<div id="map">
 					<Map locations={data} mode={mapMode} target={target} selectionCoordinates={currentSelection} sidebars={sidebars} onSelect={handleCurrentSelection} onTemp={handleTemp}/>
