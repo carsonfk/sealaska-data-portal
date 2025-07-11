@@ -518,11 +518,11 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
 
   useEffect(() => {
     setTimeout(() => {
-      if (map.current.getSource("locations")) {
+      if (map.current.getSource('locations')) {
         //update the source of the features on the map
         const source = map.current.getSource("locations");
         source.setData({
-          type: "FeatureCollection",
+          type: 'FeatureCollection',
           features: featureLocations,
         });
       }
@@ -530,7 +530,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   }, [featureLocations, styleSwap]); //everytime the featureLocations state or map style is changed
 
   useEffect(() => {
-    let layerList = ["locations_layer", "transparent_layer"];
+    let layerList = ['locations_layer', 'transparent_layer'];
     if (mode === 'view') { //events added and removed from map in view mode
       //map.current.getCanvas().style.cursor = ""
       map.current.off('click', addPointsRef.current);
@@ -544,9 +544,9 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
       for (let i = 1; i < layerList.length; i++) {
         map.current.on('click', layerList[i], onPopupRef.current);
         popupPointerRef.current = popupPointer;
-        map.current.on("mouseenter", layerList[i], popupPointerRef.current);
+        map.current.on('mouseenter', layerList[i], popupPointerRef.current);
         defaultPointerRef.current = defaultPointer;
-        map.current.on("mouseleave", layerList[i], defaultPointerRef.current);
+        map.current.on('mouseleave', layerList[i], defaultPointerRef.current);
       }
       onSelect([]); //figure out how to not call on initialization
 
@@ -561,8 +561,8 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
       map.current.off('click', removePopupRef.current);
       for (let i = 1; i < layerList.length; i++) {
         map.current.off('click', layerList[i], onPopupRef.current);
-        map.current.off("mouseenter", layerList[i], popupPointerRef.current);
-        map.current.off("mouseleave", layerList[i], defaultPointerRef.current);
+        map.current.off('mouseenter', layerList[i], popupPointerRef.current);
+        map.current.off('mouseleave', layerList[i], defaultPointerRef.current);
         popup.remove();
       }
     }
@@ -620,7 +620,3 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
     </>
   );
 }
-
-// <div className="legend-item"><span style={{backgroundColor:'#f00'}}></span> Reviewed</div>
-// <div className="legend-item"><span style={{backgroundColor:'#0f0'}}></span> Unreviewed</div>
-// <div className="legend-item"><span style={{backgroundColor:'#00f'}}></span> Sealaska</div>

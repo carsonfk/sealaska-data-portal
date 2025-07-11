@@ -36,15 +36,15 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
         let reviewedCount = 0
         let unreviewedCount = 0;
         let json = locations; // revisit
-        let title = document.querySelector('#list-locations > .list-title');
-        let subtitle = document.querySelector('#list-locations > .list-subtitle');
-        let table = document.querySelector('#list-locations > .feature-list');
+        let title = document.querySelector('#list-locations .list-title');
+        let subtitle = document.querySelector('#list-locations .list-subtitle');
+        let table = document.querySelector('#list-locations .feature-list');
         let row, cell1, cell2;
 
         title.innerHTML = 'Posts';
         subtitle.classList.remove('hide');
         if (table.childElementCount !== 0) {
-            $("#feature-list tr").remove();
+            $("#list-locations .feature-list tr").remove();
         }
 
         //loops sorted json to construct table
@@ -84,15 +84,15 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
     function buildTableOther(layerName) {
         console.log(layerName);
         let currentLayer = '#list-' + layerName
-        let title = document.querySelector(currentLayer + ' > .list-title');
-        let subtitle = document.querySelector(currentLayer + ' > .list-subtitle');
-        let table = document.querySelector(currentLayer + ' > .feature-list');
+        let title = document.querySelector(currentLayer + ' .list-title');
+        let subtitle = document.querySelector(currentLayer + ' .list-subtitle');
+        let table = document.querySelector(currentLayer + ' .feature-list');
         let row, cell1, cell2;
 
         title.innerHTML = capitalizeFirst(layerName);
         subtitle.classList.add('hide');
         if (table.childElementCount !== 0) {
-            $("#feature-list tr").remove();
+            $(currentLayer + " .feature-list tr").remove();
         }
 
         //loops sorted json to construct table
@@ -129,11 +129,6 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
     //function buildLayerMenu() {
     //    let menuContainer = document.getElementById('table-layers');
     //}
-
-
-    useEffect(() => {
-
-    }, []);
 
     useEffect(() => {
         if (locations && mode === 'view') {
