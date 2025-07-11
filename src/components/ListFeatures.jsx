@@ -32,13 +32,13 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
     ]
     const testjson = JSON.parse(JSON.stringify(test));
 
-    function buildTable() { //populates the table with available data
+    function buildTablePosts() { //populates the table with available data
         let reviewedCount = 0
         let unreviewedCount = 0;
         let json = locations; // revisit
-        let title = document.getElementById('list-title');
-        let subtitle = document.getElementById('list-subtitle');
-        let table = document.getElementById('feature-list');
+        let title = document.querySelector('#list-locations > .list-title');
+        let subtitle = document.querySelector('#list-locations > .list-subtitle');
+        let table = document.querySelector('#list-locations > .feature-list');
         let row, cell1, cell2;
 
         title.innerHTML = 'Posts';
@@ -82,9 +82,11 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
     }
 
     function buildTableOther(layerName) {
-        let title = document.getElementById('list-title');
-        let subtitle = document.getElementById('list-subtitle');
-        let table = document.getElementsByTagName("table")[0];
+        console.log(layerName);
+        let currentLayer = '#list-' + layerName
+        let title = document.querySelector(currentLayer + ' > .list-title');
+        let subtitle = document.querySelector(currentLayer + ' > .list-subtitle');
+        let table = document.querySelector(currentLayer + ' > .feature-list');
         let row, cell1, cell2;
 
         title.innerHTML = capitalizeFirst(layerName);
@@ -135,7 +137,10 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
 
     useEffect(() => {
         if (locations && mode === 'view') {
-            buildTable();
+            buildTablePosts();
+            buildTableOther('projects');
+            buildTableOther('lands');
+            buildTableOther('roads');
         }
     }, [locations, mode]); //fire this whenever the features put into the map change, map mode changes, or table mode changes
     
@@ -146,24 +151,33 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
     }, [target]);
 
     useEffect(() => {
-        let subtitle = document.getElementById('list-subtitle');
+        let subtitle = document.querySelector('#list-locations > .list-subtitle');
         subtitle.innerHTML = 'Reviewed: ' + ratio[0] + ' of ' + (ratio[0] + ratio[1]);
     }, [ratio])
 
     if (mode === 'view') {
         return (
             <>
-            <div className="list-location">
-                <h3 id='list-title'>Posts</h3>
-                <p id='list-subtitle' className='hide'></p>
-                <table id="feature-list"></table>
+            <div id='list-locations' className='list'>
+                <h3 className='list-title'>Posts</h3>
+                <p className='list-subtitle'></p>
+                <table className="feature-list"></table>
             </div>
-            <div className="list-">
-                <h3 id='list-title'>Posts</h3>
-                <p id='list-subtitle' className='hide'></p>
-                <table id="feature-list"></table>
+            <div id='list-projects' className='list'>
+                <h3 className='list-title'>Projects</h3>
+                <p className='list-subtitle'></p>
+                <table className="feature-list"></table>
             </div>
-
+            <div id='list-lands' className='list'>
+                <h3 className='list-title'>Lands</h3>
+                <p className='list-subtitle'></p>
+                <table className="feature-list"></table>
+            </div>
+            <div id='list-roads' className='list'>
+                <h3 className='list-title'>Roads</h3>
+                <p className='list-subtitle'></p>
+                <table className="feature-list"></table>
+            </div>
             </>
         )
     }
