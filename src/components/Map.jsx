@@ -21,20 +21,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
     closeButton: false
   }));
 
-  //initializes menu & legend click event
-  function menuLegendClick(selected, other) {
-    document.getElementById(selected.id + "-icon").onclick = () => {
-      for (let item of selected.getElementsByTagName('div')) {
-        item.classList.toggle("hide");
-      }
-      for (let item of other.getElementsByTagName('div')) {
-        if (!item.classList.contains("hide")) {
-          item.classList.toggle("hide");
-        }
-      }
-    }
-  }
-
   //handles flying to provided coordinates
   function flyTo(coordinates) {
     if (target[1] === 'list') {
@@ -61,7 +47,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
     if (typeof timestamp === "string") {
       timestamp = JSON.parse(timestamp);
     }
-    flyTo(coordinates);
 
     if (feature.properties.image !== "") {
       const img = new Image();
@@ -87,6 +72,20 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
         .setLngLat(coordinates)
         .setHTML("Awaiting manual review")
         .addTo(map.current);
+    }
+  }
+
+  //initializes menu & legend click event
+  function menuLegendClick(selected, other) {
+    document.getElementById(selected.id + "-icon").onclick = () => {
+      for (let item of selected.getElementsByTagName('div')) {
+        item.classList.toggle("hide");
+      }
+      for (let item of other.getElementsByTagName('div')) {
+        if (!item.classList.contains("hide")) {
+          item.classList.toggle("hide");
+        }
+      }
     }
   }
 
@@ -244,6 +243,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
           }
         }
         handlePopup(targetFeature);
+        flyTo(targetFeature.geometry.coordinates.slice()); //only fly to feature on target select from table
       } else {
         popup.remove();
       }
@@ -498,7 +498,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
         'gray'
       ];
 
-      buildLegend('locations', locationsItems, locationsColors);
+      buildLegend('posts', locationsItems, locationsColors);
       buildLegend('projects', projectsItems, projectsColors);
       buildLegend('lands', taxBlocksItems, taxBlocksColors);
       buildLegend('roads', roadsItems, roadsColors);
@@ -530,7 +530,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   }, [featureLocations, styleSwap]); //everytime the featureLocations state or map style is changed
 
   useEffect(() => {
-    let layerList = ['locations_layer', 'transparent_layer'];
+    let layerList = ['locations_layer', 'transparent_layer', 'taxblocks_layer'];
     if (mode === 'view') { //events added and removed from map in view mode
       //map.current.getCanvas().style.cursor = ""
       map.current.off('click', addPointsRef.current);
