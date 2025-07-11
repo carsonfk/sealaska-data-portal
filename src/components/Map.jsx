@@ -75,6 +75,23 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
     }
   }
 
+  function handlePopupLands(feature) {
+    console.log(feature);
+    let coordinates = feature.geometry.coordinates.slice();
+    let owner = feature.properties.SURFOWNER;
+    let name = feature.properties.TAX_NAME;
+
+    buildPopupLands(coordinates, owner, name);
+  }
+
+  //constructs a reviewed/unreviewed popup using provided parameters
+  function buildPopupLands(coordinates, owner, name) {
+    popup
+        .setLngLat(coordinates)
+        .setHTML("<strong><h2>" + owner + "</h2></strong>" + "<h6>" + name + "</h6>")
+        .addTo(map.current);
+  }
+
   //initializes menu & legend click event
   function menuLegendClick(selected, other) {
     document.getElementById(selected.id + "-icon").onclick = () => {
@@ -159,7 +176,11 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   const onPopup = 
     (point) => {
       onTemp(point.features[0].id);
-      handlePopup(point.features[0]);
+      if (point.features[0].source === 'taxblocks') {
+        handlePopupLands(point.features[0]);
+      } else {
+        handlePopup(point.features[0]);
+      }
     }
   const onPopupRef = useRef(onPopup);
 
