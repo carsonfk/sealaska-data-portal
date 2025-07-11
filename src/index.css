@@ -520,6 +520,10 @@ img {
   width: 100%
 }
 
+.list.hide {
+  display: none;
+}
+
 .feature-list {
   border-collapse: collapse;
   border-spacing: 0;

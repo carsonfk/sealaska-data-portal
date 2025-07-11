@@ -82,7 +82,6 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
     }
 
     function buildTableOther(layerName) {
-        console.log(layerName);
         let currentLayer = '#list-' + layerName
         let title = document.querySelector(currentLayer + ' .list-title');
         let subtitle = document.querySelector(currentLayer + ' .list-subtitle');
@@ -105,6 +104,13 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
             cell2.innerHTML = testjson[i].properties.details;
             row.addEventListener("click", (e) => {
                 let currentRow = e.target.parentNode;
+                for (let child of table.children[0].children) {
+                    if (child.classList.contains("hl")) {
+                        if (!currentRow.classList.contains("hl")) {
+                            child.classList.toggle("hl");
+                        }
+                    }
+                }
                 currentRow.classList.toggle("hl");
                 if (currentRow.classList.contains("hl")) {
                     //onCenter(parseInt(currentRow.id)); // sends current highlighted row id
@@ -121,6 +127,26 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
             for (let child of table.children[0].children) {
                 if (child.classList.contains("hl") && id !== parseInt(child.id) || !child.classList.contains("hl") && id === parseInt(child.id)) {
                     child.classList.toggle("hl");
+                }
+            }
+        }
+    }
+
+    function swapView() {
+        let lists = document.getElementsByClassName('list');
+        let continues = true;
+        for (let i = 0; i < lists.length; i++) {
+            if (!lists[i].classList.contains('hide') && continues) {
+                onCenter(-1); // no row is highlighted
+                for (let child of document.querySelector('#' + lists[i].id + " .feature-list tbody").children) {
+                    child.classList.remove("hl");
+                }
+                continues = false;
+                lists[i].classList.add('hide');
+                if (i === lists.length - 1) {
+                    lists[0].classList.remove('hide');
+                } else {
+                    lists[i + 1].classList.remove('hide');
                 }
             }
         }
@@ -153,22 +179,24 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
     if (mode === 'view') {
         return (
             <>
+            <br></br>
+            <button className="interactive" type='submit' onClick={swapView}>test</button>
             <div id='list-locations' className='list'>
                 <h3 className='list-title'>Posts</h3>
                 <p className='list-subtitle'></p>
                 <table className="feature-list"></table>
             </div>
-            <div id='list-projects' className='list'>
+            <div id='list-projects' className='list hide'>
                 <h3 className='list-title'>Projects</h3>
                 <p className='list-subtitle'></p>
                 <table className="feature-list"></table>
             </div>
-            <div id='list-lands' className='list'>
+            <div id='list-lands' className='list hide'>
                 <h3 className='list-title'>Lands</h3>
                 <p className='list-subtitle'></p>
                 <table className="feature-list"></table>
             </div>
-            <div id='list-roads' className='list'>
+            <div id='list-roads' className='list hide'>
                 <h3 className='list-title'>Roads</h3>
                 <p className='list-subtitle'></p>
                 <table className="feature-list"></table>
