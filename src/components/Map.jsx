@@ -21,6 +21,33 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
     closeButton: false
   }));
 
+  function averageGeolocation(coords) {
+    if (coords.length === 0) return null;
+    if (coords.length === 1) return coords[0];
+    console.log(coords);
+    let x = 0.0, y = 0.0, z = 0.0;
+
+    for (let coord of coords) {
+      let lat = coord[1] * Math.PI / 180;
+      let lon = coord[0] * Math.PI / 180;
+
+      x += Math.cos(lat) * Math.cos(lon);
+      y += Math.cos(lat) * Math.sin(lon);
+      z += Math.sin(lat);
+    }
+
+    const total = coords.length;
+    x /= total;
+    y /= total;
+    z /= total;
+
+    const centralLon = Math.atan2(y, x);
+    const centralSqrt = Math.sqrt(x * x + y * y);
+    const centralLat = Math.atan2(z, centralSqrt);
+
+    return [(centralLon * 180 / Math.PI), (centralLat * 180 / Math.PI)];
+  }
+
   //handles flying to provided coordinates
   function flyTo(coordinates) {
     if (target[1] === 'list') {
@@ -29,7 +56,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
       let zoomLevel = map.current.getZoom();
       let flyDuration = 1000 + (lngDelta * 20) + (latDelta * 20) + (zoomLevel * 300);
       map.current.flyTo({center: [coordinates[0], coordinates[1]],
-        essential: true, duration: flyDuration})
+        essential: true, duration: flyDuration});
       setLng(coordinates[0]);
       setLat(coordinates[1]);
       setZoom(map.current.getZoom());
@@ -76,11 +103,11 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   }
 
   function handlePopupLands(feature) {
-    console.log(feature);
-    let coordinates = feature.geometry.coordinates.slice();
+    //let coordinates = feature.geometry.coordinates.slice();
     let owner = feature.properties.SURFOWNER;
     let name = feature.properties.TAX_NAME;
-
+    let coordinates = averageGeolocation(feature.geometry.coordinates[0]);
+    console.log(coordinates);
     buildPopupLands(coordinates, owner, name);
   }
 
@@ -175,6 +202,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   //click on point places popup
   const onPopup = 
     (point) => {
+      console.log(point.features[0])
       onTemp(point.features[0].id);
       if (point.features[0].source === 'taxblocks') {
         handlePopupLands(point.features[0]);
