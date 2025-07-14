@@ -105,10 +105,10 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
     //let coordinates = feature.geometry.coordinates.slice();
     let owner = feature.properties.SURFOWNER;
     let name = feature.properties.TAX_NAME;
-
     let indexMax;
     let maxLength = 0;
     let tempCoordinates;
+    console.log(feature.geometry.coordinates);
     if (feature.geometry.coordinates.length >= 2) {
       for (let i = 0; i < feature.geometry.coordinates.length; i++) {
         console.log(feature.geometry.coordinates[i][0]);

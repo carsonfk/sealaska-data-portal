@@ -172,33 +172,39 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
     }, [target]);
 
     useEffect(() => {
-        let subtitle = document.querySelector('#list-locations > .list-subtitle');
+        let subtitle = document.querySelector('#subgroup-locations > .list-subtitle');
         subtitle.innerHTML = 'Reviewed: ' + ratio[0] + ' of ' + (ratio[0] + ratio[1]);
     }, [ratio])
 
     if (mode === 'view') {
         return (
             <>
-            <br></br>
-            <button className="interactive" type='submit' onClick={swapView}>test</button>
             <div id='list-locations' className='list'>
-                <h3 className='list-title'>Posts</h3>
-                <p className='list-subtitle collapsable'></p>
+                <div id='subgroup-locations' className='subgroup interactive'>
+                    <h3 className='list-title'>Posts</h3>
+                    <p className='list-subtitle collapsable'></p>
+                </div>
                 <table className="feature-list collapsable"></table>
             </div>
             <div id='list-projects' className='list collapsed'>
-                <h3 className='list-title'>Projects</h3>
-                <p className='list-subtitle collapsable'></p>
+                <div id='subgroup-projects' className='subgroup interactive'>
+                    <h3 className='list-title'>Projects</h3>
+                    <p className='list-subtitle collapsable'></p>
+                </div>
                 <table className="feature-list collapsable"></table>
             </div>
             <div id='list-lands' className='list collapsed'>
-                <h3 className='list-title'>Lands</h3>
-                <p className='list-subtitle collapsable'></p>
+                <div id='subgroup-lands' className='subgroup interactive'>
+                    <h3 className='list-title'>Lands</h3>
+                    <p className='list-subtitle collapsable'></p>
+                </div>
                 <table className="feature-list collapsable"></table>
             </div>
             <div id='list-roads' className='list collapsed'>
-                <h3 className='list-title'>Roads</h3>
-                <p className='list-subtitle collapsable'></p>
+                <div id='subgroup-roads' className='subgroup interactive'>
+                    <h3 className='list-title'>Roads</h3>
+                    <p className='list-subtitle collapsable'></p>
+                </div>
                 <table className="feature-list collapsable"></table>
             </div>
             </>
