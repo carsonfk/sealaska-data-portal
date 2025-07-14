@@ -517,10 +517,11 @@ img {
   border-radius: 5px;
   padding: 10px 0px 0px 0px;
   margin-top: 10px;
-  width: 100%
+  width: 100%;
+  display: block;
 }
 
-.list.hide {
+.collapsed > .collapsable {
   display: none;
 }
 

@@ -24,7 +24,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   function averageGeolocation(coords) {
     if (coords.length === 0) return null;
     if (coords.length === 1) return coords[0];
-    console.log(coords);
     let x = 0.0, y = 0.0, z = 0.0;
 
     for (let coord of coords) {
@@ -106,8 +105,27 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
     //let coordinates = feature.geometry.coordinates.slice();
     let owner = feature.properties.SURFOWNER;
     let name = feature.properties.TAX_NAME;
-    let coordinates = averageGeolocation(feature.geometry.coordinates[0]);
-    console.log(coordinates);
+
+    let indexMax;
+    let maxLength = 0;
+    let tempCoordinates;
+    if (feature.geometry.coordinates.length >= 2) {
+      for (let i = 0; i < feature.geometry.coordinates.length; i++) {
+        console.log(feature.geometry.coordinates[i][0]);
+        if (feature.geometry.coordinates[i][0].length > maxLength) {
+          maxLength = feature.geometry.coordinates[i][0].length;
+          indexMax = i;
+        }
+      }
+      console.log("two or more arrays")
+      tempCoordinates = feature.geometry.coordinates[indexMax][0];
+      console.log(tempCoordinates);
+    } else {
+      console.log("one array")
+      tempCoordinates = feature.geometry.coordinates[0];
+      console.log(tempCoordinates);
+    }
+    let coordinates = averageGeolocation(tempCoordinates);
     buildPopupLands(coordinates, owner, name);
   }
 
@@ -202,7 +220,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   //click on point places popup
   const onPopup = 
     (point) => {
-      console.log(point.features[0])
+      //console.log(point.features[0])
       onTemp(point.features[0].id);
       if (point.features[0].source === 'taxblocks') {
         handlePopupLands(point.features[0]);

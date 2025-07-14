@@ -136,17 +136,17 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
         let lists = document.getElementsByClassName('list');
         let continues = true;
         for (let i = 0; i < lists.length; i++) {
-            if (!lists[i].classList.contains('hide') && continues) {
+            if (!lists[i].classList.contains('collapsed') && continues) {
                 onCenter(-1); // no row is highlighted
                 for (let child of document.querySelector('#' + lists[i].id + " .feature-list tbody").children) {
                     child.classList.remove("hl");
                 }
                 continues = false;
-                lists[i].classList.add('hide');
+                lists[i].classList.add('collapsed');
                 if (i === lists.length - 1) {
-                    lists[0].classList.remove('hide');
+                    lists[0].classList.remove('collapsed');
                 } else {
-                    lists[i + 1].classList.remove('hide');
+                    lists[i + 1].classList.remove('collapsed');
                 }
             }
         }
@@ -183,23 +183,23 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
             <button className="interactive" type='submit' onClick={swapView}>test</button>
             <div id='list-locations' className='list'>
                 <h3 className='list-title'>Posts</h3>
-                <p className='list-subtitle'></p>
-                <table className="feature-list"></table>
+                <p className='list-subtitle collapsable'></p>
+                <table className="feature-list collapsable"></table>
             </div>
-            <div id='list-projects' className='list hide'>
+            <div id='list-projects' className='list collapsed'>
                 <h3 className='list-title'>Projects</h3>
-                <p className='list-subtitle'></p>
-                <table className="feature-list"></table>
+                <p className='list-subtitle collapsable'></p>
+                <table className="feature-list collapsable"></table>
             </div>
-            <div id='list-lands' className='list hide'>
+            <div id='list-lands' className='list collapsed'>
                 <h3 className='list-title'>Lands</h3>
-                <p className='list-subtitle'></p>
-                <table className="feature-list"></table>
+                <p className='list-subtitle collapsable'></p>
+                <table className="feature-list collapsable"></table>
             </div>
-            <div id='list-roads' className='list hide'>
+            <div id='list-roads' className='list collapsed'>
                 <h3 className='list-title'>Roads</h3>
-                <p className='list-subtitle'></p>
-                <table className="feature-list"></table>
+                <p className='list-subtitle collapsable'></p>
+                <table className="feature-list collapsable"></table>
             </div>
             </>
         )
