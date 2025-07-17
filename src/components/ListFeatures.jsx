@@ -132,22 +132,17 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
         }
     }
 
-    function swapView() {
+    function swapView(e) {
+        onCenter(-1); // no row is highlighted
         let lists = document.getElementsByClassName('list');
-        let continues = true;
-        for (let i = 0; i < lists.length; i++) {
-            if (!lists[i].classList.contains('collapsed') && continues) {
-                onCenter(-1); // no row is highlighted
-                for (let child of document.querySelector('#' + lists[i].id + " .feature-list tbody").children) {
-                    child.classList.remove("hl");
+        if (!e.target.parentNode.parentNode.classList.contains('collapsed')) {
+            e.target.parentNode.parentNode.classList.add('collapsed');
+        } else {
+            for (let i = 0; i < lists.length; i++) {
+                if (!lists[i].classList.contains('collapsed')) {
+                    lists[i].classList.add('collapsed');
                 }
-                continues = false;
-                lists[i].classList.add('collapsed');
-                if (i === lists.length - 1) {
-                    lists[0].classList.remove('collapsed');
-                } else {
-                    lists[i + 1].classList.remove('collapsed');
-                }
+                e.target.parentNode.parentNode.classList.remove('collapsed');
             }
         }
     }
@@ -155,6 +150,14 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
     //function buildLayerMenu() {
     //    let menuContainer = document.getElementById('table-layers');
     //}
+
+    useEffect(() => {
+        console.log("hehehe");
+        let listSubgroups = document.getElementsByClassName('subgroup');
+        for (let i = 0; i < listSubgroups.length; i++) {
+            listSubgroups[i].addEventListener("click", swapView);
+        }
+    }, []);
 
     useEffect(() => {
         if (locations && mode === 'view') {

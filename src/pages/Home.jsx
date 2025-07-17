@@ -42,7 +42,7 @@ export default function Home(props){
 		(side === "left") ? other = "right" : other = "left";
 		let sidebar = document.getElementsByClassName(side);
 		let sidebar2 = document.getElementsByClassName(other);
-		sidebar[0].onclick = () => {
+		sidebar[0].addEventListener("click", () => {
 			sidebar[0].classList.toggle("hide");
 			sidebar[1].classList.toggle("hide");
 			if (sidebar[1].classList.contains('hide')) { //exits contribute mode when closing left sidebar
@@ -77,7 +77,7 @@ export default function Home(props){
 					setParam(side, null);
 				}
 			}
-		};
+		});
 	}
 
 	//sort provided JSON using sort state
@@ -141,8 +141,8 @@ export default function Home(props){
 	useEffect(() => {
 		let close = document.getElementById("msg-close");
 		close.onclick = () => {
-		let update = document.getElementById("update");
-		update.classList.toggle("hide");
+			let update = document.getElementById("update");
+			update.classList.toggle("hide");
 		};
 
 		var leftInit, rightInit;

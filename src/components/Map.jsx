@@ -139,7 +139,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
 
   //initializes menu & legend click event
   function menuLegendClick(selected, other) {
-    document.getElementById(selected.id + "-icon").onclick = () => {
+    document.getElementById(selected.id + "-icon").addEventListener("click", () => {
       for (let item of selected.getElementsByTagName('div')) {
         item.classList.toggle("hide");
       }
@@ -148,7 +148,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
           item.classList.toggle("hide");
         }
       }
-    }
+    });
   }
 
   //if legend subgroup doesnt already exist, builds and adds to legend element
@@ -356,7 +356,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
           mapElement.classList.remove("light");
         }
       }
-      input.onclick = (layer) => {
+      input.addEventListener("click", (layer) => {
         let layerId = layer.target.id;
         if (!map.current.style.globalId.includes(layerId)) {
           setStyleSwap(layerId);
@@ -374,7 +374,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
             mapElement.classList.remove("light");
           }
         }
-      };
+      });
     }
 
     map.current.on('load', function () {
