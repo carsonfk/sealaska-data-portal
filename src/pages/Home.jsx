@@ -121,12 +121,12 @@ export default function Home(props){
         setCurrentSelection([coordinates, 'box']);
     };
 
-	const handleTemp = (id) => { //from map jsx - updates map center
-		setTarget([id, 'map']);
+	const handleTemp = (layerName, id) => { //from map jsx - updates map center
+		setTarget([layerName, id, 'map']);
 	};
 
-	const handleCenter = (id) => { //from listfeatures jsx - updates map center
-		setTarget([id, 'list']);
+	const handleCenter = (layerName, id) => { //from listfeatures jsx - updates map center
+		setTarget([layerName, id, 'list']);
 	};
 
 	const handleReset = () => {
