@@ -125,7 +125,9 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
         let tables = document.getElementsByTagName("table");
         for (let i = 0; i < tables.length; i++) {
             if (tables[i].children[0]) {
-                if (tables[i].parentElement.classList.contains('list-' + layerName)) {
+                //console.log(tables[i].parentElement.classList);
+                if (tables[i].parentElement.id === ('list-' + layerName)) {
+                    console.log(tables[i].children[0].children);
                     for (let child of tables[i].children[0].children) {
                         if ((child.classList.contains("hl") && id !== parseInt(child.id)) || (!child.classList.contains("hl") && id === parseInt(child.id))) {
                             child.classList.toggle("hl");
@@ -140,7 +142,7 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
         }
     }
 
-    function swapView(e) {
+    function swapViewList(e) {
         onCenter('none', -1); // no row is highlighted
         updateTableHL('none', -1);
         let lists = document.getElementsByClassName('list');
@@ -152,6 +154,23 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
                     lists[i].classList.add('collapsed');
                 }
                 e.target.parentNode.parentNode.classList.remove('collapsed');
+            }
+        }
+    }
+
+    function swapViewMap(target) {
+        console.log(target);
+        updateTableHL(target[0], target[1]);
+        if (target[1] !== -1) {
+            let lists = document.getElementsByClassName('list');
+            console.log(lists);
+            if (document.getElementById('list-' + target[0]).classList.contains('collapsed')) {
+                for (let i = 0; i < lists.length; i++) {
+                    if (!lists[i].classList.contains('collapsed')) {
+                        lists[i].classList.add('collapsed');
+                    }
+                    document.getElementById('list-' + target[0]).classList.remove('collapsed');
+                }
             }
         }
     }
@@ -170,14 +189,15 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
             console.log("hi!")
             let listSubgroups = document.getElementsByClassName('subgroup');
             for (let i = 0; i < listSubgroups.length; i++) {
-                listSubgroups[i].addEventListener("click", swapView);
+                listSubgroups[i].addEventListener("click", swapViewList);
             }
         }
     }, [mode])
     
     useEffect(() => {
         if (mode === 'view' && (target[2] === 'map' || target[2] === 'reset')) {
-            updateTableHL(target[0], target[1]);
+            //updateTableHL(target[0], target[1]);
+            swapViewMap(target)
         };
     }, [target]);
 

@@ -49,7 +49,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
 
   //handles flying to provided coordinates
   function flyTo(coordinates) {
-    if (target[1] === 'list') {
+    if (target[2] === 'list') {
       let lngDelta = Math.abs(map.current.getCenter().lng - coordinates[0]);
       let latDelta = Math.abs(map.current.getCenter().lat - coordinates[1]);
       let zoomLevel = map.current.getZoom();
@@ -220,8 +220,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   //click on point places popup
   const onPopup = 
     (point) => {
-      //console.log(point.features[0])
-      onTemp(point.features[0].id);
+      onTemp(point.features[0].source, point.features[0].id);
       if (point.features[0].source === 'lands') {
         handlePopupLands(point.features[0]);
       } else {
@@ -303,14 +302,18 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   useEffect(() => {
     if (mode === 'view' && (target[2] === 'list' || target[2] === 'reset')) {
       if (target[1] !== -1) {
-        let targetFeature;
-        for (let i = 0; i < featureLocations.length; i++) {
-          if (featureLocations[i].id === parseInt(target[1])) {
-            targetFeature = featureLocations[i];
+        if (target[0] === 'posts') {
+          let targetFeature;
+          for (let i = 0; i < featureLocations.length; i++) {
+            if (featureLocations[i].id === parseInt(target[1])) {
+              targetFeature = featureLocations[i];
+            }
           }
+          handlePopup(targetFeature);
+          flyTo(targetFeature.geometry.coordinates); //only fly to feature on target select from table
+        } else if (target[0] === 'lands') {
+
         }
-        handlePopup(targetFeature);
-        flyTo(targetFeature.geometry.coordinates.slice()); //only fly to feature on target select from table
       } else {
         popup.remove();
       }
@@ -476,7 +479,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
         'type': "geojson",
         'data': {
           'type': "FeatureCollection",
-          'features': featureLocations,
+          'features': featureLocations
         }
       });
       map.current.addLayer({
@@ -506,7 +509,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
           'circle-opacity': 0
         }
       });
-
 
       //build legend based on enabled layers
       const postsItems = [
