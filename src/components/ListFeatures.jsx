@@ -124,17 +124,17 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
     function updateTableHL(layerName, id) {
         let tables = document.getElementsByTagName("table");
         for (let i = 0; i < tables.length; i++) {
-            if (tables[i].parentElement.className.contains('list-' + layerName)) {
-                if (tables[i].children[0]) {
+            if (tables[i].children[0]) {
+                if (tables[i].parentElement.classList.contains('list-' + layerName)) {
                     for (let child of tables[i].children[0].children) {
                         if ((child.classList.contains("hl") && id !== parseInt(child.id)) || (!child.classList.contains("hl") && id === parseInt(child.id))) {
                             child.classList.toggle("hl");
                         }
                     }
-                }
-            } else {
-                for (let child of tables[i].children[0].children) {
-                    child.classList.remove("hl");
+                } else {
+                    for (let child of tables[i].children[0].children) {
+                        child.classList.remove("hl");
+                    }
                 }
             }
         }

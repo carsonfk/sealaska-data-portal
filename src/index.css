@@ -333,9 +333,9 @@ nav {
 
 .legend-key {
   display: inline-block;
-  width: 13px;
-  height: 13px;
-  margin-right: 5px;
+  width: 15px;
+  height: 15px;
+  margin-right: 3px;
 }
 
 #posts-key {
@@ -345,7 +345,7 @@ nav {
 
 #lands-key {
   border-radius: 30%;
-  border: 2px solid currentcolor;
+  border: 1px solid currentcolor;
 }
 
 #alt-title {

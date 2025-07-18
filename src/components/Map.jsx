@@ -222,7 +222,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
     (point) => {
       //console.log(point.features[0])
       onTemp(point.features[0].id);
-      if (point.features[0].source === 'taxblocks') {
+      if (point.features[0].source === 'lands') {
         handlePopupLands(point.features[0]);
       } else {
         handlePopup(point.features[0]);
@@ -256,7 +256,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   //click outside of point removes popup
   const removePopup =
     () => {
-      onTemp(-1);
+      onTemp('none', -1);
       popup.remove();
     }
   const removePopupRef = useRef(removePopup);
@@ -301,11 +301,11 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   }, [selectionCoordinates]); //fires whenever a coordinate is changed
 
   useEffect(() => {
-    if (mode === 'view' && (target[1] === 'list' || target[1] === 'reset')) {
-      if (target[0] !== -1) {
+    if (mode === 'view' && (target[2] === 'list' || target[2] === 'reset')) {
+      if (target[1] !== -1) {
         let targetFeature;
         for (let i = 0; i < featureLocations.length; i++) {
-          if (featureLocations[i].id === parseInt(target[0])) {
+          if (featureLocations[i].id === parseInt(target[1])) {
             targetFeature = featureLocations[i];
           }
         }
@@ -422,15 +422,15 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
         });
       }
 
-      //taxblocks layer
-      map.current.addSource('taxblocks', {
+      //lands layer
+      map.current.addSource('lands', {
           'type': 'geojson',
           'data': 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/ArcGIS/rest/services/Tax_Blocks_(geojson)/FeatureServer/0/query?where=1%3D1&outSR=4326&outFields=SURFOWNER&outFields=TAX_NAME&f=pgeojson'
       });
       map.current.addLayer({
-        'id': 'taxblocks_layer',
+        'id': 'lands_layer',
         'type': 'fill',
-        'source': 'taxblocks',
+        'source': 'lands',
         'paint': {
             'fill-color': [
               'match',
@@ -449,18 +449,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
             ]
         }
       });
-      //map.current.addLayer({
-      //  id: 'taxblock_labels',
-      //  type: 'symbol',
-      //  source: 'taxblocks',
-      //  layout: {
-      //    'text-field': ['get', 'SURFOWNER'],
-      //    'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
-      //    'text-radial-offset': 0.5,
-      //    'text-justify': 'auto',
-      //    //'icon-image': ['get', 'icon']
-      //  }
-      //});
 
       //roads layer
       map.current.addSource("roads", {
@@ -484,7 +472,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
 
 
       //locations layer + transparent layer (easier click)
-      map.current.addSource("locations", {
+      map.current.addSource("posts", {
         'type': "geojson",
         'data': {
           'type': "FeatureCollection",
@@ -492,9 +480,9 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
         }
       });
       map.current.addLayer({
-        'id': "locations_layer",
+        'id': "posts_layer",
         'type': "circle",
-        'source': "locations",
+        'source': "posts",
         'paint': {
           "circle-radius": 6,
           "circle-stroke-width": 2,
@@ -512,7 +500,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
       map.current.addLayer({
         'id': "transparent_layer",
         'type': "circle",
-        'source': "locations",
+        'source': "posts",
         'paint': {
           "circle-radius": 20,
           'circle-opacity': 0
@@ -521,13 +509,13 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
 
 
       //build legend based on enabled layers
-      const locationsItems = [
+      const postsItems = [
         'Reviewed',
         'Unreviewed',
         'Sealaska'
       ];
 
-      const locationsColors = [
+      const postsColors = [
         'orange',
         '#ccc',
         '#CD202D'
@@ -544,12 +532,12 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
         'yellow'
       ];
 
-      const taxBlocksItems = [
+      const landsItems = [
         'Sealaska',
         'Village Corporation'
       ];
 
-      const taxBlocksColors = [
+      const landsColors = [
         'rgba(250, 100, 100, 0.2)',
         'rgba(200, 100, 240, 0.2)'
       ];
@@ -565,9 +553,9 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
         'gray'
       ];
 
-      buildLegend('posts', locationsItems, locationsColors);
+      buildLegend('posts', postsItems, postsColors);
       buildLegend('projects', projectsItems, projectsColors);
-      buildLegend('lands', taxBlocksItems, taxBlocksColors);
+      buildLegend('lands', landsItems, landsColors);
       buildLegend('roads', roadsItems, roadsColors);
     });
 
@@ -585,9 +573,9 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
 
   useEffect(() => {
     setTimeout(() => {
-      if (map.current.getSource('locations')) {
+      if (map.current.getSource('posts')) {
         //update the source of the features on the map
-        const source = map.current.getSource("locations");
+        const source = map.current.getSource("posts");
         source.setData({
           type: 'FeatureCollection',
           features: featureLocations,
@@ -597,7 +585,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   }, [featureLocations, styleSwap]); //everytime the featureLocations state or map style is changed
 
   useEffect(() => {
-    let layerList = ['locations_layer', 'transparent_layer', 'taxblocks_layer'];
+    let layerList = ['posts_layer', 'transparent_layer', 'lands_layer'];
     if (mode === 'view') { //events added and removed from map in view mode
       //map.current.getCanvas().style.cursor = ""
       map.current.off('click', addPointsRef.current);
