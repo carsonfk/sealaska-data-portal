@@ -159,7 +159,6 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
     }
 
     function swapViewMap(target) {
-        console.log(target);
         updateTableHL(target[0], target[1]);
         if (target[1] !== -1) {
             let lists = document.getElementsByClassName('list');
@@ -197,14 +196,14 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
     useEffect(() => {
         if (mode === 'view' && (target[2] === 'map' || target[2] === 'reset')) {
             //updateTableHL(target[0], target[1]);
-            swapViewMap(target)
+            swapViewMap(target);
         };
     }, [target]);
 
     useEffect(() => {
         let subtitle = document.querySelector('#subgroup-posts > .list-subtitle');
         subtitle.innerHTML = 'Reviewed: ' + ratio[0] + ' of ' + (ratio[0] + ratio[1]);
-    }, [ratio])
+    }, [ratio]);
 
     if (mode === 'view') {
         return (

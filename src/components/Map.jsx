@@ -266,6 +266,38 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   //  }
   //const removePopupRefTest = useRef(removePopupTest);
 
+  /*
+  const hoverOn =
+    (e) => {
+      if (e.features.length > 0) {
+        if (hoveredPolygonId !== null) {
+          mapRef.current.setFeatureState(
+            { source: 'lands', id: hoveredPolygonId },
+            { hover: false }
+          );
+        }
+        hoveredPolygonId = e.features[0].id;
+        mapRef.current.setFeatureState(
+          { source: 'lands', id: hoveredPolygonId },
+          { hover: true }
+        );
+      }
+    }
+  const hoverOnRef  = useRef(hoverOn)
+
+  const hoverOff =
+    () => {
+      if (hoveredPolygonId !== null) {
+        mapRef.current.setFeatureState(
+          { source: '', id: hoveredPolygonId },
+          { hover: false }
+        );
+      }
+      hoveredPolygonId = null;
+    }
+  const hoverOffRef  = useRef(hoverOff)
+  */
+
   useEffect(() => {
     if (map.current) {
       var classes = document.getElementById("mapContainer").classList;
@@ -439,19 +471,27 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
               'match',
               ['get', 'SURFOWNER'],
               'Sealaska',
-              'rgba(250, 100, 100, 0.2)',
-              'rgba(200, 100, 240, 0.2)'
+              'rgb(250, 100, 100)',
+              'rgb(200, 100, 240)'
+            ],
+            'fill-opacity': [
+              'case',
+              ['boolean', ['feature-state', 'hover'], false],
+              0.6,     // More opaque on hover
+              0.3      // Default opacity
             ],
             'fill-outline-color': 
             [
               'match',
               ['get', 'SURFOWNER'],
               'Sealaska',
-              'rgba(250, 100, 100, 1)',
-              'rgba(200, 100, 240, 1)'
+              'rgb(250, 100, 100)',
+              'rgb(200, 100, 240)'
             ]
         }
       });
+
+
 
       //roads layer
       map.current.addSource("roads", {
