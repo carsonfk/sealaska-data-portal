@@ -217,14 +217,30 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
     }
   const onRightClickRef = useRef(onRightClick);
 
-  //click on point places popup
+  let selectedPolygonId = null;
+
+  //click on feature places popup
   const onPopup = 
-    (point) => {
-      onCenter(point.features[0].source, point.features[0].id, 'map');
-      if (point.features[0].source === 'lands') {
-        handlePopupLands(point.features[0]);
+    (e) => {
+      if (e.features.length > 0) {
+        if (selectedPolygonId !== null) {
+          map.current.setFeatureState(
+            { source: 'lands', id: selectedPolygonId },
+            { selected: false }
+          );
+        }
+        selectedPolygonId = e.features[0].id;
+        map.current.setFeatureState(
+          { source: 'lands', id: selectedPolygonId },
+          { selected: true }
+        );
+      }
+
+      onCenter(e.features[0].source, e.features[0].id, 'map');
+      if (e.features[0].source === 'lands') {
+        handlePopupLands(e.features[0]);
       } else {
-        handlePopup(point.features[0]);
+        handlePopup(e.features[0]);
       }
     }
   const onPopupRef = useRef(onPopup);
@@ -255,8 +271,15 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   //click outside of point removes popup
   const removePopup =
     () => {
-      onCenter(target[0], -1, 'map');
-      popup.remove();
+      if (popup.isOpen()) {
+        map.current.setFeatureState(
+          { source: 'lands', id: selectedPolygonId },
+          { selected: false }
+        );
+
+        onCenter('retain', -1, 'map');
+        popup.remove();
+      }
     }
   const removePopupRef = useRef(removePopup);
 
@@ -266,18 +289,19 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   //  }
   //const removePopupRefTest = useRef(removePopupTest);
 
-  /*
+  var hoveredPolygonId = null;
+
   const hoverOn =
     (e) => {
       if (e.features.length > 0) {
         if (hoveredPolygonId !== null) {
-          mapRef.current.setFeatureState(
+          map.current.setFeatureState(
             { source: 'lands', id: hoveredPolygonId },
             { hover: false }
           );
         }
         hoveredPolygonId = e.features[0].id;
-        mapRef.current.setFeatureState(
+        map.current.setFeatureState(
           { source: 'lands', id: hoveredPolygonId },
           { hover: true }
         );
@@ -288,15 +312,14 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   const hoverOff =
     () => {
       if (hoveredPolygonId !== null) {
-        mapRef.current.setFeatureState(
-          { source: '', id: hoveredPolygonId },
+        map.current.setFeatureState(
+          { source: 'lands', id: hoveredPolygonId },
           { hover: false }
         );
       }
       hoveredPolygonId = null;
     }
   const hoverOffRef  = useRef(hoverOff)
-  */
 
   useEffect(() => {
     if (map.current) {
@@ -461,7 +484,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
       //lands layer
       map.current.addSource('lands', {
           'type': 'geojson',
-          'data': 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/ArcGIS/rest/services/Tax_Blocks_(geojson)/FeatureServer/0/query?where=1%3D1&outSR=4326&outFields=SURFOWNER&outFields=TAX_NAME&f=pgeojson'
+          'data': 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/ArcGIS/rest/services/Tax_Blocks_(geojson)/FeatureServer/0/query?where=1%3D1&outSR=4326&outFields=SURFOWNER&outFields=TAX_NAME&outFields=ObjectId&f=pgeojson'
       });
       map.current.addLayer({
         'id': 'lands_layer',
@@ -477,9 +500,9 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
             ],
             'fill-opacity': [
               'case',
-              ['boolean', ['feature-state', 'hover'], false],
-              0.6,     // More opaque on hover
-              0.3      // Default opacity
+              ['boolean', ['feature-state', 'hover'], false], 0.5, // more opaque on hover
+              ['boolean', ['feature-state', 'selected'], false], 0.5, // more opaque on select
+              0.3      // default opacity
             ],
             'fill-outline-color': 
             [
@@ -646,6 +669,11 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
         defaultPointerRef.current = defaultPointer;
         map.current.on('mouseleave', layerList[i], defaultPointerRef.current);
       }
+
+      hoverOnRef.current = hoverOn;
+      map.current.on('mousemove', 'lands_layer', hoverOnRef.current);
+      hoverOffRef.current = hoverOff;
+      map.current.on('mouseleave', 'lands_layer', hoverOffRef.current);
       onSelect([]); //figure out how to not call on initialization
 
     } else { //events added and removed from map in contribute mode
@@ -661,8 +689,18 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
         map.current.off('click', layerList[i], onPopupRef.current);
         map.current.off('mouseenter', layerList[i], popupPointerRef.current);
         map.current.off('mouseleave', layerList[i], defaultPointerRef.current);
+      }
+
+      if (popup.isOpen()) {
+        map.current.setFeatureState(
+          { source: 'lands', id: target[1] },
+          { selected: false }
+        );
         popup.remove();
       }
+
+      map.current.off('mousemove', 'lands_layer', hoverOnRef.current);
+      map.current.off('mouseleave', 'lands_layer', hoverOffRef.current);
     }
   }, [mode]);
 

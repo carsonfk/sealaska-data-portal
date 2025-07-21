@@ -42,6 +42,5 @@ export function useQueryParams() {
 
 //returns string with first letter capitalized
 export function capitalizeFirst(val) {
-    return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+  return String(val).charAt(0).toUpperCase() + String(val).slice(1);
 }
-

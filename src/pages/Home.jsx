@@ -122,7 +122,11 @@ export default function Home(props){
     };
 
 	const handleCenter = (layerName, id, origin) => { //from listfeatures jsx or map jsx - updates map center
-		setTarget([layerName, id, origin]);
+		if (layerName === 'retain') {
+			setTarget((target) => [target[0], id, origin]);
+		} else {
+			setTarget([layerName, id, origin]);
+		}
 	};
 
 	const handleReset = () => {
