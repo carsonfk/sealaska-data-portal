@@ -28,6 +28,97 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
        "image": "placeholder"},
      "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
      "id": 2
+     },
+     { "type": "Feature", "properties": {
+       "type": "temp",
+       "details": "temp",
+       "image": "placeholder"},
+     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
+     "id": 3
+     },
+     { "type": "Feature", "properties": {
+       "type": "temp",
+       "details": "temp",
+       "image": "placeholder"},
+     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
+     "id": 4
+     },
+     { "type": "Feature", "properties": {
+       "type": "temp",
+       "details": "temp",
+       "image": "placeholder"},
+     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
+     "id": 5
+     },
+     { "type": "Feature", "properties": {
+       "type": "temp",
+       "details": "temp",
+       "image": "placeholder"},
+     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
+     "id": 6
+     },
+     { "type": "Feature", "properties": {
+       "type": "temp",
+       "details": "temp",
+       "image": "placeholder"},
+     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
+     "id": 7
+     },
+     { "type": "Feature", "properties": {
+       "type": "temp",
+       "details": "temp",
+       "image": "placeholder"},
+     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
+     "id": 8
+     },
+     { "type": "Feature", "properties": {
+       "type": "temp",
+       "details": "temp",
+       "image": "placeholder"},
+     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
+     "id": 9
+     },
+     { "type": "Feature", "properties": {
+       "type": "temp",
+       "details": "temp",
+       "image": "placeholder"},
+     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
+     "id": 10
+     },
+     { "type": "Feature", "properties": {
+       "type": "temp",
+       "details": "temp",
+       "image": "placeholder"},
+     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
+     "id": 11
+     },
+     { "type": "Feature", "properties": {
+       "type": "temp",
+       "details": "temp",
+       "image": "placeholder"},
+     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
+     "id": 12
+     },
+     { "type": "Feature", "properties": {
+       "type": "temp",
+       "details": "temp",
+       "image": "placeholder"},
+     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
+     "id": 13
+     },
+     { "type": "Feature", "properties": {
+       "type": "temp",
+       "details": "temp",
+       "image": "placeholder"},
+     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
+     "id": 14
+     },
+     { "type": "Feature", "properties": {
+       "type": "temp",
+       "details": "temp",
+       "image": "placeholder"},
+     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
+     "id": 15
      }
     ]
     const testjson = JSON.parse(JSON.stringify(test));
@@ -69,9 +160,9 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
                     }
                     currentRow.classList.toggle("hl");
                     if (currentRow.classList.contains("hl")) {
-                        onCenter('posts', parseInt(currentRow.id)); // sends current highlighted row id
+                        onCenter('posts', parseInt(currentRow.id), 'list'); // sends current highlighted row id
                     } else {
-                        onCenter('posts', -1); // no row is highlighted
+                        onCenter('posts', -1, 'list'); // no row is highlighted
                     }
                 });
             } else {
@@ -113,9 +204,9 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
                 }
                 currentRow.classList.toggle("hl");
                 if (currentRow.classList.contains("hl")) {
-                    onCenter('lands', parseInt(currentRow.id)); // sends current highlighted row id
+                    onCenter('lands', parseInt(currentRow.id), 'list'); // sends current highlighted row id
                 } else {
-                    onCenter('lands', -1); // no row is highlighted
+                    onCenter('lands', -1, 'list'); // no row is highlighted
                 }
             });
         }
@@ -127,7 +218,7 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
             if (tables[i].children[0]) {
                 //console.log(tables[i].parentElement.classList);
                 if (tables[i].parentElement.id === ('list-' + layerName)) {
-                    console.log(tables[i].children[0].children);
+                    //console.log(tables[i].children[0].children);
                     for (let child of tables[i].children[0].children) {
                         if ((child.classList.contains("hl") && id !== parseInt(child.id)) || (!child.classList.contains("hl") && id === parseInt(child.id))) {
                             child.classList.toggle("hl");
@@ -143,18 +234,21 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
     }
 
     function swapViewList(e) {
-        onCenter('none', -1); // no row is highlighted
-        updateTableHL('none', -1);
+        //console.log(e.target);
         let lists = document.getElementsByClassName('list');
-        if (!e.target.parentNode.parentNode.classList.contains('collapsed')) {
+        if (!e.target.parentNode.parentNode.classList.contains('collapsed')) { // if clicked table is expanded
             e.target.parentNode.parentNode.classList.add('collapsed');
-        } else {
+            onCenter('none', -1, 'list'); // no row is highlighted
+            updateTableHL('none', -1);
+        } else { // if clicked table is collapsed
             for (let i = 0; i < lists.length; i++) {
                 if (!lists[i].classList.contains('collapsed')) {
                     lists[i].classList.add('collapsed');
                 }
-                e.target.parentNode.parentNode.classList.remove('collapsed');
             }
+            e.target.parentNode.parentNode.classList.remove('collapsed');
+            onCenter(e.target.parentNode.parentNode.id.slice(5), -1, 'list'); // no row is highlighted
+            updateTableHL(e.target.parentNode.parentNode.id.slice(5), -1);
         }
     }
 
@@ -162,7 +256,7 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
         updateTableHL(target[0], target[1]);
         if (target[1] !== -1) {
             let lists = document.getElementsByClassName('list');
-            console.log(lists);
+            //console.log(lists);
             if (document.getElementById('list-' + target[0]).classList.contains('collapsed')) {
                 for (let i = 0; i < lists.length; i++) {
                     if (!lists[i].classList.contains('collapsed')) {
@@ -185,7 +279,7 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
 
     useEffect(() => {
         if (mode === 'view') {
-            console.log("hi!")
+            //console.log("hi!")
             let listSubgroups = document.getElementsByClassName('subgroup');
             for (let i = 0; i < listSubgroups.length; i++) {
                 listSubgroups[i].addEventListener("click", swapViewList);

@@ -3,7 +3,7 @@ import { useQueryParams, capitalizeFirst } from "../functions";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-export default function Map( {locations, mode, target, selectionCoordinates, sidebars, onSelect, onTemp}) {
+export default function Map( {locations, mode, target, selectionCoordinates, sidebars, onSelect, onCenter}) {
   const mapContainer = useRef(null);
   const map = useRef(null);
   const { getParam, setParam } = useQueryParams();
@@ -220,7 +220,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   //click on point places popup
   const onPopup = 
     (point) => {
-      onTemp(point.features[0].source, point.features[0].id);
+      onCenter(point.features[0].source, point.features[0].id, 'map');
       if (point.features[0].source === 'lands') {
         handlePopupLands(point.features[0]);
       } else {
@@ -255,7 +255,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   //click outside of point removes popup
   const removePopup =
     () => {
-      onTemp('none', -1);
+      onCenter(target[0], -1, 'map');
       popup.remove();
     }
   const removePopupRef = useRef(removePopup);
@@ -350,11 +350,12 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
         popup.remove();
       }
     }
+    console.log(target)
   }, [target]);
 
   useEffect(() => {
     mapboxgl.accessToken =
-    "pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw";
+    "pk.eyJ1IjoiY2Fyc29uZmsiLCJhIjoiY204bm05M3RjMDF6eTJvb3Nmc2F1dGwwOSJ9.iEJSiX7ONPMwdkYmqWifHQ";
     if (map.current) return; // initialize map only once
 
     var style;

@@ -12,7 +12,7 @@ import FilterForm from "../components/FilterForm";
 export default function Home(props){
 	const { getParam, setParam } = useQueryParams();
 	const [data, setData] = useState();
-	const [target, setTarget] = useState([-1, 'none']);
+	const [target, setTarget] = useState(['posts', -1, 'none']); //change posts to none when query param stuff is working
 	//const [filter, setFilter] = useState('null')
 	const [sort, setSort] = useState('newest');
 	const [reset, setReset] = useState(0);
@@ -24,7 +24,7 @@ export default function Home(props){
 	const [timerLong, setTimerLong] = useState();
 	const [timerShort, setTimerShort] = useState([]);
 	const [sidebars, setSidebars] = useState();
-	const [tableMode, setTableMode] = useState({posts: [true, true], projects: [true, false], lands: [true, false], roads: [true, false]}); //reconsider
+	//const [tableMode, setTableMode] = useState({posts: [true, true], projects: [true, false], lands: [true, false], roads: [true, false]}); //reconsider
 
 	//returns class to hide sidebars
 	function hidden(side) {
@@ -121,12 +121,8 @@ export default function Home(props){
         setCurrentSelection([coordinates, 'box']);
     };
 
-	const handleTemp = (layerName, id) => { //from map jsx - updates map center
-		setTarget([layerName, id, 'map']);
-	};
-
-	const handleCenter = (layerName, id) => { //from listfeatures jsx - updates map center
-		setTarget([layerName, id, 'list']);
+	const handleCenter = (layerName, id, origin) => { //from listfeatures jsx or map jsx - updates map center
+		setTarget([layerName, id, origin]);
 	};
 
 	const handleReset = () => {
@@ -219,7 +215,7 @@ export default function Home(props){
 			//retains target after a reset
 			if(reset !== 0) {
 				setTimeout(() => {
-					setTarget([target[0], 'reset']);
+					setTarget([target[0], target[1], 'reset']);
 				}, 150);
 			}
 		}
@@ -276,7 +272,7 @@ export default function Home(props){
 					<ListFeatures locations={data} mode={mapMode} target={target} onCenter={handleCenter}/>
 				</div>
 				<div id="map">
-					<Map locations={data} mode={mapMode} target={target} selectionCoordinates={currentSelection} sidebars={sidebars} onSelect={handleCurrentSelection} onTemp={handleTemp}/>
+					<Map locations={data} mode={mapMode} target={target} selectionCoordinates={currentSelection} sidebars={sidebars} onSelect={handleCurrentSelection} onCenter={handleCenter}/>
 				</div>
 				<div id="right-drawer" className={"main-container interactive drawer right " + hidden("right")}>
 					<img id="arrow-right" className="arrow" alt="From pictarts.com" src="https://pictarts.com/21/material/01-vector/m-0027-arrow.png"></img>
