@@ -11,6 +11,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   const [lat, setLat] = useState(27);
   const [zoom, setZoom] = useState(2);
   const [featureLocations, setFeatureLocations] = useState([]);
+  const [landsLocations, setLandsLocations] = useState([]);
   const [styleSwap, setStyleSwap] = useState();
   const [marker, setMarker] = useState(new mapboxgl.Marker({
     id: 'marker',
@@ -295,6 +296,14 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
     }
   }, [locations]); //fire this whenever the features put into the map change
 
+
+  useEffect(() => {
+    if (lands) {
+      setLandsLocations(lands);
+      
+    }
+  }, [lands]); //fire this whenever the features put into the map change
+
   useEffect(() => {
     if (selectionCoordinates[1] === 'box') {
       if (selectionCoordinates[0][0] >= 54.5 && selectionCoordinates[0][0] <= 60 && 
@@ -412,7 +421,6 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
     });
 
     map.current.on("style.load", () => {
-
       if (map.current.getStyle().name.includes("Outdoors") || map.current.getStyle().name.includes("Satellite")) {
         //custom atmosphere styling for outdoor map
         if (map.current.getStyle().name.includes("Outdoors")) {
@@ -435,11 +443,11 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
 
       //lands layer
       map.current.addSource('lands', {
-          'type': 'geojson',
-          'data': {
-            'type': "FeatureCollection",
-            'features': lands
-          }
+        'type': 'geojson',
+        'data': {
+          'type': "FeatureCollection",
+          'features': landsLocations
+        }
       });
 
       map.current.addLayer({
@@ -473,7 +481,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
             ]
         }
       });
-
+      
       //roads layer
       map.current.addSource("roads", {
         'type': 'geojson',
@@ -604,11 +612,26 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
         const source = map.current.getSource("posts");
         source.setData({
           type: 'FeatureCollection',
-          features: featureLocations,
+          features: featureLocations
         });
       }
     }, 200);
   }, [featureLocations, styleSwap]); //everytime the featureLocations state or map style is changed
+
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (map.current.getSource('lands')) {
+        //update the source of the features on the map
+        const sourceLands = map.current.getSource("lands");
+        sourceLands.setData({
+          type: 'FeatureCollection',
+          features: landsLocations
+        });
+      }
+    }, 200);
+  }, [landsLocations, styleSwap]); //everytime the featureLocations state or map style is changed
+  
 
   useEffect(() => {
     let layerList = ['lands_layer', 'transparent_layer'];
@@ -663,10 +686,6 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
       map.current.off('mouseleave', 'lands_layer', hoverOffRef.current);
     }
   }, [mode]);
-
-  useEffect(() => {
-    console.log(lands)
-  }, [lands])
 
   return (
     <>

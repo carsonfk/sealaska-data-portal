@@ -4,212 +4,74 @@ import $ from 'jquery';
 //import { getDatabase, ref, set as firebaseSet, push } from 'firebase/database'
 //import FilterForm from './FilterForm'
 
-export default function ListFeatures( {locations, mode, target, onCenter} ) {
+export default function ListFeatures( {locations, projects, lands, roads, mode, target, onCenter} ) {
     const [ratio, setRatio] = useState([0,0]);
 
-    let test = [
-     { "type": "Feature", "properties": {
-       "type": "temp",
-       "details": "temp",
-       "image": "placeholder"},
-     "geometry": { "type": "Point", "coordinates": [-134.979453, 57.035768] },
-     "id": 0
-     },
-     { "type": "Feature", "properties": {
-       "type": "temp",
-       "details": "temp",
-       "image": "placeholder"},
-     "geometry": { "type": "Point", "coordinates": [-133.149579, 56.130115] },
-     "id": 1
-     },
-     { "type": "Feature", "properties": {
-       "type": "temp",
-       "details": "temp",
-       "image": "placeholder"},
-     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
-     "id": 2
-     },
-     { "type": "Feature", "properties": {
-       "type": "temp",
-       "details": "temp",
-       "image": "placeholder"},
-     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
-     "id": 3
-     },
-     { "type": "Feature", "properties": {
-       "type": "temp",
-       "details": "temp",
-       "image": "placeholder"},
-     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
-     "id": 4
-     },
-     { "type": "Feature", "properties": {
-       "type": "temp",
-       "details": "temp",
-       "image": "placeholder"},
-     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
-     "id": 5
-     },
-     { "type": "Feature", "properties": {
-       "type": "temp",
-       "details": "temp",
-       "image": "placeholder"},
-     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
-     "id": 6
-     },
-     { "type": "Feature", "properties": {
-       "type": "temp",
-       "details": "temp",
-       "image": "placeholder"},
-     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
-     "id": 7
-     },
-     { "type": "Feature", "properties": {
-       "type": "temp",
-       "details": "temp",
-       "image": "placeholder"},
-     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
-     "id": 8
-     },
-     { "type": "Feature", "properties": {
-       "type": "temp",
-       "details": "temp",
-       "image": "placeholder"},
-     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
-     "id": 9
-     },
-     { "type": "Feature", "properties": {
-       "type": "temp",
-       "details": "temp",
-       "image": "placeholder"},
-     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
-     "id": 10
-     },
-     { "type": "Feature", "properties": {
-       "type": "temp",
-       "details": "temp",
-       "image": "placeholder"},
-     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
-     "id": 11
-     },
-     { "type": "Feature", "properties": {
-       "type": "temp",
-       "details": "temp",
-       "image": "placeholder"},
-     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
-     "id": 12
-     },
-     { "type": "Feature", "properties": {
-       "type": "temp",
-       "details": "temp",
-       "image": "placeholder"},
-     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
-     "id": 13
-     },
-     { "type": "Feature", "properties": {
-       "type": "temp",
-       "details": "temp",
-       "image": "placeholder"},
-     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
-     "id": 14
-     },
-     { "type": "Feature", "properties": {
-       "type": "temp",
-       "details": "temp",
-       "image": "placeholder"},
-     "geometry": { "type": "Point", "coordinates": [-134.824398, 56.511916] },
-     "id": 15
-     }
-    ]
-    const testjson = JSON.parse(JSON.stringify(test));
-
-    function buildTablePosts() { //populates the table with available data
-        let reviewedCount = 0
-        let unreviewedCount = 0;
-        let json = locations; // revisit
-        let title = document.querySelector('#list-posts .list-title');
-        let subtitle = document.querySelector('#list-posts .list-subtitle');
-        let table = document.querySelector('#list-posts .feature-list');
-        let row, cell1, cell2;
-
-        title.innerHTML = 'Posts';
-        subtitle.classList.remove('hide');
-        if (table.childElementCount !== 0) {
-            $("#list-posts .feature-list tr").remove();
-        }
-
-        //loops sorted json to construct table
-        for (let i = 0; i < json.length; i++) {
-            let reviewed = json[i].properties.reviewed === "true";
-            if (reviewed) {
-                reviewedCount++;
-                row = table.insertRow(-1);
-                row.id = json[i].id;
-                cell1 = row.insertCell(0);
-                cell2 = row.insertCell(1);
-                cell1.innerHTML = json[i].properties.timestamp.time + "<br>" + json[i].properties.timestamp.date;
-                cell2.innerHTML = json[i].properties.type;
-                row.addEventListener("click", (e) => {
-                    let currentRow = e.target.parentNode;
-                    for (let child of table.children[0].children) {
-                        if (child.classList.contains("hl")) {
-                            if (!currentRow.classList.contains("hl")) {
-                                child.classList.toggle("hl");
-                            }
-                        }
-                    }
-                    currentRow.classList.toggle("hl");
-                    if (currentRow.classList.contains("hl")) {
-                        onCenter('posts', parseInt(currentRow.id), 'list'); // sends current highlighted row id
-                    } else {
-                        onCenter('posts', -1, 'list'); // no row is highlighted
-                    }
-                });
-            } else {
-                unreviewedCount++;
-            }
-        }
-        setRatio([reviewedCount, unreviewedCount]);
-    }
-
-    function buildTableOther(layerName) {
+    function buildTable(layerName, data) { // adds data to a specific table
+        console.log(data);
         let currentLayer = '#list-' + layerName
         let title = document.querySelector(currentLayer + ' .list-title');
         let subtitle = document.querySelector(currentLayer + ' .list-subtitle');
         let table = document.querySelector(currentLayer + ' .feature-list');
-        let row, cell1, cell2;
 
         title.innerHTML = capitalizeFirst(layerName);
-        subtitle.classList.add('hide');
         if (table.childElementCount !== 0) {
             $(currentLayer + " .feature-list tr").remove();
         }
 
         //loops sorted json to construct table
-        for (let i = 0; i < testjson.length; i++) {
-            row = table.insertRow(-1);
-            row.id = testjson[i].id;
-            cell1 = row.insertCell(0);
-            cell2 = row.insertCell(1);
-            cell1.innerHTML = testjson[i].properties.type;
-            cell2.innerHTML = testjson[i].properties.details;
-            row.addEventListener("click", (e) => {
-                let currentRow = e.target.parentNode;
-                for (let child of table.children[0].children) {
-                    if (child.classList.contains("hl")) {
-                        if (!currentRow.classList.contains("hl")) {
-                            child.classList.toggle("hl");
-                        }
+        if (layerName === 'posts') {
+            let reviewedCount = 0
+            let unreviewedCount = 0;
+            for (let i = 0; i < data.length; i++) {
+                let reviewed = data[i].properties.reviewed === "true";
+                if (reviewed) {
+                    reviewedCount++;
+                    buildTableRow(layerName, table, data[i]);
+                } else {
+                    unreviewedCount++;
+                }
+            }
+            setRatio([reviewedCount, unreviewedCount]);
+        } else {
+            for (let i = 0; i < data.length; i++) {
+                buildTableRow(layerName, table, data[i]);
+            }
+        }
+    }
+
+    function buildTableRow(layerName, table, rowData) { // builds one table tow
+        let row = table.insertRow(-1);
+        row.id = rowData.id;
+        let cell1 = row.insertCell(0);
+        let cell2 = row.insertCell(1);
+        if (layerName === 'posts') {
+            cell1.innerHTML = rowData.properties.timestamp.time + "<br>" + rowData.properties.timestamp.date;
+            cell2.innerHTML = rowData.properties.type;
+        } else if (layerName === 'projects') {
+                
+        } else if (layerName === 'lands') {
+            cell1.innerHTML = rowData.properties.SURFOWNER;
+            cell2.innerHTML = rowData.properties.TAX_NAME;
+        } else if (layerName == 'roads') {
+
+        }
+        row.addEventListener("click", (e) => {
+            let currentRow = e.target.parentNode;
+            for (let child of table.children[0].children) {
+                if (child.classList.contains("hl")) {
+                    if (!currentRow.classList.contains("hl")) {
+                        child.classList.toggle("hl");
                     }
                 }
-                currentRow.classList.toggle("hl");
-                if (currentRow.classList.contains("hl")) {
-                    onCenter('lands', parseInt(currentRow.id), 'list'); // sends current highlighted row id
-                } else {
-                    onCenter('lands', -1, 'list'); // no row is highlighted
-                }
-            });
-        }
+            }
+            currentRow.classList.toggle("hl");
+            if (currentRow.classList.contains("hl")) {
+                onCenter(layerName, parseInt(currentRow.id), 'list'); // sends current highlighted row id
+            } else {
+                onCenter(layerName, -1, 'list'); // no row is highlighted
+            }
+        });
     }
 
     function updateTableHL(layerName, id) {
@@ -270,12 +132,28 @@ export default function ListFeatures( {locations, mode, target, onCenter} ) {
 
     useEffect(() => {
         if (locations && mode === 'view') {
-            buildTablePosts();
-            buildTableOther('projects');
-            buildTableOther('lands');
-            buildTableOther('roads');
+            buildTable('posts', locations);
         }
-    }, [locations, mode]); //fire this whenever the features put into the map change, map mode changes, or table mode changes
+    }, [locations, mode]); //fire this whenever the post features put into the map change or map mode changes
+
+    //useEffect(() => {
+    //    if (projects && mode === 'view') {
+    //        buildTable('projects', projects);
+    //    }
+    //}, [projects, mode]); //fire this whenever the project features put into the map change or map mode changes
+
+    useEffect(() => {
+        if (lands && mode === 'view') {
+            buildTable('lands', lands);
+        }
+    }, [lands, mode]); //fire this whenever the lands features put into the map change or map mode changes
+
+    //useEffect(() => {
+    //    if (roads && mode === 'view') {
+    //        buildTable('roads', roads);
+    //    }
+    //}, [roads, mode]); //fire this whenever the roads features put into the map change or map mode changes
+
 
     useEffect(() => {
         if (mode === 'view') {

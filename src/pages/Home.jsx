@@ -103,7 +103,7 @@ export default function Home(props){
 		request(landsURL)
 		.then(response => {
 			//console.log('Success:', response);
-			setLandsData(response);
+			setLandsData(response.features);
 		})
 		.catch(error => {
 			console.error('Error:', error);
@@ -261,7 +261,7 @@ export default function Home(props){
 
 	useEffect(() => {
 		if (data) {
-			console.log(data);
+			//console.log(JSON.stringify(data[0]));
 			let update = document.getElementById("update");
 			if (!update.classList.contains("hide")) { // case 1: update msg is visible because of recent refresh -> reset popup
 				update.classList.toggle("hide");
@@ -301,7 +301,7 @@ export default function Home(props){
 					<Hero scrollToMap={scrollToMap}/>
 					<ViewContributeForm mode={mapMode} onSubmit={handleModeSubmit}/>
 					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits} onReset={handleReset} submitSwap={handleFormSubmit}/>
-					<ListFeatures locations={data} mode={mapMode} target={target} onCenter={handleCenter}/>
+					<ListFeatures locations={data} projects={projectsData} lands={landsData} roads={roadsData} mode={mapMode} target={target} onCenter={handleCenter}/>
 				</div>
 				<div id="map">
 					<Map locations={data} projects={projectsData} lands={landsData} roads={roadsData} mode={mapMode} target={target} selectionCoordinates={currentSelection} sidebars={sidebars} onSelect={handleCurrentSelection} onCenter={handleCenter}/>
