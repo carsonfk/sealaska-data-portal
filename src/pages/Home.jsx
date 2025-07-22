@@ -102,7 +102,7 @@ export default function Home(props){
 
 		request(landsURL)
 		.then(response => {
-			console.log('Success:', response);
+			//console.log('Success:', response);
 			setLandsData(response);
 		})
 		.catch(error => {
@@ -201,21 +201,6 @@ export default function Home(props){
 		window.addEventListener("resize", handleResize);
    		return () => window.removeEventListener("resize", handleResize);
 	}, []);
-
-	useEffect(() => {
-		//async function contributeMode() { //unused
-		//}
-
-		//async function viewMode() { //unused
-		//}
-
-		//if (mapMode === 'view'){
-		//	viewMode();
-		//} else if (mapMode === 'contribute'){
-		//	contributeMode();
-		//}
-		console.log(mapMode)
-	}, [mapMode]) //anytime mapMode is updated
 	
 	useEffect(()=>{ //this pulls data from the database on inital load and reset
 		async function resetLoad() {
@@ -276,6 +261,7 @@ export default function Home(props){
 
 	useEffect(() => {
 		if (data) {
+			console.log(data);
 			let update = document.getElementById("update");
 			if (!update.classList.contains("hide")) { // case 1: update msg is visible because of recent refresh -> reset popup
 				update.classList.toggle("hide");

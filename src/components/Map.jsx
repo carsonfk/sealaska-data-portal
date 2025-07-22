@@ -436,7 +436,10 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
       //lands layer
       map.current.addSource('lands', {
           'type': 'geojson',
-          'data': lands
+          'data': {
+            'type': "FeatureCollection",
+            'features': lands
+          }
       });
 
       map.current.addLayer({
@@ -660,6 +663,10 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
       map.current.off('mouseleave', 'lands_layer', hoverOffRef.current);
     }
   }, [mode]);
+
+  useEffect(() => {
+    console.log(lands)
+  }, [lands])
 
   return (
     <>
