@@ -3,7 +3,7 @@ import { useQueryParams, capitalizeFirst } from "../functions";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-export default function Map( {locations, mode, target, selectionCoordinates, sidebars, onSelect, onCenter}) {
+export default function Map( {locations, projects, lands, roads, mode, target, selectionCoordinates, sidebars, onSelect, onCenter}) {
   const mapContainer = useRef(null);
   const map = useRef(null);
   const { getParam, setParam } = useQueryParams();
@@ -20,32 +20,6 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
     closeOnClick: false,
     closeButton: false
   }));
-
-  function averageGeolocation(coords) {
-    if (coords.length === 0) return null;
-    if (coords.length === 1) return coords[0];
-    let x = 0.0, y = 0.0, z = 0.0;
-
-    for (let coord of coords) {
-      let lat = coord[1] * Math.PI / 180;
-      let lon = coord[0] * Math.PI / 180;
-
-      x += Math.cos(lat) * Math.cos(lon);
-      y += Math.cos(lat) * Math.sin(lon);
-      z += Math.sin(lat);
-    }
-
-    const total = coords.length;
-    x /= total;
-    y /= total;
-    z /= total;
-
-    const centralLon = Math.atan2(y, x);
-    const centralSqrt = Math.sqrt(x * x + y * y);
-    const centralLat = Math.atan2(z, centralSqrt);
-
-    return [(centralLon * 180 / Math.PI), (centralLat * 180 / Math.PI)];
-  }
 
   //handles flying to provided coordinates
   function flyTo(coordinates) {
@@ -101,31 +75,9 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
     }
   }
 
-  function handlePopupLands(feature) {
-    //let coordinates = feature.geometry.coordinates.slice();
+  function handlePopupLands(feature, coordinates) {
     let owner = feature.properties.SURFOWNER;
     let name = feature.properties.TAX_NAME;
-    let indexMax;
-    let maxLength = 0;
-    let tempCoordinates;
-    console.log(feature.geometry.coordinates);
-    if (feature.geometry.coordinates.length >= 2) {
-      for (let i = 0; i < feature.geometry.coordinates.length; i++) {
-        console.log(feature.geometry.coordinates[i][0]);
-        if (feature.geometry.coordinates[i][0].length > maxLength) {
-          maxLength = feature.geometry.coordinates[i][0].length;
-          indexMax = i;
-        }
-      }
-      console.log("two or more arrays")
-      tempCoordinates = feature.geometry.coordinates[indexMax][0];
-      console.log(tempCoordinates);
-    } else {
-      console.log("one array")
-      tempCoordinates = feature.geometry.coordinates[0];
-      console.log(tempCoordinates);
-    }
-    let coordinates = averageGeolocation(tempCoordinates);
     buildPopupLands(coordinates, owner, name);
   }
 
@@ -238,7 +190,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
 
       onCenter(e.features[0].source, e.features[0].id, 'map');
       if (e.features[0].source === 'lands') {
-        handlePopupLands(e.features[0]);
+        handlePopupLands(e.features[0], e.lngLat);
       } else {
         handlePopup(e.features[0]);
       }
@@ -484,8 +436,9 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
       //lands layer
       map.current.addSource('lands', {
           'type': 'geojson',
-          'data': 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/ArcGIS/rest/services/Tax_Blocks_(geojson)/FeatureServer/0/query?where=1%3D1&outSR=4326&outFields=SURFOWNER&outFields=TAX_NAME&outFields=ObjectId&f=pgeojson'
+          'data': lands
       });
+
       map.current.addLayer({
         'id': 'lands_layer',
         'type': 'fill',
@@ -496,7 +449,9 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
               ['get', 'SURFOWNER'],
               'Sealaska',
               'rgb(250, 100, 100)',
-              'rgb(200, 100, 240)'
+              'DNR',
+              'rgb(100, 150, 250)',
+              'rgb(200, 100, 250)'
             ],
             'fill-opacity': [
               'case',
@@ -504,24 +459,24 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
               ['boolean', ['feature-state', 'selected'], false], 0.5, // more opaque on select
               0.3      // default opacity
             ],
-            'fill-outline-color': 
-            [
+            'fill-outline-color': [
               'match',
               ['get', 'SURFOWNER'],
               'Sealaska',
               'rgb(250, 100, 100)',
-              'rgb(200, 100, 240)'
+              'DNR',
+              'rgb(100, 150, 250)',
+              'rgb(200, 100, 250)'
             ]
         }
       });
-
-
 
       //roads layer
       map.current.addSource("roads", {
         'type': 'geojson',
         'data': 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/arcgis/rest/services/Roads_16May_(geojson)/FeatureServer/0/query?where=1%3D1&outSR=4326&outFields=RD_OWNER&f=pgeojson'
       })
+
       map.current.addLayer({
         'id': 'roads_layer',
         'type': 'fill',
@@ -600,12 +555,14 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
 
       const landsItems = [
         'Sealaska',
-        'Village Corporation'
+        'Village Corporation',
+        'Alaska DNR'
       ];
 
       const landsColors = [
         'rgba(250, 100, 100, 0.2)',
-        'rgba(200, 100, 240, 0.2)'
+        'rgba(200, 100, 250, 0.2)',
+        'rgba(100, 150, 250, 0.2)'
       ];
 
       const roadsItems = [
@@ -651,7 +608,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
   }, [featureLocations, styleSwap]); //everytime the featureLocations state or map style is changed
 
   useEffect(() => {
-    let layerList = ['posts_layer', 'transparent_layer', 'lands_layer'];
+    let layerList = ['lands_layer', 'transparent_layer'];
     if (mode === 'view') { //events added and removed from map in view mode
       //map.current.getCanvas().style.cursor = ""
       map.current.off('click', addPointsRef.current);
@@ -662,7 +619,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
       //removePopupRefTest.current = removePopupTest;
       //popup.on('close', removePopupRefTest.current);
       onPopupRef.current = onPopup;
-      for (let i = 1; i < layerList.length; i++) {
+      for (let i = 0; i < layerList.length; i++) {
         map.current.on('click', layerList[i], onPopupRef.current);
         popupPointerRef.current = popupPointer;
         map.current.on('mouseenter', layerList[i], popupPointerRef.current);
@@ -685,7 +642,7 @@ export default function Map( {locations, mode, target, selectionCoordinates, sid
       onRightClickRef.current = onRightClick;
       marker.on('contextmenu', onRightClickRef.current);
       map.current.off('click', removePopupRef.current);
-      for (let i = 1; i < layerList.length; i++) {
+      for (let i = 0; i < layerList.length; i++) {
         map.current.off('click', layerList[i], onPopupRef.current);
         map.current.off('mouseenter', layerList[i], popupPointerRef.current);
         map.current.off('mouseleave', layerList[i], defaultPointerRef.current);

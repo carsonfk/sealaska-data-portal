@@ -1,6 +1,7 @@
-import React, {useState, useEffect, useRef} from "react";
+import { useState, useEffect, useRef } from "react";
 import { useQueryParams } from "../functions";
-import {getDatabase, ref, onValue, get, orderByChild, equalTo, query } from 'firebase/database'
+import { getDatabase, ref, onValue, get, orderByChild, equalTo, query } from 'firebase/database'
+import { request } from '@esri/arcgis-rest-request';
 import AddFeatureForm from "../components/AddFeatureForm";
 import Map from "../components/Map";
 import ListFeatures from "../components/ListFeatures";
@@ -12,6 +13,9 @@ import FilterForm from "../components/FilterForm";
 export default function Home(props){
 	const { getParam, setParam } = useQueryParams();
 	const [data, setData] = useState();
+	const [projectsData, setProjectsData] = useState();
+	const [landsData, setLandsData] = useState();
+	const [roadsData, setRoadsData] = useState();
 	const [target, setTarget] = useState(['posts', -1, 'none']); //change posts to none when query param stuff is working
 	//const [filter, setFilter] = useState('null')
 	const [sort, setSort] = useState('newest');
@@ -25,6 +29,10 @@ export default function Home(props){
 	const [timerShort, setTimerShort] = useState([]);
 	const [sidebars, setSidebars] = useState();
 	//const [tableMode, setTableMode] = useState({posts: [true, true], projects: [true, false], lands: [true, false], roads: [true, false]}); //reconsider
+
+	const landsURL = 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/ArcGIS/rest/services/Tax_Blocks_(geojson)/FeatureServer/0/query?where=1%3D1&outSR=4326&outFields=SURFOWNER&outFields=TAX_NAME&outFields=ObjectId&f=pgeojson';
+	const projectsURL = '';
+	const roadsURL = '';
 
 	//returns class to hide sidebars
 	function hidden(side) {
@@ -78,6 +86,38 @@ export default function Home(props){
 				}
 			}
 		});
+	}
+
+	//requests data from AGOL
+	function requestStaticLayers() {
+		/*
+		request(projectsURL)
+		.then(response => {
+			console.log('Success:', response);
+		})
+		.catch(error => {
+			console.error('Error:', error);
+		});
+		*/
+
+		request(landsURL)
+		.then(response => {
+			console.log('Success:', response);
+			setLandsData(response);
+		})
+		.catch(error => {
+			console.error('Error:', error);
+		});
+
+		/*
+		request(roadsURL)
+		.then(response => {
+			console.log('Success:', response);
+		})
+		.catch(error => {
+			console.error('Error:', error);
+		});
+		*/
 	}
 
 	//sort provided JSON using sort state
@@ -139,6 +179,8 @@ export default function Home(props){
 	};
 
 	useEffect(() => {
+		requestStaticLayers();
+
 		let close = document.getElementById("msg-close");
 		close.onclick = () => {
 			let update = document.getElementById("update");
@@ -276,7 +318,7 @@ export default function Home(props){
 					<ListFeatures locations={data} mode={mapMode} target={target} onCenter={handleCenter}/>
 				</div>
 				<div id="map">
-					<Map locations={data} mode={mapMode} target={target} selectionCoordinates={currentSelection} sidebars={sidebars} onSelect={handleCurrentSelection} onCenter={handleCenter}/>
+					<Map locations={data} projects={projectsData} lands={landsData} roads={roadsData} mode={mapMode} target={target} selectionCoordinates={currentSelection} sidebars={sidebars} onSelect={handleCurrentSelection} onCenter={handleCenter}/>
 				</div>
 				<div id="right-drawer" className={"main-container interactive drawer right " + hidden("right")}>
 					<img id="arrow-right" className="arrow" alt="From pictarts.com" src="https://pictarts.com/21/material/01-vector/m-0027-arrow.png"></img>
