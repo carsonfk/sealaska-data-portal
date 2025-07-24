@@ -38,31 +38,42 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   }
   
   //begins popup construction and fly with or without image
-  function handlePopup(feature) {
-    let coordinates = feature.geometry.coordinates.slice();
-    let type = feature.properties.type.charAt(0).toUpperCase()
-      + feature.properties.type.slice(1);
-    let details = feature.properties.details;
-    let reviewed = feature.properties.reviewed === "true";
-    let timestamp = feature.properties.timestamp;
-    if (typeof timestamp === "string") {
-      timestamp = JSON.parse(timestamp);
-    }
-
-    if (feature.properties.image !== "") {
-      const img = new Image();
-      img.src = feature.properties.image;
-      img.onload = () => { // Perform actions with the loaded image
-        const imgStr = img.outerHTML;
-        buildPopup(coordinates, type, details, reviewed, timestamp, imgStr);
+  function handlePopup(layerName, feature) {
+    if (layerName === 'posts') {
+      let coordinates = feature.geometry.coordinates.slice();
+      let type = feature.properties.type.charAt(0).toUpperCase()
+        + feature.properties.type.slice(1);
+      let details = feature.properties.details;
+      let reviewed = feature.properties.reviewed === "true";
+      let timestamp = feature.properties.timestamp;
+      if (typeof timestamp === "string") {
+        timestamp = JSON.parse(timestamp);
       }
-    } else {
-      buildPopup(coordinates, type, details, reviewed, timestamp, "");
+      if (feature.properties.image !== "") {
+        const img = new Image();
+        img.src = feature.properties.image;
+        img.onload = () => { // Perform actions with the loaded image
+          const imgStr = img.outerHTML;
+          buildPopupPosts(coordinates, type, details, reviewed, timestamp, imgStr);
+        }
+      } else {
+        buildPopupPosts(coordinates, type, details, reviewed, timestamp, "");
+      }
+    } else if (layerName === 'projects') {
+    
+    } else if (layerName === 'lands') {
+      console.log(feature);
+      let coordinates = feature.geometry.coordinates[0][0];
+      let owner = feature.properties.SURFOWNER;
+      let name = feature.properties.TAX_NAME;
+      buildPopupLands(coordinates, owner, name);
+    } else if (layerName == 'roads') {
+
     }
   }
-  
+
   //constructs a reviewed/unreviewed popup using provided parameters
-  function buildPopup(coordinates, type, details, reviewed, timestamp, img) {
+  function buildPopupPosts(coordinates, type, details, reviewed, timestamp, img) {
     if (reviewed) {
       popup
         .setLngLat(coordinates)
@@ -74,12 +85,6 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
         .setHTML("Awaiting manual review")
         .addTo(map.current);
     }
-  }
-
-  function handlePopupLands(feature, coordinates) {
-    let owner = feature.properties.SURFOWNER;
-    let name = feature.properties.TAX_NAME;
-    buildPopupLands(coordinates, owner, name);
   }
 
   //constructs a reviewed/unreviewed popup using provided parameters
@@ -188,13 +193,9 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
           { selected: true }
         );
       }
-
+      console.log(e.features[0]);
       onCenter(e.features[0].source, e.features[0].id, 'map');
-      if (e.features[0].source === 'lands') {
-        handlePopupLands(e.features[0], e.lngLat);
-      } else {
-        handlePopup(e.features[0]);
-      }
+      handlePopup(e.features[0].source, e.features[0]);
     }
   const onPopupRef = useRef(onPopup);
 
@@ -221,7 +222,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
     }
   const defaultPointerRef = useRef(defaultPointer);
 
-  //click outside of point removes popup
+  //click outside of feature removes popup
   const removePopup =
     () => {
       if (popup.isOpen()) {
@@ -229,7 +230,6 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
           { source: 'lands', id: selectedPolygonId },
           { selected: false }
         );
-
         onCenter('retain', -1, 'map');
         popup.remove();
       }
@@ -300,7 +300,6 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   useEffect(() => {
     if (lands) {
       setLandsLocations(lands);
-      
     }
   }, [lands]); //fire this whenever the features put into the map change
 
@@ -317,19 +316,43 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
 
   useEffect(() => {
     if (mode === 'view' && (target[2] === 'list' || target[2] === 'reset')) {
+      let allFeatures = map.current.getSource('lands')._data.features;
+      allFeatures.forEach(f => {
+        if (map.current.getFeatureState({ source: 'lands', id: f.id }).selected) {
+          map.current.setFeatureState(
+            { source: 'lands', id: f.id },
+            { selected: false }
+          );
+        }
+      });
       if (target[1] !== -1) {
+        map.current.setFeatureState(
+          { source: target[0], id: target[1] },
+          { selected: true }
+        );
+        let targetData;
+        let point = false;
         if (target[0] === 'posts') {
-          let targetFeature;
-          for (let i = 0; i < featureLocations.length; i++) {
-            if (featureLocations[i].id === parseInt(target[1])) {
-              targetFeature = featureLocations[i];
-            }
-          }
-          handlePopup(targetFeature);
-          flyTo(targetFeature.geometry.coordinates); //only fly to feature on target select from table
+          targetData = featureLocations;
+          point = true;
+        } else if (target[0] === 'projects') {
+          point = true;
         } else if (target[0] === 'lands') {
+          targetData = landsLocations;
+        } else if (target[0] === 'roads') {
 
         }
+        for (let i = 0; i < targetData.length; i++) {
+          if (targetData[i].id === parseInt(target[1])) {
+            handlePopup(target[0], targetData[i]);
+            if (point) { //reconsider once all layers are available
+              flyTo(targetData[i].geometry.coordinates); //only fly to feature on target select from table
+            } else {
+              flyTo(targetData[i].geometry.coordinates[0][0]); //only fly to feature on target select from table
+            }
+          }
+        }
+          
       } else {
         popup.remove();
       }
@@ -466,8 +489,8 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
             ],
             'fill-opacity': [
               'case',
-              ['boolean', ['feature-state', 'hover'], false], 0.5, // more opaque on hover
               ['boolean', ['feature-state', 'selected'], false], 0.5, // more opaque on select
+              ['boolean', ['feature-state', 'hover'], false], 0.5, // more opaque on hover
               0.3      // default opacity
             ],
             'fill-outline-color': [

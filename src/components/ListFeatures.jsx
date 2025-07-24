@@ -53,6 +53,8 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         } else if (layerName === 'lands') {
             cell1.innerHTML = rowData.properties.SURFOWNER;
             cell2.innerHTML = rowData.properties.TAX_NAME;
+            //let cell3 = row.insertCell(1);
+            //cell3.innerHTML = rowData.properties.TAX_NAME;
         } else if (layerName == 'roads') {
 
         }
