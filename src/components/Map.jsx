@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from "react";
-import { useQueryParams, capitalizeFirst } from "../functions";
+import { useQueryParams, capitalizeFirst, haversineDistance } from "../functions";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -25,10 +25,10 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   //handles flying to provided coordinates
   function flyTo(coordinates) {
     if (target[2] === 'list') {
-      let lngDelta = Math.abs(map.current.getCenter().lng - coordinates[0]);
-      let latDelta = Math.abs(map.current.getCenter().lat - coordinates[1]);
+      let delta = haversineDistance(Object.values(map.current.getCenter()), coordinates)
       let zoomLevel = map.current.getZoom();
-      let flyDuration = 1000 + (lngDelta * 20) + (latDelta * 20) + (zoomLevel * 300);
+      let flyDuration = (delta / 1000) + (zoomLevel * 400);
+      console.log(flyDuration);
       map.current.flyTo({center: [coordinates[0], coordinates[1]],
         essential: true, duration: flyDuration});
       setLng(coordinates[0]);
