@@ -77,6 +77,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     }
 
     function updateTableHL(layerName, id) {
+        console.log(layerName)
         let tables = document.getElementsByTagName("table");
         for (let i = 0; i < tables.length; i++) {
             if (tables[i].children[0]) {
@@ -170,7 +171,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     useEffect(() => {
         if (mode === 'view' && (target[2] === 'map' || target[2] === 'reset')) {
             //updateTableHL(target[0], target[1]);
-            swapViewMap(target);
+            swapViewMap(target); //figure out why non-post table hl doesn't refresh on refresh
         };
     }, [target]);
 

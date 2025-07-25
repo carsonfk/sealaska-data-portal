@@ -27,7 +27,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
     if (target[2] === 'list') {
       let delta = haversineDistance(Object.values(map.current.getCenter()), coordinates)
       let zoomLevel = map.current.getZoom();
-      let flyDuration = (delta / 1000) + (zoomLevel * 400);
+      let flyDuration = 1000 + (delta / 1000) + (zoomLevel * 400);
       console.log(flyDuration);
       map.current.flyTo({center: [coordinates[0], coordinates[1]],
         essential: true, duration: flyDuration});
