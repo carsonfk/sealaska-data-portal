@@ -22,12 +22,14 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
     closeButton: false
   }));
 
+  const layerList = ['lands', 'posts'];
+
   //handles flying to provided coordinates
   function flyTo(coordinates) {
     if (target[2] === 'list') {
       let delta = haversineDistance(Object.values(map.current.getCenter()), coordinates)
       let zoomLevel = map.current.getZoom();
-      let flyDuration = 1000 + (delta / 1000) + (zoomLevel * 400);
+      let flyDuration = 3000 + ((Math.sqrt(zoomLevel * 3000) * Math.sqrt(delta)) * 0.5); //formula for fly duration
       console.log(flyDuration);
       map.current.flyTo({center: [coordinates[0], coordinates[1]],
         essential: true, duration: flyDuration});
@@ -183,17 +185,17 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
       if (e.features.length > 0) {
         if (selectedPolygonId !== null) {
           map.current.setFeatureState(
-            { source: 'lands', id: selectedPolygonId },
+            { source: e.features[0].source, id: selectedPolygonId },
             { selected: false }
           );
         }
         selectedPolygonId = e.features[0].id;
         map.current.setFeatureState(
-          { source: 'lands', id: selectedPolygonId },
+          { source: e.features[0].source, id: selectedPolygonId },
           { selected: true }
         );
       }
-      console.log(e.features[0]);
+      console.log(e.features[0].source);
       onCenter(e.features[0].source, e.features[0].id, 'map');
       handlePopup(e.features[0].source, e.features[0]);
     }
@@ -222,14 +224,21 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
     }
   const defaultPointerRef = useRef(defaultPointer);
 
-  //click outside of feature removes popup
+  //click outside of feature removes popup (if currently placed)
   const removePopup =
     () => {
       if (popup.isOpen()) {
-        map.current.setFeatureState(
-          { source: 'lands', id: selectedPolygonId },
-          { selected: false }
-        );
+        for (let i = 0; i < layerList.length; i++) {
+          let currentFeatures = map.current.getSource(layerList[i])._data.features;
+          currentFeatures.forEach(f => {
+            if (map.current.getFeatureState({ source: layerList[i], id: f.id }).selected) {
+              map.current.setFeatureState(
+                { source: layerList[i], id: f.id },
+                { selected: false }
+              );
+            }
+          });
+        }
         onCenter('retain', -1, 'map');
         popup.remove();
       }
@@ -242,6 +251,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   //  }
   //const removePopupRefTest = useRef(removePopupTest);
 
+  /*
   var hoveredPolygonId = null;
 
   const hoverOn =
@@ -249,13 +259,13 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
       if (e.features.length > 0) {
         if (hoveredPolygonId !== null) {
           map.current.setFeatureState(
-            { source: 'lands', id: hoveredPolygonId },
+            { source: e.features[0].source, id: hoveredPolygonId },
             { hover: false }
           );
         }
         hoveredPolygonId = e.features[0].id;
         map.current.setFeatureState(
-          { source: 'lands', id: hoveredPolygonId },
+          { source: e.features[0].source, id: hoveredPolygonId },
           { hover: true }
         );
       }
@@ -265,14 +275,19 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   const hoverOff =
     () => {
       if (hoveredPolygonId !== null) {
-        map.current.setFeatureState(
-          { source: 'lands', id: hoveredPolygonId },
-          { hover: false }
-        );
+        for (let i = 0; i < layerList.length; i++) {
+          if (map.current.getFeatureState({ source: layerList[i], id: hoveredPolygonId}).hover) {
+            map.current.setFeatureState(
+              { source: layerList[i], id: hoveredPolygonId },
+              { hover: false }
+            );
+          }
+        }
       }
       hoveredPolygonId = null;
     }
   const hoverOffRef  = useRef(hoverOff)
+  */
 
   useEffect(() => {
     if (map.current) {
@@ -316,15 +331,17 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
 
   useEffect(() => {
     if (mode === 'view' && (target[2] === 'list' || target[2] === 'reset')) {
-      let allFeatures = map.current.getSource('lands')._data.features;
-      allFeatures.forEach(f => {
-        if (map.current.getFeatureState({ source: 'lands', id: f.id }).selected) {
-          map.current.setFeatureState(
-            { source: 'lands', id: f.id },
-            { selected: false }
-          );
-        }
-      });
+      for (let i = 0; i < layerList.length; i++) {
+        let currentFeatures = map.current.getSource(layerList[i])._data.features;
+        currentFeatures.forEach(f => {
+          if (map.current.getFeatureState({ source: layerList[i], id: f.id }).selected) {
+            map.current.setFeatureState(
+              { source: layerList[i], id: f.id },
+              { selected: false }
+            );
+          }
+        });
+      }
       if (target[1] !== -1) {
         map.current.setFeatureState(
           { source: target[0], id: target[1] },
@@ -490,7 +507,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
             'fill-opacity': [
               'case',
               ['boolean', ['feature-state', 'selected'], false], 0.5, // more opaque on select
-              ['boolean', ['feature-state', 'hover'], false], 0.5, // more opaque on hover
+              //['boolean', ['feature-state', 'hover'], false], 0.5, // more opaque on hover
               0.3      // default opacity
             ],
             'fill-outline-color': [
@@ -550,9 +567,15 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
                         ['match', ['get', 'reviewed'], 'true', '#CD202D', 'false', '#CD202D', '#808080'],
                         'white' // Default color
                     ],
-          "circle-stroke-color": "white"
+          "circle-stroke-color": [
+            'case',
+            ['boolean', ['feature-state', 'selected'], false],
+            'lightblue', // red if selected
+            'white'  // default blue
+          ]
         }
       });
+      /*
       map.current.addLayer({
         'id': "transparent_layer",
         'type': "circle",
@@ -562,6 +585,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
           'circle-opacity': 0
         }
       });
+      */
 
       //build legend based on enabled layers
       const postsItems = [
@@ -655,9 +679,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
     }, 200);
   }, [landsLocations, styleSwap]); //everytime the featureLocations state or map style is changed
   
-
   useEffect(() => {
-    let layerList = ['lands_layer', 'transparent_layer'];
     if (mode === 'view') { //events added and removed from map in view mode
       //map.current.getCanvas().style.cursor = ""
       map.current.off('click', addPointsRef.current);
@@ -669,44 +691,46 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
       //popup.on('close', removePopupRefTest.current);
       onPopupRef.current = onPopup;
       for (let i = 0; i < layerList.length; i++) {
-        map.current.on('click', layerList[i], onPopupRef.current);
+        map.current.on('click', layerList[i] + '_layer', onPopupRef.current);
         popupPointerRef.current = popupPointer;
-        map.current.on('mouseenter', layerList[i], popupPointerRef.current);
+        map.current.on('mouseenter', layerList[i] + '_layer', popupPointerRef.current);
         defaultPointerRef.current = defaultPointer;
-        map.current.on('mouseleave', layerList[i], defaultPointerRef.current);
+        map.current.on('mouseleave', layerList[i] + '_layer', defaultPointerRef.current);
+        /*
+        hoverOnRef.current = hoverOn;
+        map.current.on('mousemove', layerList[i] + '_layer', hoverOnRef.current);
+        hoverOffRef.current = hoverOff;
+        map.current.on('mouseleave', layerList[i] + '_layer', hoverOffRef.current);
+        */
       }
-
-      hoverOnRef.current = hoverOn;
-      map.current.on('mousemove', 'lands_layer', hoverOnRef.current);
-      hoverOffRef.current = hoverOff;
-      map.current.on('mouseleave', 'lands_layer', hoverOffRef.current);
       onSelect([]); //figure out how to not call on initialization
 
     } else { //events added and removed from map in contribute mode
       //map.current.getCanvas().style.cursor = "pointer"
       addPointsRef.current = addPoints;
       map.current.on('click', addPointsRef.current);
-      dragEndRef.current = onDragEnd
+      dragEndRef.current = onDragEnd;
       marker.on('dragend', dragEndRef.current);
       onRightClickRef.current = onRightClick;
       marker.on('contextmenu', onRightClickRef.current);
       map.current.off('click', removePopupRef.current);
       for (let i = 0; i < layerList.length; i++) {
-        map.current.off('click', layerList[i], onPopupRef.current);
-        map.current.off('mouseenter', layerList[i], popupPointerRef.current);
-        map.current.off('mouseleave', layerList[i], defaultPointerRef.current);
+        map.current.off('click', layerList[i] + '_layer', onPopupRef.current);
+        map.current.off('mouseenter', layerList[i] + '_layer', popupPointerRef.current);
+        map.current.off('mouseleave', layerList[i] + '_layer', defaultPointerRef.current);
+        /* 
+        map.current.off('mousemove', layerList[i] + '_layer', hoverOnRef.current);
+        map.current.off('mouseleave', layerList[i] + '_layer', hoverOffRef.current);
+        */
       }
 
       if (popup.isOpen()) {
         map.current.setFeatureState(
-          { source: 'lands', id: target[1] },
+          { source: target[0], id: target[1] },
           { selected: false }
         );
         popup.remove();
       }
-
-      map.current.off('mousemove', 'lands_layer', hoverOnRef.current);
-      map.current.off('mouseleave', 'lands_layer', hoverOffRef.current);
     }
   }, [mode]);
 

@@ -246,7 +246,7 @@ export default function Home(props){
 			//retains target after a reset
 			if(reset !== 0) {
 				setTimeout(() => {
-					setTarget([target[0], target[1], 'reset']);
+					setTarget((target) => [target[0], target[1], 'reset']);
 				}, 150);
 			}
 		}

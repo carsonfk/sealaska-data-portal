@@ -77,13 +77,10 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     }
 
     function updateTableHL(layerName, id) {
-        console.log(layerName)
         let tables = document.getElementsByTagName("table");
         for (let i = 0; i < tables.length; i++) {
             if (tables[i].children[0]) {
-                //console.log(tables[i].parentElement.classList);
                 if (tables[i].parentElement.id === ('list-' + layerName)) {
-                    //console.log(tables[i].children[0].children);
                     for (let child of tables[i].children[0].children) {
                         if ((child.classList.contains("hl") && id !== parseInt(child.id)) || (!child.classList.contains("hl") && id === parseInt(child.id))) {
                             child.classList.toggle("hl");
