@@ -66,8 +66,8 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
     } else if (layerName === 'lands') {
       console.log(feature);
       let coordinates = feature.geometry.coordinates[0][0];
-      let owner = feature.properties.SURFOWNER;
-      let name = feature.properties.TAX_NAME;
+      let owner = feature.properties.SurfFull;
+      let name = feature.properties.TaxName;
       buildPopupLands(coordinates, owner, name);
     } else if (layerName == 'roads') {
 
@@ -497,12 +497,20 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
         'paint': {
             'fill-color': [
               'match',
-              ['get', 'SURFOWNER'],
-              'Sealaska',
+              ['get', 'OwnCategor'],
+              'Sealaska Corporation',
               'rgb(250, 100, 100)',
-              'DNR',
+              'Village Corp',
+              'rgb(200, 100, 250)',
+              'State',
               'rgb(100, 150, 250)',
-              'rgb(200, 100, 250)'
+              'Federal',
+              'rgb(100, 250, 100)',
+              'Borough',
+              'rgb(250, 250, 100)',
+              'Private',
+              'rgb(255, 255, 255)',
+              '#ccc'
             ],
             'fill-opacity': [
               'case',
@@ -512,12 +520,20 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
             ],
             'fill-outline-color': [
               'match',
-              ['get', 'SURFOWNER'],
-              'Sealaska',
+              ['get', 'OwnCategor'],
+              'Sealaska Corporation',
               'rgb(250, 100, 100)',
-              'DNR',
+              'Village Corp',
+              'rgb(200, 100, 250)',
+              'State',
               'rgb(100, 150, 250)',
-              'rgb(200, 100, 250)'
+              'Federal',
+              'rgb(100, 250, 100)',
+              'Borough',
+              'rgb(250, 250, 100)',
+              'Private',
+              'rgb(255, 255, 255)',
+              '#ccc'
             ]
         }
       });
@@ -559,20 +575,32 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
         'paint': {
           "circle-radius": 6,
           "circle-stroke-width": 2,
-          'circle-color': [
-                        'case',
-                        ['==', ['get', 'account'], 'anon'],
-                        ['match', ['get', 'reviewed'], 'true', 'orange', 'false', '#ccc', '#808080'],
-                        ['==', ['get', 'account'], 'sealaska'],
-                        ['match', ['get', 'reviewed'], 'true', '#CD202D', 'false', '#CD202D', '#808080'],
-                        'white' // Default color
-                    ],
-          "circle-stroke-color": [
-            'case',
-            ['boolean', ['feature-state', 'selected'], false],
-            'lightblue', // red if selected
-            'white'  // default blue
-          ]
+          "circle-color": [
+            "case",
+            ["boolean", ["feature-state", "selected"], false],
+            "lightblue",
+            [
+              "case",
+              ["==", ["get", "account"], 'anon'],
+              [
+                "match",
+                ["get", "reviewed"],
+                "true", "orange",
+                "false", "#ccc",
+                "#808080"
+              ],
+              ["==", ["get", "account"], 'sealaska'],
+              [
+                "match",
+                ["get", "reviewed"],
+                "true", "#CD202D",
+                "false", "#CD202D",
+                "#808080"
+              ],
+              "#808080"
+            ]
+          ],
+          "circle-stroke-color": 'white'
         }
       });
       /*
@@ -612,15 +640,21 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
       ];
 
       const landsItems = [
-        'Sealaska',
-        'Village Corporation',
-        'Alaska DNR'
+        'Sealaska Corp',
+        'Village Corp',
+        'State of Alaska',
+        'Federal',
+        'Borough',
+        'Private'
       ];
 
       const landsColors = [
         'rgba(250, 100, 100, 0.2)',
         'rgba(200, 100, 250, 0.2)',
-        'rgba(100, 150, 250, 0.2)'
+        'rgba(100, 150, 250, 0.2)',
+        'rgba(100, 250, 100, 0.2)',
+        'rgba(250, 250, 100, 0.2)',
+        'rgba(255, 255, 255, 0.2)'
       ];
 
       const roadsItems = [

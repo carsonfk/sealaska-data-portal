@@ -32,6 +32,13 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
                 }
             }
             setRatio([reviewedCount, unreviewedCount]);
+        } else if (layerName === 'lands') {
+            for (let i = 0; i < data.length; i++) {
+                let sealaska = data[i].properties.SurfFull === "Sealaska";
+                if (sealaska) {
+                    buildTableRow(layerName, table, data[i]);
+                }
+            }
         } else {
             for (let i = 0; i < data.length; i++) {
                 buildTableRow(layerName, table, data[i]);
@@ -50,8 +57,8 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         } else if (layerName === 'projects') {
                 
         } else if (layerName === 'lands') {
-            cell1.innerHTML = rowData.properties.SURFOWNER;
-            cell2.innerHTML = rowData.properties.TAX_NAME;
+            cell1.innerHTML = rowData.properties.SurfFull;
+            cell2.innerHTML = rowData.properties.TaxName;
             //let cell3 = row.insertCell(1);
             //cell3.innerHTML = rowData.properties.TAX_NAME;
         } else if (layerName === 'roads') {

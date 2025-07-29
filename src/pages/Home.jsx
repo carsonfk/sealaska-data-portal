@@ -30,7 +30,7 @@ export default function Home(props){
 	const [sidebars, setSidebars] = useState();
 	//const [tableMode, setTableMode] = useState({posts: [true, true], projects: [true, false], lands: [true, false], roads: [true, false]}); //reconsider
 
-	const landsURL = 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/ArcGIS/rest/services/Tax_Blocks_(geojson)/FeatureServer/0/query?where=1%3D1&outSR=4326&outFields=SURFOWNER&outFields=TAX_NAME&outFields=ObjectId&f=pgeojson';
+	const landsURL = 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/arcgis/rest/services/SELands/FeatureServer/0/query?where=1%3D1&outSR=4326&outFields=OwnCategor&outFields=SurfFull&outFields=TaxName&outFields=AreaAcres&outFields=OBJECTID&f=pgeojson';
 	const projectsURL = '';
 	const roadsURL = '';
 
