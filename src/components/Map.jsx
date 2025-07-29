@@ -201,7 +201,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
     }
   const onPopupRef = useRef(onPopup);
 
-  //cursor becomes pointer when hovering over point
+  //cursor becomes pointer when hovering over feature
   const popupPointer =
     () => {
       map.current.getCanvas().style.cursor = "pointer";

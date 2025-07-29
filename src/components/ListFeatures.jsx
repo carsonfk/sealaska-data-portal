@@ -11,7 +11,6 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         console.log(data);
         let currentLayer = '#list-' + layerName
         let title = document.querySelector(currentLayer + ' .list-title');
-        let subtitle = document.querySelector(currentLayer + ' .list-subtitle');
         let table = document.querySelector(currentLayer + ' .feature-list');
 
         title.innerHTML = capitalizeFirst(layerName);
@@ -55,7 +54,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
             cell2.innerHTML = rowData.properties.TAX_NAME;
             //let cell3 = row.insertCell(1);
             //cell3.innerHTML = rowData.properties.TAX_NAME;
-        } else if (layerName == 'roads') {
+        } else if (layerName === 'roads') {
 
         }
         row.addEventListener("click", (e) => {
