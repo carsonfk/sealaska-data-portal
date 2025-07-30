@@ -41,10 +41,24 @@ export function useQueryParams() {
 }
 
 //returns string with first letter capitalized
-export function capitalizeFirst(val) {
-  return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+export function capitalizeFirst(str) {
+  return String(str).charAt(0).toUpperCase() + String(str).slice(1);
 }
 
+//adds comma to thousands place of provided number
+export function addComma(number) {
+  let numberSplit = (Math.floor(number * 100) / 100).toString().split('.');
+  let indexMaxInit = numberSplit[0].length - 1;
+  let arrayFirst = [...numberSplit[0]];
+  for (let i = indexMaxInit; i >= 0; i--) {
+    if ((indexMaxInit - i) % 3 === 0 && i !== indexMaxInit) {
+      arrayFirst.splice(i + 1, 0, ',');
+    }
+  }
+  return arrayFirst.join('') + '.' + numberSplit[1];
+}
+
+//calculates great circle distance between two coordinates
 export function haversineDistance(coord1, coord2) {
   const toRad = angle => (angle * Math.PI) / 180;
 

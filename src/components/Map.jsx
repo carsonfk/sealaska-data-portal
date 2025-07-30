@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from "react";
-import { useQueryParams, capitalizeFirst, haversineDistance } from "../functions";
+import { useQueryParams, capitalizeFirst, haversineDistance, addComma } from "../functions";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -70,14 +70,14 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
       }
       let owner = feature.properties.SurfFull;
       let name = feature.properties.TaxName;
-      let acres = Math.floor(feature.properties.AreaAcres * 100) / 100;
+      let acres = addComma(feature.properties.AreaAcres);
       buildPopupLands(coordinates, owner, name, acres);
     } else if (layerName == 'roads') {
 
     }
   }
 
-  //constructs a reviewed/unreviewed popup using provided parameters
+  //constructs a reviewed/unreviewed popup for a post using provided parameters
   function buildPopupPosts(coordinates, type, details, reviewed, timestamp, img) {
     if (reviewed) {
       popup
@@ -92,12 +92,19 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
     }
   }
 
-  //constructs a reviewed/unreviewed popup using provided parameters
+  //constructs a popup for a land feature using provided parameters
   function buildPopupLands(coordinates, owner, name, acres) {
-    popup
+    if (name !== undefined && name !== 'Other') {
+      popup
         .setLngLat(coordinates)
         .setHTML("<strong><h2>" + owner + "</h2></strong>" + "<h6>" + name + "</h6>" + acres + " acres")
         .addTo(map.current);
+    } else {
+      popup
+        .setLngLat(coordinates)
+        .setHTML("<strong><h2>" + owner + "</h2></strong>" + acres + " acres")
+        .addTo(map.current);
+    }
   }
 
   //initializes menu & legend click event
@@ -508,6 +515,18 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
           'features': landsLocations
         }
       });
+
+      /*
+      map.addLayer({
+          'id': 'lands_outline',
+          'type': 'line',
+          'source': 'lands', // Reference to the same GeoJSON source
+          'paint': {
+              'line-color': '#ff0000', // Desired outline color
+              'line-width': 4 // Desired outline thickness
+          }
+      });
+      */
 
       map.current.addLayer({
         'id': 'lands_layer',
