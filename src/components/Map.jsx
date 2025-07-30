@@ -64,11 +64,14 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
     } else if (layerName === 'projects') {
     
     } else if (layerName === 'lands') {
-      console.log(feature);
       let coordinates = feature.geometry.coordinates[0][0];
+      if (coordinates.length > 2 ) {
+        coordinates = coordinates[0];
+      }
       let owner = feature.properties.SurfFull;
       let name = feature.properties.TaxName;
-      buildPopupLands(coordinates, owner, name);
+      let acres = Math.floor(feature.properties.AreaAcres * 100) / 100;
+      buildPopupLands(coordinates, owner, name, acres);
     } else if (layerName == 'roads') {
 
     }
@@ -90,10 +93,10 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   }
 
   //constructs a reviewed/unreviewed popup using provided parameters
-  function buildPopupLands(coordinates, owner, name) {
+  function buildPopupLands(coordinates, owner, name, acres) {
     popup
         .setLngLat(coordinates)
-        .setHTML("<strong><h2>" + owner + "</h2></strong>" + "<h6>" + name + "</h6>")
+        .setHTML("<strong><h2>" + owner + "</h2></strong>" + "<h6>" + name + "</h6>" + acres + " acres")
         .addTo(map.current);
   }
 
@@ -138,6 +141,18 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
         legendSubgroup.appendChild(item);
       });
     }
+  }
+
+  //update the source of the features on the map
+  function updateSource(localData, source) {
+    setTimeout(() => {
+      if (map.current.getSource(source)) {
+        map.current.getSource(source).setData({
+          type: 'FeatureCollection',
+          features: localData
+        });
+      }
+    }, 200);
   }
 
   //updates marker coordinates to drop location, or rejects drop and returns marker to existing selection
@@ -361,12 +376,16 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
         }
         for (let i = 0; i < targetData.length; i++) {
           if (targetData[i].id === parseInt(target[1])) {
-            handlePopup(target[0], targetData[i]);
             if (point) { //reconsider once all layers are available
               flyTo(targetData[i].geometry.coordinates); //only fly to feature on target select from table
             } else {
-              flyTo(targetData[i].geometry.coordinates[0][0]); //only fly to feature on target select from table
+              let coordinates = targetData[i].geometry.coordinates[0][0];
+              if (coordinates.length > 2 ) {
+                coordinates = coordinates[0];
+              }
+              flyTo(coordinates); //only fly to feature on target select from table
             }
+            handlePopup(target[0], targetData[i]);
           }
         }
           
@@ -687,32 +706,14 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   }, []);
 
   useEffect(() => {
-    setTimeout(() => {
-      if (map.current.getSource('posts')) {
-        //update the source of the features on the map
-        const source = map.current.getSource("posts");
-        source.setData({
-          type: 'FeatureCollection',
-          features: featureLocations
-        });
-      }
-    }, 200);
+    updateSource(featureLocations, 'posts');
   }, [featureLocations, styleSwap]); //everytime the featureLocations state or map style is changed
 
 
   useEffect(() => {
-    setTimeout(() => {
-      if (map.current.getSource('lands')) {
-        //update the source of the features on the map
-        const sourceLands = map.current.getSource("lands");
-        sourceLands.setData({
-          type: 'FeatureCollection',
-          features: landsLocations
-        });
-      }
-    }, 200);
-  }, [landsLocations, styleSwap]); //everytime the featureLocations state or map style is changed
-  
+    updateSource(landsLocations, 'lands');
+  }, [landsLocations, styleSwap]); //everytime the landsLocations state or map style is changed
+
   useEffect(() => {
     if (mode === 'view') { //events added and removed from map in view mode
       //map.current.getCanvas().style.cursor = ""
