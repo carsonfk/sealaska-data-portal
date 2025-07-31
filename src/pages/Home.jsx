@@ -149,16 +149,8 @@ export default function Home(props){
 		}
 	};
 
-    const handleCurrentSelection = (coordinates) => { //from map jsx - updates current point selection (will default to empty when mode is set to view)
-		if (coordinates.length === 0) {
-			setCurrentSelection({coordinates: [], origin: 'map'});
-		} else {
-			setCurrentSelection({coordinates: coordinates, origin: 'map'});
-		}
-    };
-
-	const handleEdits = ({coordinate: point}) => { //from addfeature jsx - updates current point selection (will default to empty when mode is set to view)
-        setCurrentSelection({coordinates: point, origin: 'box'});
+    const handleCurrentSelection = ({coordinates: point, origin: component}) => { //from addfeature or map jsx - updates current point selection (will default to empty when mode is set to view)
+		setCurrentSelection({coordinates: point, origin: component});
     };
 
 	const handleCenter = ({name: layerName, id: layerId, fly: bool}) => { //from listfeatures jsx or map jsx - updates targeted feature
@@ -176,7 +168,6 @@ export default function Home(props){
 
 	const handleFormSubmit = () => {
 		setMapMode('view');
-		//setTarget([, 'list'])
 	};
 
 	useEffect(() => {
@@ -301,7 +292,7 @@ export default function Home(props){
 				<div id="features" className={"main-container sidebar left " + hidden("left")}>
 					<Hero scrollToMap={scrollToMap}/>
 					<ViewContributeForm mode={mapMode} onSubmit={handleModeSubmit}/>
-					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onEdit={handleEdits} onReset={handleReset} submitSwap={handleFormSubmit}/>
+					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection} onReset={handleReset} submitSwap={handleFormSubmit}/>
 					<ListFeatures locations={data} projects={projectsData} lands={landsData} roads={roadsData} mode={mapMode} target={target} onCenter={handleCenter}/>
 				</div>
 				<div id="map">

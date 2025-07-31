@@ -3,7 +3,7 @@ import { getDatabase, ref, set as firebaseSet, push } from 'firebase/database'
 //import FilterForm from './FilterForm'
 import { getTimestampAK } from "../functions";
 
-export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onReset, submitSwap} ) {
+export default function AddFeatureForm( {mode, selectionCoordinates, onSelect, onReset, submitSwap} ) {
     const [form, setForm] = useState({
         latitude: "",
         longitude: "",
@@ -104,7 +104,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
                         name="latitude"
                         value={parseFloat(parseFloat(form.latitude).toFixed(6))}
                         onChange={(e) => {
-                            onEdit([e.target.value, form.longitude]);
+                            onSelect([e.target.value, form.longitude]);
                             updateForm({ latitude: e.target.value });
                         }}
                     />
@@ -121,7 +121,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
                         name="longitude"
                         value={parseFloat(parseFloat(form.longitude).toFixed(6))}
                         onChange={(e) => {
-                            onEdit([form.latitude, e.target.value]);
+                            onSelect({coordinates: [form.latitude, e.target.value], origin: 'box'});
                             updateForm({ longitude: e.target.value });
                         }}
                     />

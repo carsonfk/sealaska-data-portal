@@ -42,7 +42,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   function handlePopup(layerName, feature, fly) {
     let coordinates;
     if (layerName === 'posts' || layerName === 'projects') { //reconsider once all layers are available
-      let coordinates = feature.geometry.coordinates;
+      coordinates = feature.geometry.coordinates;
       if (layerName === 'posts') {
         let type = feature.properties.type.charAt(0).toUpperCase()
           + feature.properties.type.slice(1);
@@ -65,16 +65,12 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
       } else if (layerName === 'projects') {
 
       }
-
-      if (fly) {
-        flyTo(coordinates); //only fly to feature on target select from table
-      }
     } else if (layerName === 'lands' || layerName === 'roads') {
       let coordinateGroup = feature.geometry.coordinates[0];
       if (coordinateGroup[0].length > 2 ) {
         coordinateGroup = coordinateGroup[0];
       }
-      let coordinates = averageGeolocation(coordinateGroup)
+      coordinates = averageGeolocation(coordinateGroup)
 
       if (layerName === 'lands') {
         let owner = feature.properties.SurfFull;
@@ -84,10 +80,9 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
       } else if (layerName == 'roads') {
 
       }
-
-      if (fly) {
-        flyTo(coordinates); //only fly to feature on target select from table
-      }
+    }
+    if (fly) {
+      flyTo(coordinates); //only fly to feature on target select from table
     }
   }
 
@@ -183,10 +178,10 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
       if (lngLat.lat >= 54.5 && lngLat.lat <= 60 && 
           lngLat.lng >= -140 && lngLat.lng <= -130.25) {
         //setMarker(marker);
-        onSelect([lngLat.lat, lngLat.lng]);
+        onSelect({coordinates: [lngLat.lat, lngLat.lng], origin: 'map'});
       } else {
         marker.remove();
-        onSelect([]);
+        onSelect({coordinates: [], origin: 'map'});
       }
     }
   const dragEndRef = useRef(onDragEnd);
@@ -200,7 +195,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
          coordinates.lng >= -140 && coordinates.lng <= -130.25) {
           marker.setLngLat(coordinates).addTo(map.current);
           //setMarker(marker);
-          onSelect([coordinates.lat, coordinates.lng]);
+          onSelect({coordinates: [coordinates.lat, coordinates.lng], origin: 'map'});
          }
     }
   const addPointsRef = useRef(addPoints);
@@ -209,7 +204,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   const onRightClick = 
     () => {
       marker.remove();
-      onSelect([]);
+      onSelect({coordinates: [], origin: 'map'});
     }
   const onRightClickRef = useRef(onRightClick);
 
@@ -747,7 +742,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
         map.current.on('mouseleave', layerList[i] + '_layer', hoverOffRef.current);
         */
       }
-      onSelect([]); //figure out how to not call on initialization
+      onSelect({coordinates: [], origin: 'map'}); //figure out how to not call on initialization
 
     } else { //events added and removed from map in contribute mode
       //map.current.getCanvas().style.cursor = "pointer"
