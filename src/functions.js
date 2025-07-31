@@ -106,3 +106,23 @@ export function averageGeolocation(coords) {
 
     return [(centralLon * 180 / Math.PI), (centralLat * 180 / Math.PI)];
   }
+
+  export function stateTimer(state, setState, duration, name) {
+    let element = document.getElementById(name);
+			if (!element.classList.contains("hide")) { // case 1: update msg is visible because of recent refresh -> reset popup
+				element.classList.toggle("hide");
+				setTimeout(() => {
+				element.classList.toggle("hide");
+				}, 100)
+			} else { // case 2: update msg is hidden -> make visible
+				element.classList.toggle("hide");
+			}
+			if (state.length !== 0) { //restart update msg hide timer if ongoing
+				clearTimeout(state);
+			}
+			setState(setTimeout(() => { //set update msg hide timer
+				if (!element.classList.contains("hide")) {
+				element.classList.toggle("hide");
+				}
+			}, duration));
+  }

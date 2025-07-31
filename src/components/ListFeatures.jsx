@@ -8,7 +8,6 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     const [ratio, setRatio] = useState([0,0]);
 
     function buildTable(layerName, data) { // adds data to a specific table
-        //console.log(data);
         let currentLayer = '#list-' + layerName
         let title = document.querySelector(currentLayer + ' .list-title');
         let table = document.querySelector(currentLayer + ' .feature-list');
@@ -102,7 +101,6 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     }
 
     function swapViewList(e) {
-        //console.log(e.target);
         let lists = document.getElementsByClassName('list');
         if (!e.target.parentNode.parentNode.classList.contains('collapsed')) { // if clicked table is expanded
             e.target.parentNode.parentNode.classList.add('collapsed');
@@ -124,7 +122,6 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         updateTableHL(target.name, target.id);
         if (target.id !== -1) {
             let lists = document.getElementsByClassName('list');
-            console.log(target.name);
             if (document.getElementById('list-' + target.name).classList.contains('collapsed')) {
                 for (let i = 0; i < lists.length; i++) {
                     if (!lists[i].classList.contains('collapsed')) {
@@ -174,6 +171,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     useEffect(() => {
         if (mode === 'view') {
             //updateTableHL(target[0], target[1]);
+            console.log(target)
             swapViewMap(target); //figure out why non-post table hl doesn't refresh on refresh
         };
     }, [target]);

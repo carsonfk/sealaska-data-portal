@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { getDatabase, ref, set as firebaseSet, push } from 'firebase/database'
 //import FilterForm from './FilterForm'
-import { getTimestampAK } from "../functions";
+import { getTimestampAK, stateTimer} from "../functions";
 
 export default function AddFeatureForm( {mode, selectionCoordinates, onSelect, onReset, submitSwap} ) {
+    const [timer, setTimer] = useState([])
     const [form, setForm] = useState({
         latitude: "",
         longitude: "",
@@ -80,9 +81,8 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onSelect, o
             document.getElementById('image').value = "";
             onReset();
             submitSwap();
-        } else {
-            //test error message
-            document.getElementById('error').classList.remove('hide');
+        } else { //error message timer
+            stateTimer(timer, setTimer, 7000, 'error');
         }
     }
 
@@ -141,7 +141,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onSelect, o
                     <textarea
                         id="details"
                         name="details"
-                        rows="3"
+                        rows="2"
                         value={form.details}
                         onChange={(e) => updateForm({ details: e.target.value }, '')}
                     />
@@ -165,8 +165,10 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onSelect, o
                     </div>
                     <br></br>
                     <button className="interactive addLocation" type="submit">Submit your Location</button>
-                    <div id="error" className="hide">
-                        <p>error</p>
+                    <div id="error" className="error-notification hide">
+                        ⚠️
+                        <br></br>
+                        <p>Please be sure to complete all required fields.</p>
                     </div>
                 </form>
             </div>

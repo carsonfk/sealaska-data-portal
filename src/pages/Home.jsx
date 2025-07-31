@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useQueryParams } from "../functions";
+import { useQueryParams, stateTimer} from "../functions";
 import { getDatabase, ref, onValue, get, orderByChild, equalTo, query } from 'firebase/database'
 import { request } from '@esri/arcgis-rest-request';
 import AddFeatureForm from "../components/AddFeatureForm";
@@ -26,7 +26,7 @@ export default function Home(props){
 	//const timerRef = useRef(null);
 	const windowWidth = useRef(window.innerWidth);
 	const [timerLong, setTimerLong] = useState();
-	const [timerShort, setTimerShort] = useState([]);
+	const [timer, setTimer] = useState([]);
 	const [sidebars, setSidebars] = useState();
 	//const [tableMode, setTableMode] = useState({posts: [true, true], projects: [true, false], lands: [true, false], roads: [true, false]}); //reconsider
 
@@ -157,7 +157,6 @@ export default function Home(props){
 		if (layerName === 'retain') {
 			setTarget((target) => ({name: target.name, id: layerId, fly: bool}));
 		} else {
-			console.log(layerName);
 			setTarget({name: layerName, id: layerId, fly: bool});
 		}
 	};
@@ -253,24 +252,7 @@ export default function Home(props){
 
 	useEffect(() => {
 		if (data) {
-			//console.log(JSON.stringify(data[0]));
-			let update = document.getElementById("update");
-			if (!update.classList.contains("hide")) { // case 1: update msg is visible because of recent refresh -> reset popup
-				update.classList.toggle("hide");
-				setTimeout(() => {
-				update.classList.toggle("hide");
-				}, 100)
-			} else { // case 2: update msg is hidden -> make visible
-				update.classList.toggle("hide");
-			}
-			if (timerShort.length !== 0) { //restart update msg hide timer if ongoing
-				clearTimeout(timerShort);
-			}
-			setTimerShort(setTimeout(() => { //set update msg hide timer
-				if (!update.classList.contains("hide")) {
-				update.classList.toggle("hide");
-				}
-			}, 7000));
+			stateTimer(timer, setTimer, 7000, 'update');
 		}
 	}, [data])
 
@@ -318,26 +300,3 @@ export default function Home(props){
         </>
     )
 }
-
-//function useInterval(callback, delay) {
-		// Remember the latest callback.
-	//	useEffect(() => {
-	//	    timerRef.current = callback;
-	//	}, [callback]);
-
-		// Set up the interval.
-	//	useEffect(() => {
-	//	    function tick() {
-	//		    timerRef.current();
-	//	    }
-	//	    if (delay !== null) {
-	//		    let id = setInterval(tick, delay);
-				//setTemp(id);
-	//		    return () => clearInterval(id);
-	//	    }
-	//	}, [delay]);
-	//}
-
-	//useInterval(() => {
-	//	setReset((reset) => reset + 1);
-	//}, 5000);

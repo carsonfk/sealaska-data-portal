@@ -26,11 +26,9 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
 
   //handles flying to provided coordinates
   function flyTo(coordinates) {
-    console.log(coordinates);
     let delta = haversineDistance(Object.values(map.current.getCenter()), coordinates)
     let zoomLevel = map.current.getZoom();
     let flyDuration = 3000 + ((Math.sqrt(zoomLevel * 3000) * Math.sqrt(delta)) * 0.5); //formula for fly duration
-    //console.log(flyDuration);
     map.current.flyTo({center: [coordinates[0], coordinates[1]],
       essential: true, duration: flyDuration});
     //setLng(coordinates[0]);
@@ -150,7 +148,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
         key.style.backgroundColor = color;
         key.style.color = color;
 
-        const value = document.createElement('span');
+        const value = document.createElement('label');
         value.innerHTML = `${layer}`;
         item.appendChild(key);
         item.appendChild(value);
@@ -213,7 +211,6 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   //click on feature places popup
   const onPopup = 
     (e) => {
-      console.log(e.features[0].source);
       onCenter({name: e.features[0].source, id: e.features[0].id, fly: false});
     }
   const onPopupRef = useRef(onPopup);
@@ -331,7 +328,6 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
 
   useEffect(() => {
     if (lands) {
-      //console.log(lands)
       setLandsLocations(lands);
     }
   }, [lands]); //fire this whenever the features put into the map change
@@ -377,7 +373,6 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
         }
         for (let i = 0; i < targetData.length; i++) {
           if (targetData[i].id === parseInt(target.id)) {
-            console.log(targetData[i].geometry.coordinates);
             handlePopup(target.name, targetData[i], target.fly);
           }
         }
@@ -385,7 +380,6 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
         popup.remove();
       }
     }
-    console.log(target)
   }, [target]);
 
   useEffect(() => {
@@ -450,7 +444,14 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
 
     map.current.on('load', function () {
       //add map controls
-      map.current.addControl(new mapboxgl.NavigationControl());
+      map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+      //add map scale
+      const scale = new mapboxgl.ScaleControl({
+        maxWidth: 200,
+        unit: 'imperial'
+      });
+      map.current.addControl(scale, 'bottom-left');
 
       //add center for map animation
       map.current.addSource('center', {

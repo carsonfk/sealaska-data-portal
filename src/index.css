@@ -57,6 +57,10 @@
 
 /* main */
 
+h4 {
+  margin-bottom: 0px;
+}
+
 body {
   font-family: "Roboto", Arial, sans-serif;
   margin: 0;
@@ -380,7 +384,7 @@ nav {
 img {
   max-width: 200px;
   max-height: 150px;
-  margin: 0 auto;
+  margin: 0px auto;
 }
 
 /* sidebar drawer */
@@ -587,13 +591,22 @@ td:nth-child(2) {
   backdrop-filter: brightness(0);
 }
 
-#error {
- display: block;
+.error-notification {
+  display: block;
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 6px;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  margin: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-#error.hide {
+.error-notification.hide {
   display: none;
 }
+
 
 /* options sidebar*/
 #options {
@@ -805,11 +818,24 @@ td:nth-child(2) {
   }
 
   h2 {
+    font-size: 20px;
+  }
+
+  h4 {
     font-size: 18px;
   }
   
   h6, p, tr, label, input, button, li {
-    font-size: 13px;
+    font-size: 12px;
+  }
+
+  .legend-key {
+    width: 12px;
+    height: 12px;
+  }
+
+  #posts-key {
+    border: 1px solid white;
   }
 
   .add-location-form {
