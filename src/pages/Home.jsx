@@ -157,14 +157,15 @@ export default function Home(props){
 		}
     };
 
-	const handleEdits = (coordinates) => { //from addfeature jsx - updates current point selection (will default to empty when mode is set to view)
-        setCurrentSelection({coordinates: coordinates, origin: 'box'});
+	const handleEdits = ({coordinate: point}) => { //from addfeature jsx - updates current point selection (will default to empty when mode is set to view)
+        setCurrentSelection({coordinates: point, origin: 'box'});
     };
 
-	const handleCenter = (layerName, layerId, bool) => { //from listfeatures jsx or map jsx - updates targeted feature
+	const handleCenter = ({name: layerName, id: layerId, fly: bool}) => { //from listfeatures jsx or map jsx - updates targeted feature
 		if (layerName === 'retain') {
 			setTarget((target) => ({name: target.name, id: layerId, fly: bool}));
 		} else {
+			console.log(layerName);
 			setTarget({name: layerName, id: layerId, fly: bool});
 		}
 	};

@@ -124,7 +124,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         updateTableHL(target.name, target.id);
         if (target.id !== -1) {
             let lists = document.getElementsByClassName('list');
-            console.log(target);
+            console.log(target.name);
             if (document.getElementById('list-' + target.name).classList.contains('collapsed')) {
                 for (let i = 0; i < lists.length; i++) {
                     if (!lists[i].classList.contains('collapsed')) {

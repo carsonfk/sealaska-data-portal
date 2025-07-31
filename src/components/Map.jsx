@@ -65,6 +65,10 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
       } else if (layerName === 'projects') {
 
       }
+
+      if (fly) {
+        flyTo(coordinates); //only fly to feature on target select from table
+      }
     } else if (layerName === 'lands' || layerName === 'roads') {
       let coordinateGroup = feature.geometry.coordinates[0];
       if (coordinateGroup[0].length > 2 ) {
@@ -80,10 +84,10 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
       } else if (layerName == 'roads') {
 
       }
-    }
 
-    if (fly) {
-      flyTo(coordinates); //only fly to feature on target select from table
+      if (fly) {
+        flyTo(coordinates); //only fly to feature on target select from table
+      }
     }
   }
 
@@ -214,6 +218,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   //click on feature places popup
   const onPopup = 
     (e) => {
+      console.log(e.features[0].source);
       onCenter({name: e.features[0].source, id: e.features[0].id, fly: false});
     }
   const onPopupRef = useRef(onPopup);
