@@ -16,12 +16,12 @@ export default function Home(props){
 	const [projectsData, setProjectsData] = useState();
 	const [landsData, setLandsData] = useState();
 	const [roadsData, setRoadsData] = useState();
-	const [target, setTarget] = useState(['posts', -1, 'none']); //change posts to none when query param stuff is working
+	const [target, setTarget] = useState({name: 'posts', id: -1, fly: false}); //change posts to none when query param stuff is working
 	//const [filter, setFilter] = useState('null')
 	const [sort, setSort] = useState('newest');
 	const [reset, setReset] = useState(0);
     const [mapMode, setMapMode] = useState('view');
-    const [currentSelection, setCurrentSelection] = useState([[], 'none']);
+    const [currentSelection, setCurrentSelection] = useState({coordinates:[], origin: 'none'});
 	const mapRef = useRef(null);
 	//const timerRef = useRef(null);
 	const windowWidth = useRef(window.innerWidth);
@@ -151,21 +151,21 @@ export default function Home(props){
 
     const handleCurrentSelection = (coordinates) => { //from map jsx - updates current point selection (will default to empty when mode is set to view)
 		if (coordinates.length === 0) {
-			setCurrentSelection([[], 'map']);
+			setCurrentSelection({coordinates: [], origin: 'map'});
 		} else {
-			setCurrentSelection([coordinates, 'map']);
+			setCurrentSelection({coordinates: coordinates, origin: 'map'});
 		}
     };
 
 	const handleEdits = (coordinates) => { //from addfeature jsx - updates current point selection (will default to empty when mode is set to view)
-        setCurrentSelection([coordinates, 'box']);
+        setCurrentSelection({coordinates: coordinates, origin: 'box'});
     };
 
-	const handleCenter = (layerName, id, origin) => { //from listfeatures jsx or map jsx - updates map center
+	const handleCenter = (layerName, layerId, bool) => { //from listfeatures jsx or map jsx - updates targeted feature
 		if (layerName === 'retain') {
-			setTarget((target) => [target[0], id, origin]);
+			setTarget((target) => ({name: target.name, id: layerId, fly: bool}));
 		} else {
-			setTarget([layerName, id, origin]);
+			setTarget({name: layerName, id: layerId, fly: bool});
 		}
 	};
 
@@ -246,7 +246,7 @@ export default function Home(props){
 			//retains target after a reset
 			if(reset !== 0) {
 				setTimeout(() => {
-					setTarget((target) => [target[0], target[1], 'reset']);
+					setTarget((target) => ({name: target.name, id: target.id, fly: false}));
 				}, 150);
 			}
 		}

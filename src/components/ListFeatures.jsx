@@ -8,7 +8,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     const [ratio, setRatio] = useState([0,0]);
 
     function buildTable(layerName, data) { // adds data to a specific table
-        console.log(data);
+        //console.log(data);
         let currentLayer = '#list-' + layerName
         let title = document.querySelector(currentLayer + ' .list-title');
         let table = document.querySelector(currentLayer + ' .feature-list');
@@ -75,9 +75,9 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
             }
             currentRow.classList.toggle("hl");
             if (currentRow.classList.contains("hl")) {
-                onCenter(layerName, parseInt(currentRow.id), 'list'); // sends current highlighted row id
+                onCenter({name: layerName, id: parseInt(currentRow.id), fly: true}); // sends current highlighted row id
             } else {
-                onCenter(layerName, -1, 'list'); // no row is highlighted
+                onCenter({name: layerName, id: -1, fly: true}); // no row is highlighted
             }
         });
     }
@@ -106,7 +106,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         let lists = document.getElementsByClassName('list');
         if (!e.target.parentNode.parentNode.classList.contains('collapsed')) { // if clicked table is expanded
             e.target.parentNode.parentNode.classList.add('collapsed');
-            onCenter('none', -1, 'list'); // no row is highlighted
+            onCenter({name: 'none', id: -1, fly: true}); // no row is highlighted
             updateTableHL('none', -1);
         } else { // if clicked table is collapsed
             for (let i = 0; i < lists.length; i++) {
@@ -115,22 +115,22 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
                 }
             }
             e.target.parentNode.parentNode.classList.remove('collapsed');
-            onCenter(e.target.parentNode.parentNode.id.slice(5), -1, 'list'); // no row is highlighted
+            onCenter({name: e.target.parentNode.parentNode.id.slice(5), id: -1, fly: true}); // no row is highlighted
             updateTableHL(e.target.parentNode.parentNode.id.slice(5), -1);
         }
     }
 
     function swapViewMap(target) {
-        updateTableHL(target[0], target[1]);
-        if (target[1] !== -1) {
+        updateTableHL(target.name, target.id);
+        if (target.id !== -1) {
             let lists = document.getElementsByClassName('list');
-            //console.log(lists);
-            if (document.getElementById('list-' + target[0]).classList.contains('collapsed')) {
+            console.log(target);
+            if (document.getElementById('list-' + target.name).classList.contains('collapsed')) {
                 for (let i = 0; i < lists.length; i++) {
                     if (!lists[i].classList.contains('collapsed')) {
                         lists[i].classList.add('collapsed');
                     }
-                    document.getElementById('list-' + target[0]).classList.remove('collapsed');
+                    document.getElementById('list-' + target.name).classList.remove('collapsed');
                 }
             }
         }
@@ -172,7 +172,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     }, [mode])
     
     useEffect(() => {
-        if (mode === 'view' && (target[2] === 'map' || target[2] === 'reset')) {
+        if (mode === 'view') {
             //updateTableHL(target[0], target[1]);
             swapViewMap(target); //figure out why non-post table hl doesn't refresh on refresh
         };

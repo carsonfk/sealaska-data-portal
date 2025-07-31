@@ -53,14 +53,14 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onEdit, onR
     }, [mode]); //fire this whenever the mode changes
 
     useEffect(() => {
-        console.log(selectionCoordinates[1]);
-        if (selectionCoordinates[1] === 'map') {
-            if (selectionCoordinates[0].length === 0) {
+        //console.log(selectionCoordinates.origin);
+        if (selectionCoordinates.origin === 'map') {
+            if (selectionCoordinates.coordinates.length === 0) {
                 updateForm({ latitude: "", 
                              longitude: "" });
             } else {
-                updateForm({ latitude: selectionCoordinates[0][0], 
-                             longitude: selectionCoordinates[0][1] });
+                updateForm({ latitude: selectionCoordinates.coordinates[0], 
+                             longitude: selectionCoordinates.coordinates[1] });
             }
         }
     }, [selectionCoordinates]); //fires whenever a marker is placed/moved
