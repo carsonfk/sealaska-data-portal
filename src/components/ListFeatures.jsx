@@ -6,42 +6,69 @@ import $ from 'jquery';
 
 export default function ListFeatures( {locations, projects, lands, roads, mode, target, onCenter} ) {
     const [ratio, setRatio] = useState([0,0]);
+    const [sort, setSort] = useState('newest');
 
-    //sorts provided JSON using sort state
-	function sortJSON(json, sort) {
-		let jsonSort = [];
-		if (sort === 'newest') {
-			for (let i = json.length - 1; i > -1; i--) {
-				jsonSort.push(json[i]);
+    //sorts provided JSON using provided sort
+	function sortData(data, sort) {
+		let dataSort = [];
+        if (sort === 'newest') {
+			for (let i = data.length - 1; i > -1; i--) {
+				dataSort.push(data[i]);
 			}
 		} else if (sort === 'oldest') {
 			
-		}
-		return jsonSort;
-	}
-
-	function sortJSON2(json, sort) {
-		let jsonSort = [];
-		if (sort === 'name') {
-			let jsonSort = json;
-			console.log(jsonSort);
-			for (let i = 1; i < jsonSort.length; i++) {
-				let key = jsonSort[i];
+        } else if (sort === 'name') {
+			let dataSort = data;
+			console.log(dataSort);
+			for (let i = 1; i < dataSort.length; i++) {
+				let key = dataSort[i];
 				let j = i - 1;
 				//console.log(jsonSort[j].properties.SurfFull.charAt(0));
 				//console.log(key.properties.SurfFull.charAt(0));
-				while (j >= 0 && jsonSort[j].properties.TaxName.charAt(0).localeCompare(key.properties.TaxName.charAt(0)) === 1) {
-					jsonSort[j + 1] = jsonSort[j];
+				while (j >= 0 && dataSort[j].properties.TaxName.charAt(0).localeCompare(key.properties.TaxName.charAt(0)) === 1) {
+					dataSort[j + 1] = dataSort[j];
 					j--;
 				}
-				jsonSort[j + 1] = key;
+				dataSort[j + 1] = key;
 			}
 		} else if (sort === 'name-reverse') {
 	
 		}
-		console.log(jsonSort);
-		return jsonSort;
+		return dataSort;
 	}
+
+    function handleData(data, layerName) {
+        let returnArr = []
+        if (layerName === 'posts') {
+            let reviewedCount = 0;
+            let unreviewedCount = 0;
+            for (let i = 0; i < data.length; i++) {
+                let reviewed = data[i].properties.reviewed === "true";
+                if (reviewed) {
+                    console.log('reviewed')
+                    reviewedCount++;
+                    returnArr.push(data[i]);
+                } else {
+                    console.log('unreviewed')
+                    unreviewedCount++;
+                }
+            }
+            setRatio([reviewedCount, unreviewedCount]);
+        } else if (layerName === 'lands') {
+            for (let i = 0; i < data.length; i++) {
+                //console.log(data[i])
+                let sealaska = data[i].properties.SurfFull === "Sealaska";
+                if (sealaska) {
+                    returnArr.push(data[i]);
+                }
+            }
+        } else {
+            for (let i = 0; i < data.length; i++) {
+                returnArr.push(data[i])
+            }
+        }
+        return returnArr;
+    }
 
     function buildTable(layerName, data) { // adds data to a specific table
         let currentLayer = '#list-' + layerName
@@ -53,32 +80,9 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
             $(currentLayer + " .feature-list tr").remove();
         }
 
-        //loops sorted json to construct table
-        if (layerName === 'posts') {
-            let reviewedCount = 0
-            let unreviewedCount = 0;
-            for (let i = 0; i < data.length; i++) {
-                let reviewed = data[i].properties.reviewed === "true";
-                if (reviewed) {
-                    reviewedCount++;
-                    buildTableRow(layerName, table, data[i]);
-                } else {
-                    unreviewedCount++;
-                }
-            }
-            setRatio([reviewedCount, unreviewedCount]);
-        } else if (layerName === 'lands') {
-            for (let i = 0; i < data.length; i++) {
-                console.log(data[i])
-                let sealaska = data[i].properties.SurfFull === "Sealaska";
-                if (sealaska) {
-                    buildTableRow(layerName, table, data[i]);
-                }
-            }
-        } else {
-            for (let i = 0; i < data.length; i++) {
-                buildTableRow(layerName, table, data[i]);
-            }
+        //loops limited and sorted json to construct table
+        for (let i = 0; i < data.length; i++) {
+            buildTableRow(layerName, table, data[i]);
         }
     }
 
@@ -172,7 +176,8 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
     useEffect(() => {
         if (locations && mode === 'view') {
-            buildTable('posts', locations);
+            let limit = handleData(locations, 'posts')
+            buildTable('posts', sortData(limit, 'newest'));
         }
     }, [locations, mode]); //fire this whenever the post features put into the map change or map mode changes
 
@@ -184,7 +189,8 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
     useEffect(() => {
         if (lands && mode === 'view') {
-            buildTable('lands', lands);
+            let limit = handleData(lands, 'lands')
+            buildTable('lands', sortData(limit, 'name'));
         }
     }, [lands, mode]); //fire this whenever the lands features put into the map change or map mode changes
 
@@ -214,6 +220,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     }, [target]);
 
     useEffect(() => {
+        console.log(ratio);
         let subtitle = document.querySelector('#subgroup-posts > .list-subtitle');
         subtitle.innerHTML = 'Reviewed: ' + ratio[0] + ' of ' + (ratio[0] + ratio[1]);
     }, [ratio]);
