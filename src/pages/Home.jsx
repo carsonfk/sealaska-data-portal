@@ -18,12 +18,10 @@ export default function Home(props){
 	const [roadsData, setRoadsData] = useState();
 	const [target, setTarget] = useState({name: 'posts', id: -1, fly: false}); //change posts to none when query param stuff is working
 	//const [filter, setFilter] = useState('null')
-	const [sort, setSort] = useState('newest');
+	//const [sort, setSort] = useState('newest');
 	const [reset, setReset] = useState(0);
     const [mapMode, setMapMode] = useState('view');
     const [currentSelection, setCurrentSelection] = useState({coordinates:[], origin: 'none'});
-	const mapRef = useRef(null);
-	//const timerRef = useRef(null);
 	const windowWidth = useRef(window.innerWidth);
 	const [timerLong, setTimerLong] = useState();
 	const [timer, setTimer] = useState([]);
@@ -88,7 +86,7 @@ export default function Home(props){
 		});
 	}
 
-	//requests data from AGOL
+	//requests static layer data from AGOL
 	function requestStaticLayers() {
 		/*
 		request(projectsURL)
@@ -96,7 +94,7 @@ export default function Home(props){
 			console.log('Success:', response);
 		})
 		.catch(error => {
-			console.error('Error:', error);
+			console.error(error);
 		});
 		*/
 
@@ -106,7 +104,7 @@ export default function Home(props){
 			setLandsData(response.features);
 		})
 		.catch(error => {
-			console.error('Error:', error);
+			console.error(error);
 		});
 
 		/*
@@ -115,21 +113,9 @@ export default function Home(props){
 			console.log('Success:', response);
 		})
 		.catch(error => {
-			console.error('Error:', error);
+			console.error(error);
 		});
 		*/
-	}
-
-	//sort provided JSON using sort state
-	function sortJSON(locations) {
-		if (sort === 'newest') {
-			let locationsSort = []; 
-			for (let i = locations.length - 1; i > -1; i--) {
-				locationsSort.push(locations[i]);
-			}
-			locations = locationsSort;
-		}
-		return locations;
 	}
 
 	const handleResize = () => { //right sidebar hidden on screen shrink (if left sidebar is visible)
@@ -232,7 +218,7 @@ export default function Home(props){
 			});
 
 			//sorts parsed JSON and sets it as global data
-			setData(sortJSON(JSON.parse(`[${publicJSON}]`)));
+			setData(JSON.parse(`[${publicJSON}]`));
 			
 			//retains target after a reset
 			if(reset !== 0) {
@@ -256,12 +242,6 @@ export default function Home(props){
 		}
 	}, [data])
 
-	const scrollToMap = () => { //no longer functional or needed
-		if (mapRef.current) {
-		  mapRef.current.scrollIntoView({ behavior: 'smooth' });
-		}
-	};
-
     return (
         <>
 		<header>
@@ -272,7 +252,7 @@ export default function Home(props){
 					<img id="arrow-left" className="arrow" alt="From pictarts.com" src="https://pictarts.com/21/material/01-vector/m-0027-arrow.png"></img>
 				</div>
 				<div id="features" className={"main-container sidebar left " + hidden("left")}>
-					<Hero scrollToMap={scrollToMap}/>
+					<Hero/>
 					<ViewContributeForm mode={mapMode} onSubmit={handleModeSubmit}/>
 					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection} onReset={handleReset} submitSwap={handleFormSubmit}/>
 					<ListFeatures locations={data} projects={projectsData} lands={landsData} roads={roadsData} mode={mapMode} target={target} onCenter={handleCenter}/>

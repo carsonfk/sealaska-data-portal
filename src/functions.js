@@ -107,6 +107,7 @@ export function averageGeolocation(coords) {
     return [(centralLon * 180 / Math.PI), (centralLat * 180 / Math.PI)];
   }
 
+  //hides & unhides features using given state, duration, and element id
   export function stateTimer(state, setState, duration, name) {
     let element = document.getElementById(name);
 			if (!element.classList.contains("hide")) { // case 1: update msg is visible because of recent refresh -> reset popup

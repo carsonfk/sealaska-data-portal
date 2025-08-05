@@ -7,6 +7,42 @@ import $ from 'jquery';
 export default function ListFeatures( {locations, projects, lands, roads, mode, target, onCenter} ) {
     const [ratio, setRatio] = useState([0,0]);
 
+    //sorts provided JSON using sort state
+	function sortJSON(json, sort) {
+		let jsonSort = [];
+		if (sort === 'newest') {
+			for (let i = json.length - 1; i > -1; i--) {
+				jsonSort.push(json[i]);
+			}
+		} else if (sort === 'oldest') {
+			
+		}
+		return jsonSort;
+	}
+
+	function sortJSON2(json, sort) {
+		let jsonSort = [];
+		if (sort === 'name') {
+			let jsonSort = json;
+			console.log(jsonSort);
+			for (let i = 1; i < jsonSort.length; i++) {
+				let key = jsonSort[i];
+				let j = i - 1;
+				//console.log(jsonSort[j].properties.SurfFull.charAt(0));
+				//console.log(key.properties.SurfFull.charAt(0));
+				while (j >= 0 && jsonSort[j].properties.TaxName.charAt(0).localeCompare(key.properties.TaxName.charAt(0)) === 1) {
+					jsonSort[j + 1] = jsonSort[j];
+					j--;
+				}
+				jsonSort[j + 1] = key;
+			}
+		} else if (sort === 'name-reverse') {
+	
+		}
+		console.log(jsonSort);
+		return jsonSort;
+	}
+
     function buildTable(layerName, data) { // adds data to a specific table
         let currentLayer = '#list-' + layerName
         let title = document.querySelector(currentLayer + ' .list-title');
@@ -33,6 +69,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
             setRatio([reviewedCount, unreviewedCount]);
         } else if (layerName === 'lands') {
             for (let i = 0; i < data.length; i++) {
+                console.log(data[i])
                 let sealaska = data[i].properties.SurfFull === "Sealaska";
                 if (sealaska) {
                     buildTableRow(layerName, table, data[i]);

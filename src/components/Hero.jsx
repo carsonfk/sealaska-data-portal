@@ -1,7 +1,7 @@
 import React from "react";
 
 //use 2 divs with card structure to emphasize both goals + make wrap for phones/tablets
-export default function Hero( {scrollToMap} ) {
+export default function Hero() {
     return (
         <div className="heroContent">
             <h1>Sealaska Data Portal
