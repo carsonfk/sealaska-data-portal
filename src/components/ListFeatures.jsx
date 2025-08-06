@@ -181,7 +181,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
     useEffect(() => {
         if (locations && mode === 'view') {
-            functionHandler(locations, 'posts', 'newest')
+            dataHelper(locations, 'posts', 'newest')
         }
     }, [locations, mode]); //fire this whenever the post features put into the map change or map mode changes
 
