@@ -39,7 +39,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onSelect, o
         if (mode === 'view') { //clears form when swapped to view mode
             updateForm({ type: "", details: "" });
         } else {
-            document.getElementById('image').addEventListener('change', async (event) => {
+            document.getElementById('image').addEventListener('change', async (event) => { //recreates image upload listener on swap to contribute mode
                 const file = event.target.files[0];
                 try {
                     const base64String = await imageToBase64(file);
@@ -54,7 +54,6 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onSelect, o
     }, [mode]); //fire this whenever the mode changes
 
     useEffect(() => {
-        //console.log(selectionCoordinates.origin);
         if (selectionCoordinates.origin === 'map') {
             if (selectionCoordinates.coordinates.length === 0) {
                 updateForm({ latitude: "", 
@@ -164,7 +163,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onSelect, o
                         <input type="file" id="image" name="image" accept="image/png, image/jpeg"/>
                     </div>
                     <br></br>
-                    <button className="interactive addLocation" type="submit">Submit your Location</button>
+                    <button className="interactive addLocation" type="submit">Submit Post</button>
                     <div id="error" className="error-notification hide">
                         ⚠️
                         <br></br>

@@ -9,6 +9,7 @@ import Hero from "../components/Hero";
 import ViewContributeForm from "../components/ViewContributeForm";
 import Refresh from "../components/Refresh";
 import FilterForm from "../components/FilterForm";
+import Stats from "../components/Stats";
 
 export default function Home(props){
 	const { getParam, setParam } = useQueryParams();
@@ -266,6 +267,7 @@ export default function Home(props){
 				<div id="options" className={"main-container sidebar right " + hidden("right")}>
 					<Refresh onReset={handleReset} reset={reset} locations={data}/>
 					<FilterForm/>
+					<Stats locations={data} projects={projectsData} lands={landsData} roads={roadsData}/>
 				</div>
 			</div>
 			<div id="overlay-layer" className="main-layer">

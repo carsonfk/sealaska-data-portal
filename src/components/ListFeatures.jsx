@@ -8,35 +8,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     const [ratio, setRatio] = useState([0,0]);
     const [sort, setSort] = useState('newest');
 
-    //sorts provided JSON using provided sort
-	function sortData(data, sort) {
-		let dataSort = [];
-        if (sort === 'newest') {
-			for (let i = data.length - 1; i > -1; i--) {
-				dataSort.push(data[i]);
-			}
-		} else if (sort === 'oldest') {
-			
-        } else if (sort === 'name') {
-			let dataSort = data;
-			console.log(dataSort);
-			for (let i = 1; i < dataSort.length; i++) {
-				let key = dataSort[i];
-				let j = i - 1;
-				//console.log(jsonSort[j].properties.SurfFull.charAt(0));
-				//console.log(key.properties.SurfFull.charAt(0));
-				while (j >= 0 && dataSort[j].properties.TaxName.charAt(0).localeCompare(key.properties.TaxName.charAt(0)) === 1) {
-					dataSort[j + 1] = dataSort[j];
-					j--;
-				}
-				dataSort[j + 1] = key;
-			}
-		} else if (sort === 'name-reverse') {
-	
-		}
-		return dataSort;
-	}
-
+    //limits provided JSON to prioritized info for list
     function handleData(data, layerName) {
         let returnArr = []
         if (layerName === 'posts') {
@@ -45,11 +17,11 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
             for (let i = 0; i < data.length; i++) {
                 let reviewed = data[i].properties.reviewed === "true";
                 if (reviewed) {
-                    console.log('reviewed')
+                    //console.log('reviewed')
                     reviewedCount++;
                     returnArr.push(data[i]);
                 } else {
-                    console.log('unreviewed')
+                    //console.log('unreviewed')
                     unreviewedCount++;
                 }
             }
@@ -67,10 +39,44 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
                 returnArr.push(data[i])
             }
         }
+        //console.log(returnArr)
         return returnArr;
     }
 
-    function buildTable(layerName, data) { // adds data to a specific table
+    //sorts provided JSON using provided sort
+	function sortData(data, sort) {
+        console.log('hi!')
+		let dataSort = [];
+        if (sort === 'newest') {
+			for (let i = data.length - 1; i > -1; i--) {
+				dataSort.push(data[i]);
+			}
+		} else if (sort === 'oldest') {
+			
+        } else if (sort === 'name') {
+			let dataTemp = data;
+			console.log(dataTemp);
+			for (let i = 1; i < dataTemp.length; i++) {
+				let key = dataTemp[i];
+                //console.log(key)
+				let j = i - 1;
+				while (j >= 0 && dataTemp[j].properties.TaxName.localeCompare(key.properties.TaxName.charAt(0)) === 1) {
+                    //console.log(dataSort[j].properties.TaxName + ', ' + key.properties.TaxName)
+					dataTemp[j + 1] = dataTemp[j];
+					j--;
+				}
+				dataTemp[j + 1] = key;
+			}
+            dataSort = dataTemp;
+            
+		} else if (sort === 'name-reverse') {
+	
+		}
+        console.log(dataSort);
+		return dataSort;
+	}
+
+    function buildTable(data, layerName) { // adds data to a specific table
         let currentLayer = '#list-' + layerName
         let title = document.querySelector(currentLayer + ' .list-title');
         let table = document.querySelector(currentLayer + ' .feature-list');
@@ -176,7 +182,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
     function dataHelper(data, layerName, sort) {
         let limit = handleData(data, layerName);
-        buildTable(layerName, sortData(limit, sort));
+        buildTable(sortData(limit, sort), layerName);
     }
 
     useEffect(() => {
@@ -223,7 +229,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     }, [target]);
 
     useEffect(() => {
-        console.log(ratio);
+        //console.log(ratio);
         let subtitle = document.querySelector('#subgroup-posts > .list-subtitle');
         subtitle.innerHTML = 'Reviewed: ' + ratio[0] + ' of ' + (ratio[0] + ratio[1]);
     }, [ratio]);
