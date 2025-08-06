@@ -174,10 +174,14 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         }
     }
 
+    function dataHelper(data, layerName, sort) {
+        let limit = handleData(data, layerName);
+        buildTable(layerName, sortData(limit, sort));
+    }
+
     useEffect(() => {
         if (locations && mode === 'view') {
-            let limit = handleData(locations, 'posts')
-            buildTable('posts', sortData(limit, 'newest'));
+            functionHandler(locations, 'posts', 'newest')
         }
     }, [locations, mode]); //fire this whenever the post features put into the map change or map mode changes
 
@@ -189,8 +193,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
     useEffect(() => {
         if (lands && mode === 'view') {
-            let limit = handleData(lands, 'lands')
-            buildTable('lands', sortData(limit, 'name'));
+            dataHelper(lands, 'lands', 'name')
         }
     }, [lands, mode]); //fire this whenever the lands features put into the map change or map mode changes
 
