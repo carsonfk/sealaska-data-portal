@@ -267,7 +267,7 @@ export default function Home(props){
 				<div id="options" className={"main-container sidebar right " + hidden("right")}>
 					<Refresh onReset={handleReset} reset={reset} locations={data}/>
 					<FilterForm/>
-					<Stats locations={data} projects={projectsData} lands={landsData} roads={roadsData}/>
+					<Stats locations={data} mode={mapMode} projects={projectsData} lands={landsData} roads={roadsData} target={target}/>
 				</div>
 			</div>
 			<div id="overlay-layer" className="main-layer">
