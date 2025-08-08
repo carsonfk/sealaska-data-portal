@@ -159,9 +159,8 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onSelect, o
                     <br></br>
                     <label for="image">Choose a photo (optional):</label>
                     <br></br>
-                    <div className="interactive">
-                        <input type="file" id="image" name="image" accept="image/png, image/jpeg"/>
-                    </div>
+                    <input  type="file" id="image" name="image" accept="image/png, image/jpeg"/>
+                    <br></br>
                     <br></br>
                     <button className="interactive addLocation" type="submit">Submit Post</button>
                     <div id="error" className="error-notification hide">

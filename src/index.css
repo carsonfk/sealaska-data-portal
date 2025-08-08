@@ -90,6 +90,16 @@ body {
   backdrop-filter: brightness(0.95);
 }
 
+.sharing-buttons, .addLocation {
+  margin: auto;
+  border: 1px solid #767676;
+  border-radius: 2px;
+}
+
+.addLocation {
+  padding: 0px 5px 0px 5px;
+}
+
 .sharing-buttons {
   max-width: 130px;
   margin: auto;
