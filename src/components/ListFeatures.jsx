@@ -77,7 +77,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 		return dataSort;
 	}
 
-    function tableInit(layerName) {
+    function tableInit(layerName, listContainer) {
         let testDiv = document.createElement('div');
         testDiv.id = 'subgroup-' + layerName;
         testDiv.className = 'subgroup interactive';
@@ -105,7 +105,6 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         containerDiv.appendChild(testDiv);
         containerDiv.appendChild(table);
 
-        let listContainer = document.getElementById('list-container');
         listContainer.appendChild(containerDiv);
     }
 
@@ -220,9 +219,18 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
     useEffect(() => {
         if (mode === 'view') {
-            onCenter({name: 'posts', id: -1, fly: false}); // make sure target is reset to default (potentially use query params?)
+            if (locations) { // change if using params?
+                onCenter({name: 'posts', id: -1, fly: false}); // make sure target is reset to default (potentially use query params?)
+            }
+
+            let listContainer = document.getElementById('list-container');
+            if (listContainer.childElementCount !== 0) {
+                $('#list-container > div').remove();
+                console.log("working?");
+            }
+
             for (let i = 0; i < layerList.length; i++) {
-                tableInit(layerList[i]);
+                tableInit(layerList[i], listContainer);
             }
         } else if (mode === 'contribute') {
             onCenter({name: 'none', id: -1, fly: false}); // make sure target is clear
@@ -255,7 +263,6 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     
     useEffect(() => {
         if (mode === 'view') {
-            //updateTableHL(target[0], target[1]);
             console.log(target);
             swapViewMap(target); //figure out why non-post table hl doesn't refresh on refresh
         };

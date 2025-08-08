@@ -345,18 +345,16 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
 
   useEffect(() => {
     if (mode === 'view' && map.current) {
-      if (map.current.getSource(layerList[0])) {
-        for (let i = 0; i < layerList.length; i++) {
-          let currentFeatures = map.current.getSource(layerList[i])._data.features;
-          currentFeatures.forEach(f => {
-            if (map.current.getFeatureState({ source: layerList[i], id: f.id }).selected) {
-              map.current.setFeatureState(
-                { source: layerList[i], id: f.id },
-                { selected: false }
-              );
-            }
-          });
-        }
+      for (let i = 0; i < layerList.length; i++) {
+        let currentFeatures = map.current.getSource(layerList[i])._data.features;
+        currentFeatures.forEach(f => {
+          if (map.current.getFeatureState({ source: layerList[i], id: f.id }).selected) {
+            map.current.setFeatureState(
+              { source: layerList[i], id: f.id },
+              { selected: false }
+            );
+          }
+        });
       }
 
       if (target.id !== -1) {
