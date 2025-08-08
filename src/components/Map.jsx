@@ -344,7 +344,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   }, [selectionCoordinates]); //fires whenever a coordinate is changed
 
   useEffect(() => {
-    if (mode === 'view' && map.current) {
+    if (mode === 'view' && map.current && map.current.getSource()) {
       for (let i = 0; i < layerList.length; i++) {
         let currentFeatures = map.current.getSource(layerList[i])._data.features;
         currentFeatures.forEach(f => {

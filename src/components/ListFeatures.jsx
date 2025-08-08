@@ -75,23 +75,44 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 		return dataSort;
 	}
 
-    function buildTable(data, layerName) { // adds data to a specific table
-        let currentLayer = '#list-' + layerName
-        let title = document.querySelector(currentLayer + ' .list-title');
-        let table = document.querySelector(currentLayer + ' .feature-list');
-
+    function tableInit(layerName) {
+        let testDiv = document.createElement('div');
+        testDiv.id = 'subgroup-' + layerName;
+        testDiv.className = 'subgroup interactive';
+        let title = document.createElement('h3');
+        title.className = 'list-title';
         title.innerHTML = capitalizeFirst(layerName);
-        if (table.childElementCount !== 0) {
-            $(currentLayer + " .feature-list tr").remove();
+        let testP = document.createElement('p');
+        testP.className = 'list-subtitle collapsable';
+        let table = document.createElement('table');
+        table.id = 'table-' + layerName;
+        table.className = 'feature-list collapsable';
+
+        testDiv.appendChild(title);
+        testDiv.appendChild(testP);
+        testDiv.addEventListener("click", swapViewList);
+        let containerDiv = document.createElement('div');
+        containerDiv.id = 'list-' + layerName;
+
+        if (layerName === 'posts') {
+            containerDiv.className = 'list'
+        } else {
+            containerDiv.className = 'list collapsed'
         }
 
-        //loops limited and sorted json to construct table
-        for (let i = 0; i < data.length; i++) {
-            buildTableRow(layerName, table, data[i]);
-        }
+        containerDiv.appendChild(testDiv);
+        containerDiv.appendChild(table);
+
+        let listContainer = document.getElementById('list-container');
+        listContainer.appendChild(containerDiv);
     }
 
-    function buildTableRow(layerName, table, rowData) { // builds one table tow
+    function buildTable(data, layerName) { // constructs specified table and passes data by row
+        
+    
+    }
+
+    function buildTableRow(layerName, table, rowData) { // builds one table row
         let row = table.insertRow(-1);
         row.id = rowData.id;
         let cell1 = row.insertCell(0);
@@ -179,14 +200,36 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         }
     }
 
-    function dataHelper(data, layerName, sort) {
+    function tableLoad(data, layerName, sort) {
         let limit = handleData(data, layerName);
-        buildTable(sortData(limit, sort), layerName);
+        let sorted = sortData(limit, sort);
+        let table = document.getElementById('table-' + layerName); 
+
+        if (table.childElementCount !== 0) {
+            $('#table-' + layerName + " tr").remove();
+        }
+
+        //loops limited and sorted json to construct table
+        for (let i = 0; i < sorted.length; i++) {
+            buildTableRow(layerName, table, sorted[i]);
+        }
     }
 
     useEffect(() => {
+        if (mode === 'view') {
+            onCenter({name: 'posts', id: -1, fly: false}); // make sure target is reset to default (potentially use query params?)
+            let layers = ['posts', 'projects', 'lands', 'roads '];
+            for (let i = 0; i < layers.length; i++) {
+                tableInit(layers[i]);
+            }
+        } else if (mode === 'contribute') {
+            onCenter({name: 'none', id: -1, fly: false}); // make sure target is clear
+        }
+    }, [mode])
+
+    useEffect(() => {
         if (locations && mode === 'view') {
-            dataHelper(locations, 'posts', 'newest')
+            tableLoad(locations, 'posts', 'newest')
         }
     }, [locations, mode]); //fire this whenever the post features put into the map change or map mode changes
 
@@ -198,7 +241,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
     useEffect(() => {
         if (lands && mode === 'view') {
-            dataHelper(lands, 'lands', 'name')
+            tableLoad(lands, 'lands', 'name')
         }
     }, [lands, mode]); //fire this whenever the lands features put into the map change or map mode changes
 
@@ -207,22 +250,11 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     //        buildTable('roads', roads);
     //    }
     //}, [roads, mode]); //fire this whenever the roads features put into the map change or map mode changes
-
-
-    useEffect(() => {
-        if (mode === 'view') {
-            //console.log("hi!")
-            let listSubgroups = document.getElementsByClassName('subgroup');
-            for (let i = 0; i < listSubgroups.length; i++) {
-                listSubgroups[i].addEventListener("click", swapViewList);
-            }
-        }
-    }, [mode])
     
     useEffect(() => {
         if (mode === 'view') {
             //updateTableHL(target[0], target[1]);
-            console.log(target)
+            console.log(target);
             swapViewMap(target); //figure out why non-post table hl doesn't refresh on refresh
         };
     }, [target]);
@@ -236,34 +268,8 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     if (mode === 'view') {
         return (
             <>
-            <div id='list-posts' className='list'>
-                <div id='subgroup-posts' className='subgroup interactive'>
-                    <h3 className='list-title'>Posts</h3>
-                    <p className='list-subtitle collapsable'></p>
-                </div>
-                <table className="feature-list collapsable"></table>
-            </div>
-            <div id='list-projects' className='list collapsed'>
-                <div id='subgroup-projects' className='subgroup interactive'>
-                    <h3 className='list-title'>Projects</h3>
-                    <p className='list-subtitle collapsable'></p>
-                </div>
-                <table className="feature-list collapsable"></table>
-            </div>
-            <div id='list-lands' className='list collapsed'>
-                <div id='subgroup-lands' className='subgroup interactive'>
-                    <h3 className='list-title'>Lands</h3>
-                    <p className='list-subtitle collapsable'></p>
-                </div>
-                <table className="feature-list collapsable"></table>
-            </div>
-            <div id='list-roads' className='list collapsed'>
-                <div id='subgroup-roads' className='subgroup interactive'>
-                    <h3 className='list-title'>Roads</h3>
-                    <p className='list-subtitle collapsable'></p>
-                </div>
-                <table className="feature-list collapsable"></table>
-            </div>
+            <div id='list-buttons'></div>
+            <div id='list-container'></div>
             </>
         )
     }

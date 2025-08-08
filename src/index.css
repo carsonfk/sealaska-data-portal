@@ -535,6 +535,10 @@ img {
   width: 100%;
 }
 
+#list-container {
+  width: 100%
+}
+
 .subgroup {
   margin: auto;
 }
