@@ -143,7 +143,7 @@ export default function Home(props){
 	const handleCenter = ({name: layerName, id: layerId, fly: bool}) => { //from listfeatures jsx or map jsx - updates targeted feature
 		if (layerName === 'retain') {
 			setTarget((target) => ({name: target.name, id: layerId, fly: bool}));
-		} else {
+		} else if (layerName !== target.name || layerId !== target.id || bool != target.fly) {
 			setTarget({name: layerName, id: layerId, fly: bool});
 		}
 	};

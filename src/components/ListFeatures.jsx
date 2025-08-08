@@ -8,6 +8,8 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     const [ratio, setRatio] = useState([0,0]);
     const [sort, setSort] = useState('newest');
 
+    const layerList = ['posts', 'projects', 'lands', 'roads'];
+
     //limits provided JSON to prioritized info for list
     function handleData(data, layerName) {
         let returnArr = []
@@ -112,7 +114,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     
     }
 
-    function buildTableRow(layerName, table, rowData) { // builds one table row
+    function buildTableRow(rowData, layerName, table) { // builds one table row
         let row = table.insertRow(-1);
         row.id = rowData.id;
         let cell1 = row.insertCell(0);
@@ -143,7 +145,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
             if (currentRow.classList.contains("hl")) {
                 onCenter({name: layerName, id: parseInt(currentRow.id), fly: true}); // sends current highlighted row id
             } else {
-                onCenter({name: layerName, id: -1, fly: true}); // no row is highlighted
+                onCenter({name: layerName, id: -1, fly: false}); // no row is highlighted
             }
         });
     }
@@ -168,10 +170,11 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     }
 
     function swapViewList(e) {
+        console.log("swap?")
         let lists = document.getElementsByClassName('list');
         if (!e.target.parentNode.parentNode.classList.contains('collapsed')) { // if clicked table is expanded
             e.target.parentNode.parentNode.classList.add('collapsed');
-            onCenter({name: 'none', id: -1, fly: true}); // no row is highlighted
+            onCenter({name: 'none', id: -1, fly: false}); // no row is highlighted
             updateTableHL('none', -1);
         } else { // if clicked table is collapsed
             for (let i = 0; i < lists.length; i++) {
@@ -180,7 +183,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
                 }
             }
             e.target.parentNode.parentNode.classList.remove('collapsed');
-            onCenter({name: e.target.parentNode.parentNode.id.slice(5), id: -1, fly: true}); // no row is highlighted
+            onCenter({name: e.target.parentNode.parentNode.id.slice(5), id: -1, fly: false}); // no row is highlighted
             updateTableHL(e.target.parentNode.parentNode.id.slice(5), -1);
         }
     }
@@ -211,16 +214,15 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
         //loops limited and sorted json to construct table
         for (let i = 0; i < sorted.length; i++) {
-            buildTableRow(layerName, table, sorted[i]);
+            buildTableRow(sorted[i], layerName, table);
         }
     }
 
     useEffect(() => {
         if (mode === 'view') {
             onCenter({name: 'posts', id: -1, fly: false}); // make sure target is reset to default (potentially use query params?)
-            let layers = ['posts', 'projects', 'lands', 'roads '];
-            for (let i = 0; i < layers.length; i++) {
-                tableInit(layers[i]);
+            for (let i = 0; i < layerList.length; i++) {
+                tableInit(layerList[i]);
             }
         } else if (mode === 'contribute') {
             onCenter({name: 'none', id: -1, fly: false}); // make sure target is clear
