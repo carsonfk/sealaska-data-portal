@@ -522,7 +522,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
             'fill-color': [
               'match',
               ['get', 'OwnCategor'],
-              'Sealaska Corporation',
+              'Sealaska Corp',
               'rgb(250, 100, 100)',
               'Village Corp',
               'rgb(200, 100, 250)',
@@ -545,7 +545,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
             'fill-outline-color': [
               'match',
               ['get', 'OwnCategor'],
-              'Sealaska Corporation',
+              'Sealaska Corp',
               'rgb(250, 100, 100)',
               'Village Corp',
               'rgb(200, 100, 250)',

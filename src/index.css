@@ -627,6 +627,7 @@ td:nth-child(2) {
 
 .refresh-container {
   width: 220px;
+  height: 40px;
 }
 
 #refresh {

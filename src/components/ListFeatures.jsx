@@ -45,7 +45,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
     //sorts provided JSON using provided sort
 	function sortData(data, sort) {
-        console.log('hi!')
+        //console.log('hi!')
 		let dataSort = [];
         if (sort === 'newest') {
 			for (let i = data.length - 1; i > -1; i--) {
@@ -55,7 +55,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 			
         } else if (sort === 'name') {
 			let dataTemp = data;
-			console.log(dataTemp);
+			//console.log(dataTemp);
 			for (let i = 1; i < dataTemp.length; i++) {
 				let key = dataTemp[i];
                 //console.log(key)
@@ -68,11 +68,10 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 				dataTemp[j + 1] = key;
 			}
             dataSort = dataTemp;
-            
 		} else if (sort === 'name-reverse') {
 	
 		}
-        console.log(dataSort);
+        //console.log(dataSort);
 		return dataSort;
 	}
 
