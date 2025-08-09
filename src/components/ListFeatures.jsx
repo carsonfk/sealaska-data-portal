@@ -77,7 +77,16 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 		return dataSort;
 	}
 
-    function tableInit(layerName, listContainer) {
+    function tableButton(layerName, buttonContainer) { // builds a single button
+        let btn = document.createElement('button');
+        btn.innerHTML = capitalizeFirst(layerName);
+        btn.addEventListener('click', () => {
+            swapViewButton(layerName);
+        });
+        buttonContainer.appendChild(btn);
+    }
+
+    function tableInit(layerName, listContainer) { // prepares a single table for data
         let testDiv = document.createElement('div');
         testDiv.id = 'subgroup-' + layerName;
         testDiv.className = 'subgroup interactive';
@@ -106,11 +115,6 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         containerDiv.appendChild(table);
 
         listContainer.appendChild(containerDiv);
-    }
-
-    function buildTable(data, layerName) { // constructs specified table and passes data by row
-        
-    
     }
 
     function buildTableRow(rowData, layerName, table) { // builds one table row
@@ -202,6 +206,18 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         }
     }
 
+    function swapViewButton(layerName) {
+        let lists = document.getElementsByClassName('list');
+        for (let i = 0; i < lists.length; i++) {
+            if (!lists[i].classList.contains('collapsed')) {
+                lists[i].classList.add('collapsed');
+            }
+        }
+        document.getElementById('list-' + layerName).classList.remove('collapsed');
+        onCenter({name: layerName, id: -1, fly: false}); // no row is highlighted
+        updateTableHL(layerName, -1);
+    }
+
     function tableLoad(data, layerName, sort) {
         let limit = handleData(data, layerName);
         let sorted = sortData(limit, sort);
@@ -223,13 +239,18 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
                 onCenter({name: 'posts', id: -1, fly: false}); // make sure target is reset to default (potentially use query params?)
             }
 
+            let buttonContainer = document.getElementById('button-container');
+            if (buttonContainer.childElementCount !== 0) {
+                $('#button-container > button').remove();
+            }
+
             let listContainer = document.getElementById('list-container');
             if (listContainer.childElementCount !== 0) {
                 $('#list-container > div').remove();
-                console.log("working?");
             }
 
             for (let i = 0; i < layerList.length; i++) {
+                tableButton(layerList[i], buttonContainer);
                 tableInit(layerList[i], listContainer);
             }
         } else if (mode === 'contribute') {
@@ -277,7 +298,8 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     if (mode === 'view') {
         return (
             <>
-            <div id='list-buttons'></div>
+            <br></br>
+            <div id='button-container'></div>
             <div id='list-container'></div>
             </>
         )
