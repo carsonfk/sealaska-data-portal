@@ -77,13 +77,20 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 		return dataSort;
 	}
 
-    function tableButton(layerName, buttonContainer) { // builds a single button
-        let btn = document.createElement('button');
-        btn.innerHTML = capitalizeFirst(layerName);
-        btn.addEventListener('click', () => {
-            swapViewButton(layerName);
+    function tableTab(layerName, tabContainer) { // builds a single tab button
+        let tab = document.createElement('div');
+        tab.innerHTML = capitalizeFirst(layerName);
+        tab.addEventListener('click', () => {
+            swapViewTab(layerName);
         });
-        buttonContainer.appendChild(btn);
+
+        if (layerName === 'posts') {
+            tab.className = 'tab select'
+        } else {
+            tab.className = 'tab'
+        }
+
+        tabContainer.appendChild(tab);
     }
 
     function tableInit(layerName, listContainer) { // prepares a single table for data
@@ -94,10 +101,10 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         title.className = 'list-title';
         title.innerHTML = capitalizeFirst(layerName);
         let testP = document.createElement('p');
-        testP.className = 'list-subtitle collapsable';
+        testP.className = 'list-subtitle';
         let table = document.createElement('table');
         table.id = 'table-' + layerName;
-        table.className = 'feature-list collapsable';
+        table.className = 'feature-list';
 
         testDiv.appendChild(title);
         testDiv.appendChild(testP);
@@ -206,7 +213,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         }
     }
 
-    function swapViewButton(layerName) {
+    function swapViewTab(layerName) {
         let lists = document.getElementsByClassName('list');
         for (let i = 0; i < lists.length; i++) {
             if (!lists[i].classList.contains('collapsed')) {
@@ -239,9 +246,9 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
                 onCenter({name: 'posts', id: -1, fly: false}); // make sure target is reset to default (potentially use query params?)
             }
 
-            let buttonContainer = document.getElementById('button-container');
-            if (buttonContainer.childElementCount !== 0) {
-                $('#button-container > button').remove();
+            let tabContainer = document.getElementById('tab-container');
+            if (tabContainer.childElementCount !== 0) {
+                $('#tab-container > tab').remove();
             }
 
             let listContainer = document.getElementById('list-container');
@@ -249,8 +256,8 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
                 $('#list-container > div').remove();
             }
 
-            for (let i = 0; i < layerList.length; i++) {
-                tableButton(layerList[i], buttonContainer);
+            for (let i = 0; i < layerList.length; i++) { //creates associated tabs and lists simultaneously
+                tableTab(layerList[i], tabContainer);
                 tableInit(layerList[i], listContainer);
             }
         } else if (mode === 'contribute') {
@@ -281,7 +288,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     //        buildTable('roads', roads);
     //    }
     //}, [roads, mode]); //fire this whenever the roads features put into the map change or map mode changes
-    
+
     useEffect(() => {
         if (mode === 'view') {
             console.log(target);
@@ -299,8 +306,10 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         return (
             <>
             <br></br>
-            <div id='button-container'></div>
-            <div id='list-container'></div>
+            <div id='layers-container'>
+                <div id='tab-container'></div>
+                <div id='list-container'></div>
+            </div>
             </>
         )
     }
