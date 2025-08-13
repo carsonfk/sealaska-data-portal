@@ -77,17 +77,18 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 		return dataSort;
 	}
 
-    function tableTab(layerName, tabContainer) { // builds a single tab button
+    function tabInit(layerName, tabContainer) { // builds a single tab button
         let tab = document.createElement('div');
+        tab.id = 'tab-' + layerName;
         tab.innerHTML = capitalizeFirst(layerName);
         tab.addEventListener('click', () => {
             swapViewTab(layerName);
         });
 
         if (layerName === 'posts') {
-            tab.className = 'tab select'
+            tab.className = 'tab interactive-2'
         } else {
-            tab.className = 'tab'
+            tab.className = 'tab interactive-2 behind'
         }
 
         tabContainer.appendChild(tab);
@@ -96,7 +97,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     function tableInit(layerName, listContainer) { // prepares a single table for data
         let testDiv = document.createElement('div');
         testDiv.id = 'subgroup-' + layerName;
-        testDiv.className = 'subgroup interactive';
+        testDiv.className = 'subgroup';
         let title = document.createElement('h3');
         title.className = 'list-title';
         title.innerHTML = capitalizeFirst(layerName);
@@ -108,14 +109,14 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
         testDiv.appendChild(title);
         testDiv.appendChild(testP);
-        testDiv.addEventListener("click", swapViewList);
+        //testDiv.addEventListener("click", swapViewList);
         let containerDiv = document.createElement('div');
         containerDiv.id = 'list-' + layerName;
 
         if (layerName === 'posts') {
             containerDiv.className = 'list'
         } else {
-            containerDiv.className = 'list collapsed'
+            containerDiv.className = 'list hide'
         }
 
         containerDiv.appendChild(testDiv);
@@ -179,48 +180,47 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         }
     }
 
-    function swapViewList(e) {
-        console.log("swap?")
-        let lists = document.getElementsByClassName('list');
-        if (!e.target.parentNode.parentNode.classList.contains('collapsed')) { // if clicked table is expanded
-            e.target.parentNode.parentNode.classList.add('collapsed');
-            onCenter({name: 'none', id: -1, fly: false}); // no row is highlighted
-            updateTableHL('none', -1);
-        } else { // if clicked table is collapsed
-            for (let i = 0; i < lists.length; i++) {
-                if (!lists[i].classList.contains('collapsed')) {
-                    lists[i].classList.add('collapsed');
-                }
-            }
-            e.target.parentNode.parentNode.classList.remove('collapsed');
-            onCenter({name: e.target.parentNode.parentNode.id.slice(5), id: -1, fly: false}); // no row is highlighted
-            updateTableHL(e.target.parentNode.parentNode.id.slice(5), -1);
-        }
-    }
-
     function swapViewMap(target) {
         updateTableHL(target.name, target.id);
         if (target.id !== -1) {
-            let lists = document.getElementsByClassName('list');
-            if (document.getElementById('list-' + target.name).classList.contains('collapsed')) {
-                for (let i = 0; i < lists.length; i++) {
-                    if (!lists[i].classList.contains('collapsed')) {
-                        lists[i].classList.add('collapsed');
+            let tabs = document.getElementsByClassName('tab');
+            if (document.getElementById('tab-' + target.name).classList.contains('behind')) {
+                for (let i = 0; i < tabs.length; i++) {
+                    if (!tabs[i].classList.contains('behind')) {
+                        tabs[i].classList.add('behind');
                     }
-                    document.getElementById('list-' + target.name).classList.remove('collapsed');
+                    document.getElementById('tab-' + target.name).classList.remove('behind');
+                }
+            }
+
+            let lists = document.getElementsByClassName('list');
+            if (document.getElementById('list-' + target.name).classList.contains('hide')) {
+                for (let i = 0; i < lists.length; i++) {
+                    if (!lists[i].classList.contains('hide')) {
+                        lists[i].classList.add('hide');
+                    }
+                    document.getElementById('list-' + target.name).classList.remove('hide');
                 }
             }
         }
     }
 
     function swapViewTab(layerName) {
-        let lists = document.getElementsByClassName('list');
-        for (let i = 0; i < lists.length; i++) {
-            if (!lists[i].classList.contains('collapsed')) {
-                lists[i].classList.add('collapsed');
+        let tabs = document.getElementsByClassName('tab');
+        for (let i = 0; i < tabs.length; i++) {
+            if (!tabs[i].classList.contains('behind')) {
+                tabs[i].classList.add('behind');
             }
         }
-        document.getElementById('list-' + layerName).classList.remove('collapsed');
+        document.getElementById('tab-' + layerName).classList.remove('behind');
+
+        let lists = document.getElementsByClassName('list');
+        for (let i = 0; i < lists.length; i++) {
+            if (!lists[i].classList.contains('hide')) {
+                lists[i].classList.add('hide');
+            }
+        }
+        document.getElementById('list-' + layerName).classList.remove('hide');
         onCenter({name: layerName, id: -1, fly: false}); // no row is highlighted
         updateTableHL(layerName, -1);
     }
@@ -248,7 +248,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
             let tabContainer = document.getElementById('tab-container');
             if (tabContainer.childElementCount !== 0) {
-                $('#tab-container > tab').remove();
+                $('#tab-container > div').remove();
             }
 
             let listContainer = document.getElementById('list-container');
@@ -257,7 +257,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
             }
 
             for (let i = 0; i < layerList.length; i++) { //creates associated tabs and lists simultaneously
-                tableTab(layerList[i], tabContainer);
+                tabInit(layerList[i], tabContainer);
                 tableInit(layerList[i], listContainer);
             }
         } else if (mode === 'contribute') {

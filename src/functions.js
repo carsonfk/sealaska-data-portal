@@ -108,22 +108,22 @@ export function averageGeolocation(coords) {
   }
 
   //hides & unhides features using given state, duration, and element id
-  export function stateTimer(state, setState, duration, name) {
+  export function stateTimer(state, setState, duration, name, toggle) {
     let element = document.getElementById(name);
-			if (!element.classList.contains("hide")) { // case 1: update msg is visible because of recent refresh -> reset popup
-				element.classList.toggle("hide");
+			if (!element.classList.contains(toggle)) { // case 1: update msg is visible because of recent refresh -> reset popup
+				element.classList.toggle(toggle);
 				setTimeout(() => {
-				element.classList.toggle("hide");
+				element.classList.toggle(toggle);
 				}, 100)
 			} else { // case 2: update msg is hidden -> make visible
-				element.classList.toggle("hide");
+				element.classList.toggle(toggle);
 			}
 			if (state.length !== 0) { //restart update msg hide timer if ongoing
 				clearTimeout(state);
 			}
 			setState(setTimeout(() => { //set update msg hide timer
-				if (!element.classList.contains("hide")) {
-				element.classList.toggle("hide");
+				if (!element.classList.contains(toggle)) {
+				element.classList.toggle(toggle);
 				}
 			}, duration));
   }

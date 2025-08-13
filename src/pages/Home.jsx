@@ -33,13 +33,13 @@ export default function Home(props){
 	const projectsURL = '';
 	const roadsURL = '';
 
-	//returns class to hide sidebars
-	function hidden(side) {
+	//returns class to close sidebars
+	function closed(side) {
 		if (side === "right" && !getParam('left') && window.innerWidth <= 878) {
-			return "hide";
+			return "closed";
 		}
 		let val;
-		getParam(side) ? val = "hide": val = null;
+		getParam(side) ? val = "closed": val = null;
 		return val;
 	}
 
@@ -50,16 +50,16 @@ export default function Home(props){
 		let sidebar = document.getElementsByClassName(side);
 		let sidebar2 = document.getElementsByClassName(other);
 		sidebar[0].addEventListener("click", () => {
-			sidebar[0].classList.toggle("hide");
-			sidebar[1].classList.toggle("hide");
-			if (sidebar[1].classList.contains('hide')) { //exits contribute mode when closing left sidebar
+			sidebar[0].classList.toggle("closed");
+			sidebar[1].classList.toggle("closed");
+			if (sidebar[1].classList.contains('closed')) { //exits contribute mode when closing left sidebar
 				setMapMode('view');
 			}
 
 			if (window.innerWidth <= 878) {
 				if (!getParam(other)) { //if opposite sidebar is visible
-					sidebar2[0].classList.toggle("hide");
-					sidebar2[1].classList.toggle("hide");
+					sidebar2[0].classList.toggle("closed");
+					sidebar2[1].classList.toggle("closed");
 					setParam(other, false);
 					setSidebars(sidebars => [!sidebars[0], !sidebars[1]]);
 					if (other === "left") {
@@ -70,7 +70,7 @@ export default function Home(props){
 						side === "right" ? !sidebars[1] : sidebars[1]]);
 				}
 
-				if (sidebar[1].classList.contains("hide")) {
+				if (sidebar[1].classList.contains("closed")) {
 					setParam(side, false);
 				} else {
 					setParam(side, null);
@@ -78,7 +78,7 @@ export default function Home(props){
 			} else {
 				setSidebars(sidebars => [side === "left" ? !sidebars[0] : sidebars[0], 
 					side === "right" ? !sidebars[1] : sidebars[1]]);
-				if (sidebar[1].classList.contains("hide")) {
+				if (sidebar[1].classList.contains("closed")) {
 					setParam(side, false);
 				} else {
 					setParam(side, null);
@@ -123,8 +123,8 @@ export default function Home(props){
 		windowWidth.current = window.innerWidth;
 		if (windowWidth.current <= 878 && !getParam('left') && !getParam('right')) {
 			let right = document.getElementsByClassName('right');
-			right[0].classList.remove('hide');
-			right[1].classList.remove('hide');
+			right[0].classList.remove('closed');
+			right[1].classList.remove('closed');
 			setParam('right', false);
 			setSidebars(sidebars => [sidebars[0], !sidebars[1]]);
 		}
@@ -162,7 +162,7 @@ export default function Home(props){
 		let close = document.getElementById("msg-close");
 		close.onclick = () => {
 			let update = document.getElementById("update");
-			update.classList.toggle("hide");
+			update.classList.toggle("transition");
 		};
 
 		var leftInit, rightInit;
@@ -239,7 +239,7 @@ export default function Home(props){
 
 	useEffect(() => {
 		if (data) {
-			stateTimer(timer, setTimer, 7000, 'update');
+			stateTimer(timer, setTimer, 7000, 'update', 'transition');
 		}
 	}, [data])
 
@@ -249,10 +249,10 @@ export default function Home(props){
 		</header>
         <main>
 			<div id="content-layer" className="main-layer">
-				<div id="left-drawer" className={"main-container interactive drawer left " + hidden("left")}>
+				<div id="left-drawer" className={"main-container interactive drawer left " + closed("left")}>
 					<img id="arrow-left" className="arrow" alt="From pictarts.com" src="https://pictarts.com/21/material/01-vector/m-0027-arrow.png"></img>
 				</div>
-				<div id="features" className={"main-container sidebar left " + hidden("left")}>
+				<div id="features" className={"main-container sidebar left " + closed("left")}>
 					<Hero/>
 					<ViewContributeForm mode={mapMode} onSubmit={handleModeSubmit}/>
 					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection} onReset={handleReset} submitSwap={handleFormSubmit}/>
@@ -261,17 +261,17 @@ export default function Home(props){
 				<div id="map">
 					<Map locations={data} projects={projectsData} lands={landsData} roads={roadsData} mode={mapMode} target={target} selectionCoordinates={currentSelection} sidebars={sidebars} onSelect={handleCurrentSelection} onCenter={handleCenter}/>
 				</div>
-				<div id="right-drawer" className={"main-container interactive drawer right " + hidden("right")}>
+				<div id="right-drawer" className={"main-container interactive drawer right " + closed("right")}>
 					<img id="arrow-right" className="arrow" alt="From pictarts.com" src="https://pictarts.com/21/material/01-vector/m-0027-arrow.png"></img>
 				</div>
-				<div id="options" className={"main-container sidebar right " + hidden("right")}>
+				<div id="options" className={"main-container sidebar right " + closed("right")}>
 					<Refresh onReset={handleReset} reset={reset} locations={data}/>
 					<FilterForm/>
 					<Stats locations={data} mode={mapMode} projects={projectsData} lands={landsData} roads={roadsData} target={target}/>
 				</div>
 			</div>
 			<div id="overlay-layer" className="main-layer">
-				<div id="update" className="map-element hide">
+				<div id="update" className="map-element transition">
 					<div id="location-msg">Locations Updated</div>
 					<div id="msg-close" className="interactive">CLOSE</div>
 				</div>

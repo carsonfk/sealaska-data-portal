@@ -115,12 +115,14 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   }
 
   //initializes menu & legend click event
-  function menuLegendClick(selected, other) {
+  function clickInit(selectedClass, otherClass) {
+    var selected = document.getElementById(selectedClass);
+    var other = document.getElementById(otherClass);
     document.getElementById(selected.id + "-icon").addEventListener("click", () => {
-      for (let item of selected.getElementsByTagName('div')) {
+      for (let item of selected.getElementsByClassName('menu-legend-subgroup')) {
         item.classList.toggle("hide");
       }
-      for (let item of other.getElementsByTagName('div')) {
+      for (let item of other.getElementsByClassName('menu-legend-subgroup')) {
         if (!item.classList.contains("hide")) {
           item.classList.toggle("hide");
         }
@@ -407,10 +409,8 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
             ", " + Math.abs(parseFloat(JSON.stringify(mouseLng)).toFixed(4)) + ((mouseLng >= 0) ? "°E" : "°W");
     });
 
-    var menu = document.getElementById('menu');
-    var legend = document.getElementById('legend');
-    menuLegendClick(menu, legend);
-    menuLegendClick(legend, menu);
+    clickInit('menu', 'legend');
+    clickInit('legend', 'menu');
 
     let inputs = document.getElementById('basemap-menu').getElementsByTagName('input');
     let mapElement = document.getElementById("map");

@@ -69,10 +69,6 @@ body {
   color: #333;
 }
 
-.interactive {
-  padding: 1px;
-}
-
 .interactive, .interactive > *, tr { /* remove .interactive > *? */
   transition: all 0.2s;
 }
@@ -81,13 +77,22 @@ body {
   cursor: pointer;
 }
 
+.interactive-2 {
+  transition-property: margin; 
+  transition-duration: 0.2s;
+}
+
 .mapboxgl-ctrl-group > button {
   transition: all 0.2s !important;
 }
 
 
-.interactive:hover, tr:hover {
+.interactive:hover, .interactive-2:hover, tr:hover {
   backdrop-filter: brightness(0.95);
+}
+
+.hide {
+  display: none !important;
 }
 
 .sharing-buttons, .addLocation {
@@ -269,7 +274,7 @@ nav {
   justify-content: space-between;
 }
 
-#update.hide {
+#update.transition {
   bottom: 37px;
   opacity: 0;
   height: 28px;
@@ -345,10 +350,6 @@ nav {
 
 .menu-item input{
   margin-right: 4px;
-}
-
-#menu > .hide, #legend > .hide {
-  display: none;
 }
 
 .legend-key {
@@ -428,7 +429,7 @@ img {
   border-radius: 0px 3px 3px 0px;
 }
 
-#left-drawer.hide {
+#left-drawer.closed {
   left: 0px;
 }
 
@@ -437,15 +438,15 @@ img {
   border-radius: 3px 0px 0px 3px;
 }
 
-#right-drawer.hide {
+#right-drawer.closed {
   right: 0px;
 }
 
-#left-drawer > img, #right-drawer.hide > img {
+#left-drawer > img, #right-drawer.closed > img {
   transform: rotate(270deg) translateY(-6px);
 }
 
-#right-drawer > img, #left-drawer.hide > img {
+#right-drawer > img, #left-drawer.closed > img {
   transform: rotate(90deg) translateY(6px);
 }
 
@@ -477,7 +478,7 @@ img {
   overflow-x: hidden; /* figure out why this is needed */
 }
 
-#features.hide {
+#features.closed {
   margin-left: -350px;
 }
 
@@ -530,8 +531,7 @@ img {
 }
 
 #layers-container {
-  border: 2px solid #CD202D;
-  border-radius: 5px;
+  
   width: 100%;
 }
 
@@ -541,25 +541,36 @@ img {
 }
 
 .tab {
+  border-top: 2px solid #CD202D;
+  border-left: 2px solid #CD202D;
+  border-right: 2px solid #CD202D;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
   flex: 1 1 25%;
 }
 
-.tab:not(.select) {
-  border-bottom: 2px solid #CD202D;
-}
-
-#tab-container :not(:first-child):not(:last-child) {
+.tab.behind {
+  border-top: 1px solid #CD202D;
   border-left: 1px solid #CD202D;
   border-right: 1px solid #CD202D;
+  border-bottom: 2px solid #CD202D;
+  margin-top: 3px;
+}
+
+
+/*
+#tab-container :not(:first-child):not(:last-child) {
+  
 }
 
 #tab-container :first-child {
-  border-right: 1px solid #CD202D;
+  
 }
 
 #tab-container :last-child {
-  border-left: 1px solid #CD202D;
+  
 }
+*/
 
 
 /* list */
@@ -568,7 +579,12 @@ img {
 }
 
 #list-container {
-  width: 100%
+  border-left: 2px solid #CD202D;
+  border-right: 2px solid #CD202D;
+  border-bottom: 2px solid #CD202D;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  width: 100%;
 }
 
 .subgroup {
@@ -586,9 +602,6 @@ p, table {
 }
 */
 
-.collapsed {
-  display: none;
-}
 
 .feature-list {
   border-collapse: collapse;
@@ -655,11 +668,6 @@ td:nth-child(2) {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.error-notification.hide {
-  display: none;
-}
-
-
 /* options sidebar*/
 #options {
   right: 0;
@@ -669,7 +677,7 @@ td:nth-child(2) {
   transition: all 0.15s;
 }
 
-#options.hide {
+#options.closed {
   margin-right: -350px;
 }
 
@@ -713,10 +721,6 @@ td:nth-child(2) {
   overflow: hidden;
 }
 
-.progress-bar-container.hide {
-  display: none;
-}
-
 .progress-bar {
   width: 200%;
   height: 100%;
@@ -731,10 +735,6 @@ td:nth-child(2) {
 
 #last-reset {
   display: block;
-}
-
-#last-reset.hide {
-  display: none;
 }
 
 /* about page */
@@ -759,11 +759,11 @@ td:nth-child(2) {
     max-width: 300px;
   }
 
-  #features.hide {
+  #features.closed {
     margin-left: -300px;
   }
 
-  #options.hide {
+  #options.closed {
     margin-right: -300px;
   }
 
@@ -837,11 +837,11 @@ td:nth-child(2) {
     max-width: 250px;
   }
 
-  #features.hide {
+  #features.closed {
     margin-left: -250px;
   }
 
-  #options.hide {
+  #options.closed {
     margin-right: -250px;
   }
 
@@ -925,11 +925,11 @@ td:nth-child(2) {
     max-width: 220px;
   }
 
-  #features.hide {
+  #features.closed {
     margin-left: -220px;
   }
 
-  #options.hide {
+  #options.closed {
     margin-right: -220px;
   }
 

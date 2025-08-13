@@ -81,7 +81,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onSelect, o
             onReset();
             submitSwap();
         } else { //error message timer
-            stateTimer(timer, setTimer, 7000, 'error');
+            stateTimer(timer, setTimer, 7000, 'error', 'hide');
         }
     }
 
