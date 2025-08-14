@@ -39,8 +39,7 @@ export default function Home(props){
 			return 'closed';
 		}
 		let val;
-		getParam(side) ? val = 'closed': val = '';
-		return val;
+		return (getParam(side) ? val = 'closed': val = '');
 	}
 
 	//initialize a single sidebar click event
@@ -56,22 +55,16 @@ export default function Home(props){
 				setMapMode('view');
 			}
 
-			if (window.innerWidth <= 878) {
-				if (!getParam(other)) { //if opposite sidebar is visible
-					sidebar2[0].classList.toggle("closed");
-					sidebar2[1].classList.toggle("closed");
-					setParam(other, false);
-					setSidebars((sidebars) => ({left: !sidebars.left, right: !sidebars.right}));
-					if (other === "left") {
-						setMapMode("view");
-					}
-				} else { //if opposite sidebar is hidden
-					setSidebars((sidebars) => ({left: (side === "left" ? !sidebars.left: sidebars.left), 
-						right: (side === "right" ? !sidebars.right : sidebars.right)}));
+			if (window.innerWidth <= 878 && !getParam(other)) { //if window size below 878 and opposite sidebar is visible
+				sidebar2[0].classList.toggle("closed");
+				sidebar2[1].classList.toggle("closed");
+				setParam(other, false);
+				setSidebars((sidebars) => ({left: !sidebars.left, right: !sidebars.right}));
+				if (other === "left") {
+					setMapMode("view");
 				}
-
-			} else {
-				setSidebars((sidebars) => ({left: (side === "left" ? !sidebars.left : sidebars.left), 
+			} else { //if opposite sidebar is hidden
+				setSidebars((sidebars) => ({left: (side === "left" ? !sidebars.left: sidebars.left), 
 					right: (side === "right" ? !sidebars.right : sidebars.right)}));
 			}
 
@@ -151,6 +144,13 @@ export default function Home(props){
 	const handleFormSubmit = () => {
 		setMapMode('view');
 	};
+
+	const handleLayerVis = (layerName, bool) => {
+		setLayerVis(prev => ({
+			...prev,
+			[layerName]: bool
+		}));
+	} 
 
 	useEffect(() => {
 		requestStaticLayers(); //puts in requests for all map layers (besides basemap and posts layers)
@@ -239,6 +239,10 @@ export default function Home(props){
 		}
 	}, [data])
 
+	useEffect(() => {
+		console.log(layerVis);
+	}, [layerVis])
+
     return (
         <>
 		<header>
@@ -255,7 +259,7 @@ export default function Home(props){
 					<ListFeatures locations={data} projects={projectsData} lands={landsData} roads={roadsData} mode={mapMode} target={target} layerVis={layerVis} onCenter={handleCenter}/>
 				</div>
 				<div id="map">
-					<Map locations={data} projects={projectsData} lands={landsData} roads={roadsData} mode={mapMode} target={target} selectionCoordinates={currentSelection} sidebars={sidebars} layerVis={layerVis} onSelect={handleCurrentSelection} onCenter={handleCenter}/>
+					<Map locations={data} projects={projectsData} lands={landsData} roads={roadsData} mode={mapMode} target={target} selectionCoordinates={currentSelection} sidebars={sidebars} layerVis={layerVis} onSelect={handleCurrentSelection} onCenter={handleCenter} onLayerVis={handleLayerVis}/>
 				</div>
 				<div id="right-drawer" className={"main-container interactive drawer right " + closed("right")}>
 					<img id="arrow-right" className="arrow" alt="From pictarts.com" src="https://pictarts.com/21/material/01-vector/m-0027-arrow.png"></img>

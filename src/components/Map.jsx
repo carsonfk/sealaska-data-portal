@@ -3,7 +3,7 @@ import { useQueryParams, capitalizeFirst, haversineDistance, averageGeolocation,
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-export default function Map( {locations, projects, lands, roads, mode, target, selectionCoordinates, sidebars, layerVis, onSelect, onCenter}) {
+export default function Map( {locations, projects, lands, roads, mode, target, selectionCoordinates, sidebars, layerVis, onSelect, onCenter, onLayerVis}) {
   const mapContainer = useRef(null);
   const map = useRef(null);
   const { getParam, setParam } = useQueryParams();
@@ -412,9 +412,9 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
     clickInit(menu, legend);
     clickInit(legend, menu);
 
-    let inputs = document.getElementById('basemap-menu').getElementsByTagName('input');
+    let basemapInputs = document.getElementById('basemap-menu').getElementsByTagName('input');
     let mapElement = document.getElementById("map");
-    for (let input of inputs) {
+    for (let input of basemapInputs) {
       if (input.checked) {
         if (input.classList.contains("light")) {
           mapElement.classList.add("light");
@@ -422,16 +422,16 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
           mapElement.classList.remove("light");
         }
       }
-      input.addEventListener("click", (layer) => {
-        let layerId = layer.target.id;
-        if (!map.current.style.globalId.includes(layerId)) {
-          setStyleSwap(layerId);
-          if (layerId === 'satellite-streets-v12') {
+      input.addEventListener("click", (basemap) => {
+        let basemapId = basemap.target.id;
+        if (!map.current.style.globalId.includes(basemapId)) {
+          setStyleSwap(basemapId);
+          if (basemapId === 'satellite-streets-v12') {
             map.current.setStyle('mapbox://styles/mapbox/satellite-streets-v12');
             setParam('mapStyle', null);
           } else {
-            map.current.setStyle('mapbox://styles/mapbox/' + layerId);
-            setParam('mapStyle', layerId);
+            map.current.setStyle('mapbox://styles/mapbox/' + basemapId);
+            setParam('mapStyle', basemapId);
           }
 
           if (input.classList.contains("light")) {
@@ -439,6 +439,22 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
           } else {
             mapElement.classList.remove("light");
           }
+        }
+      });
+    }
+
+    let layerInputs = document.getElementById('layer-menu').getElementsByTagName('input');
+    for (let input of layerInputs) {
+      input.addEventListener("click", (layer) => {
+        console.log('hello world')
+        let layerId = layer.target.id;
+        console.log (layer.target.id);
+        if (true) {
+          onLayerVis(layerId, true);
+          //setParam('posts', false);
+          //setParam('posts', null);
+        } else {
+          onLayerVis(layerId, false);
         }
       });
     }
@@ -706,9 +722,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
     //  window.open(url, "_blank");
     //});
 
-    return () => {
-      map.current.remove();
-    };
+    return () => map.current.remove();
   }, []);
 
   useEffect(() => {
@@ -803,19 +817,19 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
           </div>
           <div id="layer-menu" className="flex-vertical menu-legend-subgroup hide">
             <div className="interactive menu-item">
-              <input id="posts" type="checkbox" name="rtoggle" value="posts" defaultChecked/>
+              <input id="posts" type="checkbox" name="rtoggle" value="posts" defaultChecked={!getParam('posts')}/>
               <label for="posts">Posts</label>
             </div>
             <div className="interactive menu-item">
-              <input id="projects" type="checkbox" name="rtoggle" value="projects" defaultChecked/>
+              <input id="projects" type="checkbox" name="rtoggle" value="projects" defaultChecked={!getParam('projects')}/>
               <label for="projects">Projects</label>
             </div>
             <div className="interactive menu-item">
-              <input id="lands" type="checkbox" name="rtoggle" value="lands" defaultChecked/>
+              <input id="lands" type="checkbox" name="rtoggle" value="lands" defaultChecked={!getParam('lands')}/>
               <label for="lands">Lands</label>
             </div>
             <div className="interactive menu-item">
-              <input id="roads" type="checkbox" name="rtoggle" value="roads" defaultChecked/>
+              <input id="roads" type="checkbox" name="rtoggle" value="roads" defaultChecked={!getParam('roads')}/>
               <label for="roads">Roads</label>
             </div>
           </div>

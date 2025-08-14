@@ -79,7 +79,9 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         }
 
         tab.addEventListener('click', () => {
-            swapViewTab(layerName);
+            if (tab.classList.contains('behind')) {
+                swapViewTab(layerName);
+            }
         });
         tabContainer.appendChild(tab);
     }

@@ -808,7 +808,6 @@ td:nth-child(2) {
 }
 
 @media only screen and (max-width: 767px) {
-
   nav {
     padding: 6px;
   }
@@ -880,8 +879,8 @@ td:nth-child(2) {
     font-size: 18px;
   }
   
-  h6, p, tr, label, input, button, li {
-    font-size: 12px;
+  h6, p, tr, label, input, button, li, div {
+    font-size: 13px;
   }
 
   .legend-key {
