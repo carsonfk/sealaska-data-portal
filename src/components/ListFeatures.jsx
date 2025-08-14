@@ -10,7 +10,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
     const layerList = ['posts', 'projects', 'lands', 'roads'];
 
-    const hide = {'posts': false, 'projects': false, 'lands': false, 'roads': false} //testing
+    const hide = {'posts': false, 'projects': false, 'lands': false, 'roads': true} //testing
 
     //limits provided JSON to prioritized info for list
     function handleData(data, layerName) {
@@ -79,26 +79,22 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 		return dataSort;
 	}
 
-    function tabInit(layerName, tabContainer) { // builds a single tab button
-        if (true) { //for testing
-            let tab = document.createElement('div');
-            tab.id = 'tab-' + layerName;
-            tab.innerHTML = capitalizeFirst(layerName);
-            tab.addEventListener('click', () => {
-                swapViewTab(layerName);
-            });
-
-            if (layerName === 'posts') {
-                tab.className = 'tab interactive-2'
-            } else {
-                tab.className = 'tab interactive-2 behind'
-            }
-
-            tabContainer.appendChild(tab);
+    function tabInit(layerName, tabContainer) { // builds a single tab button (consider combining with tableInit)
+        let tab = document.createElement('div');
+        tab.id = 'tab-' + layerName;
+        tab.className = 'tab interactive-2';
+        tab.innerHTML = capitalizeFirst(layerName);
+        if (layerName !== 'posts') {
+            tab.classList.add('behind');
         }
+
+        tab.addEventListener('click', () => {
+            swapViewTab(layerName);
+        });
+        tabContainer.appendChild(tab);
     }
 
-    function tableInit(layerName, listContainer) { // prepares a single table for data
+    function tableInit(layerName, listContainer) { // prepares a single table for data (consider combining with tabInit)
         let testDiv = document.createElement('div');
         testDiv.id = 'subgroup-' + layerName;
         testDiv.className = 'subgroup';
@@ -116,11 +112,9 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         //testDiv.addEventListener("click", swapViewList);
         let containerDiv = document.createElement('div');
         containerDiv.id = 'list-' + layerName;
-
-        if (layerName === 'posts') {
-            containerDiv.className = 'list'
-        } else {
-            containerDiv.className = 'list hide'
+        containerDiv.className = 'list'
+        if (layerName !== 'posts') {
+            containerDiv.classList.add('hide');
         }
 
         containerDiv.appendChild(testDiv);
