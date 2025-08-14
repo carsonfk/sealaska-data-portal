@@ -10,6 +10,8 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
     const layerList = ['posts', 'projects', 'lands', 'roads'];
 
+    const hide = {'posts': false, 'projects': false, 'lands': false, 'roads': false} //testing
+
     //limits provided JSON to prioritized info for list
     function handleData(data, layerName) {
         let returnArr = []
@@ -78,20 +80,22 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 	}
 
     function tabInit(layerName, tabContainer) { // builds a single tab button
-        let tab = document.createElement('div');
-        tab.id = 'tab-' + layerName;
-        tab.innerHTML = capitalizeFirst(layerName);
-        tab.addEventListener('click', () => {
-            swapViewTab(layerName);
-        });
+        if (true) { //for testing
+            let tab = document.createElement('div');
+            tab.id = 'tab-' + layerName;
+            tab.innerHTML = capitalizeFirst(layerName);
+            tab.addEventListener('click', () => {
+                swapViewTab(layerName);
+            });
 
-        if (layerName === 'posts') {
-            tab.className = 'tab interactive-2'
-        } else {
-            tab.className = 'tab interactive-2 behind'
+            if (layerName === 'posts') {
+                tab.className = 'tab interactive-2'
+            } else {
+                tab.className = 'tab interactive-2 behind'
+            }
+
+            tabContainer.appendChild(tab);
         }
-
-        tabContainer.appendChild(tab);
     }
 
     function tableInit(layerName, listContainer) { // prepares a single table for data
@@ -121,7 +125,6 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
         containerDiv.appendChild(testDiv);
         containerDiv.appendChild(table);
-
         listContainer.appendChild(containerDiv);
     }
 

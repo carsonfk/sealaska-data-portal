@@ -35,11 +35,11 @@ export default function Home(props){
 
 	//returns class to close sidebars
 	function closed(side) {
-		if (side === "right" && !getParam('left') && window.innerWidth <= 878) {
-			return "closed";
+		if (side === 'right' && !getParam('left') && window.innerWidth <= 878) {
+			return 'closed';
 		}
 		let val;
-		getParam(side) ? val = "closed": val = null;
+		getParam(side) ? val = 'closed': val = '';
 		return val;
 	}
 

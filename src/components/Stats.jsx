@@ -101,7 +101,7 @@ export default function Stats({locations, projects, lands, roads, mode, target})
     }, [target, monthsAggregated, areaAggregated]);
 
 
-    if (!chartData) return <p>Select a layer to view statistics</p>;
+    if (!chartData) return <p>Return to View mode for statistics</p>;
     
     return (
         <>
