@@ -4,13 +4,11 @@ import $ from 'jquery';
 //import { getDatabase, ref, set as firebaseSet, push } from 'firebase/database'
 //import FilterForm from './FilterForm'
 
-export default function ListFeatures( {locations, projects, lands, roads, mode, target, onCenter} ) {
+export default function ListFeatures( {locations, projects, lands, roads, mode, target, layerVis, onCenter} ) {
     const [ratio, setRatio] = useState([0,0]);
     const [sort, setSort] = useState('newest');
 
     const layerList = ['posts', 'projects', 'lands', 'roads'];
-
-    const hide = {'posts': false, 'projects': false, 'lands': false, 'roads': true} //testing
 
     //limits provided JSON to prioritized info for list
     function handleData(data, layerName) {
@@ -21,18 +19,15 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
             for (let i = 0; i < data.length; i++) {
                 let reviewed = data[i].properties.reviewed === "true";
                 if (reviewed) {
-                    //console.log('reviewed')
                     reviewedCount++;
                     returnArr.push(data[i]);
                 } else {
-                    //console.log('unreviewed')
                     unreviewedCount++;
                 }
             }
             setRatio([reviewedCount, unreviewedCount]);
         } else if (layerName === 'lands') {
             for (let i = 0; i < data.length; i++) {
-                //console.log(data[i])
                 let sealaska = data[i].properties.SurfFull === "Sealaska";
                 if (sealaska) {
                     returnArr.push(data[i]);
@@ -43,7 +38,6 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
                 returnArr.push(data[i])
             }
         }
-        //console.log(returnArr)
         return returnArr;
     }
 
@@ -59,13 +53,10 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 			
         } else if (sort === 'name') {
 			let dataTemp = data;
-			//console.log(dataTemp);
 			for (let i = 1; i < dataTemp.length; i++) {
 				let key = dataTemp[i];
-                //console.log(key)
 				let j = i - 1;
 				while (j >= 0 && dataTemp[j].properties.TaxName.localeCompare(key.properties.TaxName.charAt(0)) === 1) {
-                    //console.log(dataSort[j].properties.TaxName + ', ' + key.properties.TaxName)
 					dataTemp[j + 1] = dataTemp[j];
 					j--;
 				}
@@ -75,7 +66,6 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 		} else if (sort === 'name-reverse') {
 	
 		}
-        //console.log(dataSort);
 		return dataSort;
 	}
 

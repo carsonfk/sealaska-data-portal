@@ -73,22 +73,21 @@ body {
   transition: all 0.2s;
 }
 
-.interactive, .interactive > *, tr {
+.interactive, .interactive > *, .interactive-2, .interactive-2 > *, tr {
   cursor: pointer;
 }
 
-.interactive-2 {
+.interactive-2, .interactive-2 > * {
   transition-property: margin; 
   transition-duration: 0.2s;
 }
 
-.mapboxgl-ctrl-group > button {
-  transition: all 0.2s !important;
-}
-
-
 .interactive:hover, .interactive-2:hover, tr:hover {
   backdrop-filter: brightness(0.95);
+}
+
+.mapboxgl-ctrl-group > button {
+  transition: all 0.2s !important;
 }
 
 .hide {

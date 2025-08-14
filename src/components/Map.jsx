@@ -3,7 +3,7 @@ import { useQueryParams, capitalizeFirst, haversineDistance, averageGeolocation,
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-export default function Map( {locations, projects, lands, roads, mode, target, selectionCoordinates, sidebars, onSelect, onCenter}) {
+export default function Map( {locations, projects, lands, roads, mode, target, selectionCoordinates, sidebars, layerVis, onSelect, onCenter}) {
   const mapContainer = useRef(null);
   const map = useRef(null);
   const { getParam, setParam } = useQueryParams();
@@ -68,7 +68,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
       if (coordinateGroup[0].length > 2 ) {
         coordinateGroup = coordinateGroup[0];
       }
-      coordinates = averageGeolocation(coordinateGroup)
+      coordinates = averageGeolocation(coordinateGroup);
 
       if (layerName === 'lands') {
         let owner = feature.properties.SurfFull;
@@ -306,11 +306,11 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   useEffect(() => {
     if (map.current) {
       var classes = document.getElementById("mapContainer").classList;
-      if ((sidebars[0] && classes.contains("no-left")) || (!sidebars[0] && !classes.contains("no-left"))) {
+      if (sidebars.left === classes.contains("no-left")) {
         classes.toggle("no-left");
         document.getElementById("alt-title").classList.toggle("no-left");
       }
-      if ((sidebars[1] && classes.contains("no-right")) || (!sidebars[1] && !classes.contains("no-right"))) {
+      if (sidebars.right === classes.contains("no-right")) {
         classes.toggle("no-right");
         document.getElementById("menu-legend").classList.toggle("no-right");
       }

@@ -27,7 +27,7 @@ export default function Home(props){
 	const [timerLong, setTimerLong] = useState();
 	const [timer, setTimer] = useState([]);
 	const [sidebars, setSidebars] = useState();
-	//const [tableMode, setTableMode] = useState({posts: [true, true], projects: [true, false], lands: [true, false], roads: [true, false]}); //reconsider
+	const [layerVis, setLayerVis] = useState(); //{'posts': false, 'projects': false, 'lands': false, 'roads': true}
 
 	const landsURL = 'https://services7.arcgis.com/q9QUA4QfbvUGfm76/arcgis/rest/services/SELands/FeatureServer/0/query?where=1%3D1&outSR=4326&outFields=OwnCategor&outFields=SurfFull&outFields=TaxName&outFields=AreaAcres&outFields=OBJECTID&f=pgeojson';
 	const projectsURL = '';
@@ -43,8 +43,8 @@ export default function Home(props){
 		return val;
 	}
 
-	//initialize click event
-	function clickInit(side) {
+	//initialize a single sidebar click event
+	function sidebarInit(side) {
 		let other;
 		(side === "left") ? other = "right" : other = "left";
 		let sidebar = document.getElementsByClassName(side);
@@ -61,28 +61,24 @@ export default function Home(props){
 					sidebar2[0].classList.toggle("closed");
 					sidebar2[1].classList.toggle("closed");
 					setParam(other, false);
-					setSidebars(sidebars => [!sidebars[0], !sidebars[1]]);
+					setSidebars((sidebars) => ({left: !sidebars.left, right: !sidebars.right}));
 					if (other === "left") {
 						setMapMode("view");
 					}
 				} else { //if opposite sidebar is hidden
-					setSidebars(sidebars => [side === "left" ? !sidebars[0] : sidebars[0], 
-						side === "right" ? !sidebars[1] : sidebars[1]]);
+					setSidebars((sidebars) => ({left: (side === "left" ? !sidebars.left: sidebars.left), 
+						right: (side === "right" ? !sidebars.right : sidebars.right)}));
 				}
 
-				if (sidebar[1].classList.contains("closed")) {
-					setParam(side, false);
-				} else {
-					setParam(side, null);
-				}
 			} else {
-				setSidebars(sidebars => [side === "left" ? !sidebars[0] : sidebars[0], 
-					side === "right" ? !sidebars[1] : sidebars[1]]);
-				if (sidebar[1].classList.contains("closed")) {
-					setParam(side, false);
-				} else {
-					setParam(side, null);
-				}
+				setSidebars((sidebars) => ({left: (side === "left" ? !sidebars.left : sidebars.left), 
+					right: (side === "right" ? !sidebars.right : sidebars.right)}));
+			}
+
+			if (sidebar[1].classList.contains("closed")) {
+				setParam(side, false);
+			} else {
+				setParam(side, null);
 			}
 		});
 	}
@@ -126,7 +122,7 @@ export default function Home(props){
 			right[0].classList.remove('closed');
 			right[1].classList.remove('closed');
 			setParam('right', false);
-			setSidebars(sidebars => [sidebars[0], !sidebars[1]]);
+			setSidebars((sidebars) => ({left: sidebars.left, right: !sidebars.right}));
 		}
 	};
 
@@ -157,13 +153,13 @@ export default function Home(props){
 	};
 
 	useEffect(() => {
-		requestStaticLayers();
+		requestStaticLayers(); //puts in requests for all map layers (besides basemap and posts layers)
 
 		let close = document.getElementById("msg-close");
-		close.onclick = () => {
+		close.addEventListener('click', () => {
 			let update = document.getElementById("update");
 			update.classList.toggle("transition");
-		};
+		});
 
 		var leftInit, rightInit;
 		if (!getParam('right') && getParam('right') && window.innerWidth <= 878) {
@@ -172,9 +168,9 @@ export default function Home(props){
 		getParam('left') ? leftInit = false : leftInit = true;
 		getParam("right") ? rightInit = false : rightInit = true;
 		
-		setSidebars([leftInit, rightInit]);
-		clickInit('left');
-		clickInit('right');
+		setSidebars({left: leftInit, right: rightInit});
+		sidebarInit('left');
+		sidebarInit('right');
 
 		window.addEventListener("resize", handleResize);
    		return () => window.removeEventListener("resize", handleResize);
@@ -256,10 +252,10 @@ export default function Home(props){
 					<Hero/>
 					<ViewContributeForm mode={mapMode} onSubmit={handleModeSubmit}/>
 					<AddFeatureForm mode={mapMode} selectionCoordinates={currentSelection} onSelect={handleCurrentSelection} onReset={handleReset} submitSwap={handleFormSubmit}/>
-					<ListFeatures locations={data} projects={projectsData} lands={landsData} roads={roadsData} mode={mapMode} target={target} onCenter={handleCenter}/>
+					<ListFeatures locations={data} projects={projectsData} lands={landsData} roads={roadsData} mode={mapMode} target={target} layerVis={layerVis} onCenter={handleCenter}/>
 				</div>
 				<div id="map">
-					<Map locations={data} projects={projectsData} lands={landsData} roads={roadsData} mode={mapMode} target={target} selectionCoordinates={currentSelection} sidebars={sidebars} onSelect={handleCurrentSelection} onCenter={handleCenter}/>
+					<Map locations={data} projects={projectsData} lands={landsData} roads={roadsData} mode={mapMode} target={target} selectionCoordinates={currentSelection} sidebars={sidebars} layerVis={layerVis} onSelect={handleCurrentSelection} onCenter={handleCenter}/>
 				</div>
 				<div id="right-drawer" className={"main-container interactive drawer right " + closed("right")}>
 					<img id="arrow-right" className="arrow" alt="From pictarts.com" src="https://pictarts.com/21/material/01-vector/m-0027-arrow.png"></img>
