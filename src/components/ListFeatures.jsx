@@ -5,6 +5,7 @@ import $ from 'jquery';
 //import FilterForm from './FilterForm'
 
 export default function ListFeatures( {locations, projects, lands, roads, mode, target, layerVis, onCenter} ) {
+    const { getParam, setParam } = useQueryParams();
     const [ratio, setRatio] = useState([0,0]);
     const [sort, setSort] = useState('newest');
 
@@ -76,6 +77,9 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         tab.innerHTML = capitalizeFirst(layerName);
         if (layerName !== 'posts') {
             tab.classList.add('behind');
+        }
+        if (getParam(layerName)) {
+            tab.classList.add('hide');
         }
 
         tab.addEventListener('click', () => {
@@ -245,8 +249,14 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
                 $('#list-container > div').remove();
             }
 
-            for (let i = 0; i < layerList.length; i++) { //creates associated tabs and lists simultaneously
-                tabInit(layerList[i], tabContainer);
+            for (let i = 0; i < layerList.length; i++) { //initializes associated tabs and lists simultaneously
+                if (i === 0) {
+                    tabInit(layerList[i], tabContainer);
+                } else {
+                    setTimeout(() => {
+                        tabInit(layerList[i], tabContainer);
+                    }, i * 400);
+                }
                 tableInit(layerList[i], listContainer);
             }
         } else if (mode === 'contribute') {
@@ -290,6 +300,13 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         let subtitle = document.querySelector('#subgroup-posts > .list-subtitle');
         subtitle.innerHTML = 'Reviewed: ' + ratio[0] + ' of ' + (ratio[0] + ratio[1]);
     }, [ratio]);
+
+    useEffect(() => {
+        let tabs = document.getElementById('tab-container').children;
+        for (let tab in tabs) {
+            console.log(tab);
+        }
+    }, [layerVis]);
 
     if (mode === 'view') {
         return (

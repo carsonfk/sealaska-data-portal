@@ -548,7 +548,7 @@ img {
   flex: 1 1 25%;
 }
 
-.tab.behind {
+.behind {
   border-top: 1px solid #CD202D;
   border-left: 1px solid #CD202D;
   border-right: 1px solid #CD202D;

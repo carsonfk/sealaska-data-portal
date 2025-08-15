@@ -161,6 +161,8 @@ export default function Home(props){
 			update.classList.toggle("transition");
 		});
 
+		setLayerVis({posts: !getParam('posts'), projects: !getParam('projects'), lands: !getParam('lands'), roads: !getParam('roads')});
+
 		var leftInit, rightInit;
 		if (!getParam('right') && getParam('right') && window.innerWidth <= 878) {
 			setParam('right', false);
@@ -241,7 +243,7 @@ export default function Home(props){
 
 	useEffect(() => {
 		console.log(layerVis);
-	}, [layerVis])
+	}, [layerVis]);
 
     return (
         <>

@@ -446,20 +446,15 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
     let layerInputs = document.getElementById('layer-menu').getElementsByTagName('input');
     for (let input of layerInputs) {
       input.addEventListener("click", (layer) => {
-        console.log('hello world')
+        console.log('hello world');
         let layerId = layer.target.id;
-        console.log (layer.target.id);
-        if (true) {
-          onLayerVis(layerId, true);
-          //setParam('posts', false);
-          //setParam('posts', null);
-        } else {
-          onLayerVis(layerId, false);
-        }
+        console.log(layerId);
+        onLayerVis(layerId, layer.target.checked);
+        setParam(layer.target.id, (layer.target.checked === false) ? false : null);
       });
     }
 
-    map.current.on('load', function () {
+    map.current.on('load', () => {
       //add map controls
       map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
@@ -817,7 +812,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
           </div>
           <div id="layer-menu" className="flex-vertical menu-legend-subgroup hide">
             <div className="interactive menu-item">
-              <input id="posts" type="checkbox" name="rtoggle" value="posts" defaultChecked={!getParam('posts')}/>
+              <input id="posts" type="checkbox" name="rtoggle" value="posts" defaultChecked={!getParam('projects')}/>
               <label for="posts">Posts</label>
             </div>
             <div className="interactive menu-item">
