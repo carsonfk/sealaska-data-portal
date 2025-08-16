@@ -221,78 +221,37 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     function swapViewMenu(layerName) {
         let visibleTabs = document.querySelectorAll('#tab-container :not(.hide)');
         let targetTab = document.getElementById('tab-' + layerName);
-        console.log(visibleTabs.length)
-        if (!targetTab.classList.contains('behind')) {
-            if (visibleTabs.length !== 1) {
-                targetTab.classList.add('behind');
-                for (let j = 0; j < visibleTabs.length; j++) {
-                    if (visibleTabs[j] === targetTab) {
-                        if (visibleTabs.length !== 1) {
-                            let targetTab2;
-                            if (visibleTabs.length - j === 1) {
-                                targetTab2 = visibleTabs[j - 1];
-                            } else {
-                                targetTab2 = visibleTabs[j + 1];
-                            }
-                            let layerName2 = targetTab2.id.substring(4);
-                            document.getElementById('list-' + layerName).classList.add('hide');
-                            document.getElementById('list-' + layerName2).classList.remove('hide');
-                            targetTab2.classList.remove('behind');
-                            onCenter({name: targetTab2.id.substring(4), id: -1, fly: false});
-                            updateTableHL(layerName2, -1);
-                        } else {
-                            console.log('no tables');
-                        }
-                    }
-                }
-            } else if (visibleTabs.length === 1) {
-                console.log('huh?');
+        if (visibleTabs.length < 2) {
+            if (visibleTabs.length == 1) { // removing last tab
                 document.getElementById('list-' + layerName).classList.add('hide');
-                onCenter({name: layerName, id: -1, fly: false});
-                updateTableHL(layerName, -1);
+            } else { // adding first tab
+                targetTab.classList.remove('behind');
+                document.getElementById('list-' + layerName).classList.remove('hide');
             }
-        } else if (visibleTabs.length === 0) {
-            console.log('hmm');
-            targetTab.classList.remove('behind');
             onCenter({name: layerName, id: -1, fly: false});
             updateTableHL(layerName, -1);
-            document.getElementById('list-' + layerName).classList.remove('hide');
-        }
-        targetTab.classList.toggle('hide');
-
-        /*
-        for (let i = 0; i < tabs.length; i++) {
-            if (layerVis[layerName] !== !tabs[i].classList.contains('hide')) {
-                if (!tabs[i].classList.contains('behind')) {
-                    tabs[i].classList.add('behind');
-                    for (let j = 0; j < visibleTabs.length; j++) {
-                        if (visibleTabs[j] === tabs[i]) {
-                            if (visibleTabs.length !== 1) {
-                                let targetTab;
-                                if (visibleTabs.length - j === 1) {
-                                    targetTab = visibleTabs[j - 1];
-                                } else {
-                                    targetTab = visibleTabs[j + 1];
-                                }
-                                let layerName = targetTab.id.substring(4);
-                                document.getElementsByClassName('list')[i].classList.add('hide');
-                                document.getElementById('list-' + layerName).classList.remove('hide');
-                                targetTab.classList.remove('behind');
-                                onCenter({name: targetTab.id.substring(4), id: -1, fly: false});
-                                updateTableHL(layerName, -1);
-                            } else {
-                                console.log('no tables');
-                            }
+        } else { // adding or removing any other tab
+            targetTab.classList.add('behind');
+            for (let j = 0; j < visibleTabs.length; j++) {
+                if (visibleTabs[j] === targetTab) {
+                    if (visibleTabs.length !== 1) {
+                        let targetTabNew;
+                        if (visibleTabs.length - j === 1) {
+                            targetTabNew = visibleTabs[j - 1];
+                        } else {
+                            targetTabNew = visibleTabs[j + 1];
                         }
+                        let layerNameNew = targetTabNew.id.substring(4);
+                        document.getElementById('list-' + layerName).classList.add('hide');
+                        document.getElementById('list-' + layerNameNew).classList.remove('hide');
+                        targetTabNew.classList.remove('behind');
+                        onCenter({name: layerNameNew, id: -1, fly: false});
+                        updateTableHL(layerNameNew, -1);
                     }
                 }
-                tabs[i].classList.toggle('hide');
-            } else if (visibleTabs.length === 0) {
-                tabs[i].classList.remove('hide');
-                tabs[i].classList.remove('behind');
             }
         }
-        */
+        targetTab.classList.toggle('hide');
     }
 
     function tableLoad(data, layerName, sort) {
