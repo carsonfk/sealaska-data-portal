@@ -812,7 +812,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
           </div>
           <div id="layer-menu" className="flex-vertical menu-legend-subgroup hide">
             <div className="interactive menu-item">
-              <input id="posts" type="checkbox" name="rtoggle" value="posts" defaultChecked={!getParam('projects')}/>
+              <input id="posts" type="checkbox" name="rtoggle" value="posts" defaultChecked={!getParam('posts')}/>
               <label for="posts">Posts</label>
             </div>
             <div className="interactive menu-item">

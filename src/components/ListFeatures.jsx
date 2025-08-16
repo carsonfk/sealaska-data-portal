@@ -218,6 +218,83 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         updateTableHL(layerName, -1);
     }
 
+    function swapViewMenu(layerName) {
+        let visibleTabs = document.querySelectorAll('#tab-container :not(.hide)');
+        let targetTab = document.getElementById('tab-' + layerName);
+        console.log(visibleTabs.length)
+        if (!targetTab.classList.contains('behind')) {
+            if (visibleTabs.length !== 1) {
+                targetTab.classList.add('behind');
+                for (let j = 0; j < visibleTabs.length; j++) {
+                    if (visibleTabs[j] === targetTab) {
+                        if (visibleTabs.length !== 1) {
+                            let targetTab2;
+                            if (visibleTabs.length - j === 1) {
+                                targetTab2 = visibleTabs[j - 1];
+                            } else {
+                                targetTab2 = visibleTabs[j + 1];
+                            }
+                            let layerName2 = targetTab2.id.substring(4);
+                            document.getElementById('list-' + layerName).classList.add('hide');
+                            document.getElementById('list-' + layerName2).classList.remove('hide');
+                            targetTab2.classList.remove('behind');
+                            onCenter({name: targetTab2.id.substring(4), id: -1, fly: false});
+                            updateTableHL(layerName2, -1);
+                        } else {
+                            console.log('no tables');
+                        }
+                    }
+                }
+            } else if (visibleTabs.length === 1) {
+                console.log('huh?');
+                document.getElementById('list-' + layerName).classList.add('hide');
+                onCenter({name: layerName, id: -1, fly: false});
+                updateTableHL(layerName, -1);
+            }
+        } else if (visibleTabs.length === 0) {
+            console.log('hmm');
+            targetTab.classList.remove('behind');
+            onCenter({name: layerName, id: -1, fly: false});
+            updateTableHL(layerName, -1);
+            document.getElementById('list-' + layerName).classList.remove('hide');
+        }
+        targetTab.classList.toggle('hide');
+
+        /*
+        for (let i = 0; i < tabs.length; i++) {
+            if (layerVis[layerName] !== !tabs[i].classList.contains('hide')) {
+                if (!tabs[i].classList.contains('behind')) {
+                    tabs[i].classList.add('behind');
+                    for (let j = 0; j < visibleTabs.length; j++) {
+                        if (visibleTabs[j] === tabs[i]) {
+                            if (visibleTabs.length !== 1) {
+                                let targetTab;
+                                if (visibleTabs.length - j === 1) {
+                                    targetTab = visibleTabs[j - 1];
+                                } else {
+                                    targetTab = visibleTabs[j + 1];
+                                }
+                                let layerName = targetTab.id.substring(4);
+                                document.getElementsByClassName('list')[i].classList.add('hide');
+                                document.getElementById('list-' + layerName).classList.remove('hide');
+                                targetTab.classList.remove('behind');
+                                onCenter({name: targetTab.id.substring(4), id: -1, fly: false});
+                                updateTableHL(layerName, -1);
+                            } else {
+                                console.log('no tables');
+                            }
+                        }
+                    }
+                }
+                tabs[i].classList.toggle('hide');
+            } else if (visibleTabs.length === 0) {
+                tabs[i].classList.remove('hide');
+                tabs[i].classList.remove('behind');
+            }
+        }
+        */
+    }
+
     function tableLoad(data, layerName, sort) {
         let limit = handleData(data, layerName);
         let sorted = sortData(limit, sort);
@@ -255,7 +332,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
                 } else {
                     setTimeout(() => {
                         tabInit(layerList[i], tabContainer);
-                    }, i * 400);
+                    }, i * 300);
                 }
                 tableInit(layerList[i], listContainer);
             }
@@ -302,9 +379,14 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     }, [ratio]);
 
     useEffect(() => {
-        let tabs = document.getElementById('tab-container').children;
-        for (let tab in tabs) {
-            console.log(tab);
+        if (layerVis) {
+            let tabs = document.getElementById('tab-container').children;
+            for (let i = 0; i < tabs.length; i++) {
+                //console.log(tabs[i].classList)
+                if (layerVis[layerList[i]] !== !tabs[i].classList.contains('hide')) {
+                    swapViewMenu(layerList[i]);
+                }
+            }
         }
     }, [layerVis]);
 

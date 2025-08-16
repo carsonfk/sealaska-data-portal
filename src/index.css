@@ -474,7 +474,7 @@ img {
 /* features sidebar */
 #features {
   left: 0;
-  overflow-x: hidden; /* figure out why this is needed */
+  
 }
 
 #features.closed {
@@ -530,7 +530,6 @@ img {
 }
 
 #layers-container {
-  
   width: 100%;
 }
 
@@ -571,11 +570,12 @@ img {
 }
 */
 
-
 /* list */
+/*
 .list {
-  width: 100%;
+  
 }
+*/
 
 #list-container {
   border-left: 2px solid #CD202D;
@@ -583,7 +583,6 @@ img {
   border-bottom: 2px solid #CD202D;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
-  width: 100%;
 }
 
 .subgroup {

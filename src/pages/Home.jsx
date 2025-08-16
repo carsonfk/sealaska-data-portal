@@ -13,6 +13,7 @@ import Stats from "../components/Stats";
 
 export default function Home(props){
 	const { getParam, setParam } = useQueryParams();
+	const windowWidth = useRef(window.innerWidth);
 	const [data, setData] = useState();
 	const [projectsData, setProjectsData] = useState();
 	const [landsData, setLandsData] = useState();
@@ -23,7 +24,6 @@ export default function Home(props){
 	const [reset, setReset] = useState(0);
     const [mapMode, setMapMode] = useState('view');
     const [currentSelection, setCurrentSelection] = useState({coordinates:[], origin: 'none'});
-	const windowWidth = useRef(window.innerWidth);
 	const [timerLong, setTimerLong] = useState();
 	const [timer, setTimer] = useState([]);
 	const [sidebars, setSidebars] = useState();
@@ -241,8 +241,10 @@ export default function Home(props){
 		}
 	}, [data])
 
-	useEffect(() => {
-		console.log(layerVis);
+	useEffect(() => { //testing
+		if (layerVis) {
+			console.log(layerVis);
+		}
 	}, [layerVis]);
 
     return (
