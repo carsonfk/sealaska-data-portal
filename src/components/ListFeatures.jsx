@@ -222,12 +222,10 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         let visibleTabs = document.querySelectorAll('#tab-container :not(.hide)');
         let targetTab = document.getElementById('tab-' + layerName);
         if (visibleTabs.length < 2) {
-            if (visibleTabs.length == 1) { // removing last tab
-                document.getElementById('list-' + layerName).classList.add('hide');
-            } else { // adding first tab
+            if (visibleTabs.length === 0) { // adding first tab
                 targetTab.classList.remove('behind');
-                document.getElementById('list-' + layerName).classList.remove('hide');
             }
+            document.getElementById('list-' + layerName).classList.toggle('hide');
             onCenter({name: layerName, id: -1, fly: false});
             updateTableHL(layerName, -1);
         } else { // adding or removing any other tab
