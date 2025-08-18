@@ -76,23 +76,24 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         tab.className = 'tab interactive-2';
         tab.innerHTML = capitalizeFirst(layerName);
 
-        if (getParam('targetLayer')) {
-            if (layerName === 'posts') {
-                tab.classList.add('behind');
+        if (getParam(layerName)) {
+            tab.classList.add('hide');
+        } else {
+            if (getParam('targetLayer')) {
+                if (layerName === 'posts') {
+                    tab.classList.add('behind');
+                } else {
+                    if (getParam('targetLayer') !== layerName) {
+                        tab.classList.add('behind');
+                    }
+                }
             } else {
-                if (getParam('targetLayer') !== layerName) {
+                if (layerName !== 'posts') {
                     tab.classList.add('behind');
                 }
             }
-        } else {
-            if (layerName !== 'posts') {
-                tab.classList.add('behind');
-            }
         }
-
-        if (getParam(layerName)) {
-            tab.classList.add('hide');
-        }
+        
 
         tab.addEventListener('click', () => {
             if (tab.classList.contains('behind')) {
@@ -121,18 +122,23 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         let containerDiv = document.createElement('div');
         containerDiv.id = 'list-' + layerName;
         containerDiv.className = 'list'
+        
 
-        if (getParam('targetLayer')) {
-            if (layerName === 'posts') {
-                containerDiv.classList.add('hide')
+        if (getParam(layerName)) {
+            containerDiv.classList.add('hide');
+        } else {
+            if (getParam('targetLayer')) {
+                if (layerName === 'posts') {
+                    containerDiv.classList.add('hide')
+                } else {
+                    if (getParam('targetLayer') !== layerName) {
+                        containerDiv.classList.add('hide');
+                    }
+                }
             } else {
-                if (getParam('targetLayer') !== layerName) {
+                if (layerName !== 'posts') {
                     containerDiv.classList.add('hide');
                 }
-            }
-        } else {
-            if (layerName !== 'posts') {
-                containerDiv.classList.add('hide');
             }
         }
 
@@ -360,7 +366,6 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         if (layerVis) {
             let tabs = document.getElementById('tab-container').children;
             for (let i = 0; i < tabs.length; i++) {
-                //console.log(tabs[i].classList)
                 if (layerVis[layerList[i]] !== !tabs[i].classList.contains('hide')) {
                     swapViewMenu(layerList[i]);
                 }

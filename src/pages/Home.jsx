@@ -146,6 +146,7 @@ export default function Home(props){
 	};
 
 	const handleLayerVis = (layerName, bool) => {
+		console.log('layervis')
 		setLayerVis(prev => ({
 			...prev,
 			[layerName]: bool
