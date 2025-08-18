@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useQueryParams, capitalizeFirst } from "../functions";
+import { useQueryParams, capitalizeFirst, formatNumber } from "../functions";
 import $ from 'jquery';
 //import { getDatabase, ref, set as firebaseSet, push } from 'firebase/database'
 //import FilterForm from './FilterForm'
@@ -75,9 +75,21 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         tab.id = 'tab-' + layerName;
         tab.className = 'tab interactive-2';
         tab.innerHTML = capitalizeFirst(layerName);
-        if (layerName !== 'posts') {
-            tab.classList.add('behind');
+
+        if (getParam('targetLayer')) {
+            if (layerName === 'posts') {
+                tab.classList.add('behind');
+            } else {
+                if (getParam('targetLayer') !== layerName) {
+                    tab.classList.add('behind');
+                }
+            }
+        } else {
+            if (layerName !== 'posts') {
+                tab.classList.add('behind');
+            }
         }
+
         if (getParam(layerName)) {
             tab.classList.add('hide');
         }
@@ -109,8 +121,19 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         let containerDiv = document.createElement('div');
         containerDiv.id = 'list-' + layerName;
         containerDiv.className = 'list'
-        if (layerName !== 'posts') {
-            containerDiv.classList.add('hide');
+
+        if (getParam('targetLayer')) {
+            if (layerName === 'posts') {
+                containerDiv.classList.add('hide')
+            } else {
+                if (getParam('targetLayer') !== layerName) {
+                    containerDiv.classList.add('hide');
+                }
+            }
+        } else {
+            if (layerName !== 'posts') {
+                containerDiv.classList.add('hide');
+            }
         }
 
         containerDiv.appendChild(testDiv);
@@ -129,8 +152,8 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         } else if (layerName === 'projects') {
                 
         } else if (layerName === 'lands') {
-            cell1.innerHTML = rowData.properties.SurfFull;
-            cell2.innerHTML = rowData.properties.TaxName;
+            cell1.innerHTML = rowData.properties.TaxName;
+            cell2.innerHTML = formatNumber(rowData.properties.AreaAcres, 2) + ' acres';
             //let cell3 = row.insertCell(1);
             //cell3.innerHTML = rowData.properties.TAX_NAME;
         } else if (layerName === 'roads') {
@@ -173,7 +196,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         }
     }
 
-    function swapViewMap(target) {
+    function swapView(target) {
         updateTableHL(target.name, target.id);
         if (target.id !== -1) {
             let tabs = document.getElementsByClassName('tab');
@@ -268,11 +291,11 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     }
 
     useEffect(() => {
-        if (mode === 'view') {
-            if (locations) { // change if using params?
-                onCenter({name: 'posts', id: -1, fly: false}); // make sure target is reset to default (potentially use query params?)
-            }
+        //onCenter({name: getParam('targetLayer'), id: -1, fly: false});
+    }, [])
 
+    useEffect(() => {
+        if (mode === 'view') {
             let tabContainer = document.getElementById('tab-container');
             if (tabContainer.childElementCount !== 0) {
                 $('#tab-container > div').remove();
@@ -293,8 +316,6 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
                 }
                 tableInit(layerList[i], listContainer);
             }
-        } else if (mode === 'contribute') {
-            onCenter({name: 'none', id: -1, fly: false}); // make sure target is clear
         }
     }, [mode])
 
@@ -323,9 +344,9 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     //}, [roads, mode]); //fire this whenever the roads features put into the map change or map mode changes
 
     useEffect(() => {
-        if (mode === 'view') {
+        if (mode === 'view' && target) {
             console.log(target);
-            swapViewMap(target); //figure out why non-post table hl doesn't refresh on refresh
+            swapView(target); //figure out why non-post table hl doesn't refresh on refresh
         };
     }, [target]);
 

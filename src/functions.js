@@ -46,8 +46,8 @@ export function capitalizeFirst(str) {
 }
 
 //adds comma to thousands place of provided number
-export function addComma(number) {
-  let numberSplit = (Math.floor(number * 100) / 100).toString().split('.');
+export function formatNumber(number, digits) {
+  let numberSplit = number.toString().split('.');
   let indexMaxInit = numberSplit[0].length - 1;
   let arrayFirst = [...numberSplit[0]];
   for (let i = indexMaxInit; i >= 0; i--) {
@@ -55,27 +55,28 @@ export function addComma(number) {
       arrayFirst.splice(i + 1, 0, ',');
     }
   }
-  return arrayFirst.join('') + '.' + numberSplit[1];
+  let decimal = parseFloat('.' + numberSplit[1]);
+  return arrayFirst.join('') + decimal.toFixed(digits).toString().slice(1);
 }
 
 //calculates great circle distance between two coordinates
 export function haversineDistance(coord1, coord2) {
-  const toRad = angle => (angle * Math.PI) / 180;
+  let toRad = angle => (angle * Math.PI) / 180;
 
-  const R = 6371; // Radius of Earth in kilometers
-  const lat1 = toRad(coord1[1]);
-  const lon1 = toRad(coord1[0]);
-  const lat2 = toRad(coord2[1]);
-  const lon2 = toRad(coord2[0]);
+  let R = 6371; // Radius of Earth in kilometers
+  let lat1 = toRad(coord1[1]);
+  let lon1 = toRad(coord1[0]);
+  let lat2 = toRad(coord2[1]);
+  let lon2 = toRad(coord2[0]);
 
-  const dLat = lat2 - lat1;
-  const dLon = lon2 - lon1;
+  let dLat = lat2 - lat1;
+  let dLon = lon2 - lon1;
 
-  const a =
+  let a =
     Math.sin(dLat / 2) ** 2 +
     Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
 
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
   return R * c; // Distance in kilometers
 }
@@ -95,14 +96,14 @@ export function averageGeolocation(coords) {
       z += Math.sin(lat);
     }
 
-    const total = coords.length;
+    let total = coords.length;
     x /= total;
     y /= total;
     z /= total;
 
-    const centralLon = Math.atan2(y, x);
-    const centralSqrt = Math.sqrt(x * x + y * y);
-    const centralLat = Math.atan2(z, centralSqrt);
+    let centralLon = Math.atan2(y, x);
+    let centralSqrt = Math.sqrt(x * x + y * y);
+    let centralLat = Math.atan2(z, centralSqrt);
 
     return [(centralLon * 180 / Math.PI), (centralLat * 180 / Math.PI)];
   }

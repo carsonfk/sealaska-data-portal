@@ -18,7 +18,7 @@ export default function Home(props){
 	const [projectsData, setProjectsData] = useState();
 	const [landsData, setLandsData] = useState();
 	const [roadsData, setRoadsData] = useState();
-	const [target, setTarget] = useState({name: 'posts', id: -1, fly: false}); //change posts to none when query param stuff is working
+	const [target, setTarget] = useState({name: 'none', id: -1, fly: false});
 	//const [filter, setFilter] = useState('null')
 	//const [sort, setSort] = useState('newest');
 	const [reset, setReset] = useState(0);
@@ -234,6 +234,20 @@ export default function Home(props){
 			setReset((reset) => reset + 1);
 		}, 300000));
 	}, [reset]);
+
+	useEffect(() => {
+		if (mapMode === 'view') {
+			setTarget({name: (getParam('targetLayer') ? getParam('targetLayer') : 'posts'), id: -1, fly: false});
+		} else {
+			setTarget({name: 'none', id: -1, fly: false});
+		}
+	}, [mapMode]);
+
+	useEffect(() => {
+		if (target.name !== 'none') {
+			setParam('targetLayer', target.name !== 'posts' ? target.name : null);
+		}
+	}, [target])
 
 	useEffect(() => {
 		if (data) {

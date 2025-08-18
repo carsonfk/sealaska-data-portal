@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from "react";
-import { useQueryParams, capitalizeFirst, haversineDistance, averageGeolocation, addComma } from "../functions";
+import { useQueryParams, capitalizeFirst, haversineDistance, averageGeolocation, formatNumber } from "../functions";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -73,7 +73,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
       if (layerName === 'lands') {
         let owner = feature.properties.SurfFull;
         let name = feature.properties.TaxName;
-        let acres = addComma(feature.properties.AreaAcres);
+        let acres = formatNumber(feature.properties.AreaAcres, 2);
         buildPopupLands(coordinates, owner, name, acres);
       } else if (layerName == 'roads') {
 
@@ -160,7 +160,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   //update the source of the features on the map
   function updateSource(localData, source) {
     setTimeout(() => {
-      if (map.current.getSource(source)) {
+      if (map.current && map.current.getSource(layerList[0]) !== undefined) {
         map.current.getSource(source).setData({
           type: 'FeatureCollection',
           features: localData
@@ -344,7 +344,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   }, [selectionCoordinates]); //fires whenever a coordinate is changed
 
   useEffect(() => {
-    if (mode === 'view' && map.current) {
+    if (mode === 'view' && map.current && map.current.getSource(layerList[0]) !== undefined) {
       for (let i = 0; i < layerList.length; i++) {
         let currentFeatures = map.current.getSource(layerList[i])._data.features;
         currentFeatures.forEach(f => {
