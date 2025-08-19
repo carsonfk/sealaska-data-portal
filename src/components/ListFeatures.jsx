@@ -203,7 +203,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     }
 
     function swapView(target) {
-        console.log('swap!')
+        //console.log('swap!')
         updateTableHL(target.name, target.id);
         if (target.id !== -1) {
             let tabs = document.getElementsByClassName('tab');
@@ -229,7 +229,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     }
 
     function swapViewTab(layerName) {
-        console.log('tab!')
+        //console.log('tab!')
         let tabs = document.getElementsByClassName('tab');
         for (let i = 0; i < tabs.length; i++) {
             if (!tabs[i].classList.contains('behind')) {
@@ -248,43 +248,48 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         onCenter({name: layerName, id: -1, fly: false}); // no row is highlighted
         updateTableHL(layerName, -1);
 
-        console.log(layerName)
+        //console.log(layerName)
     }
 
     function swapViewMenu(layerName) {
-        console.log('menu!')
+        //console.log('menu!')
         let visibleTabs = document.querySelectorAll('#tab-container :not(.hide)');
         let targetTab = document.getElementById('tab-' + layerName);
         if (visibleTabs.length < 2) {
             if (visibleTabs.length === 0) { // adding first tab
                 targetTab.classList.remove('behind');
+                document.getElementById('list-' + layerName).classList.remove('hide');
+                onCenter({name: layerName, id: -1, fly: false});
+                updateTableHL(layerName, -1);
             }
-            document.getElementById('list-' + layerName).classList.toggle('hide');
-            onCenter({name: layerName, id: -1, fly: false});
-            updateTableHL(layerName, -1);
         } else { // adding or removing any other tab
-            targetTab.classList.add('behind');
-            for (let j = 0; j < visibleTabs.length; j++) {
-                if (visibleTabs[j] === targetTab) {
-                    if (visibleTabs.length !== 1) {
-                        let targetTabNew;
-                        if (visibleTabs.length - j === 1) {
-                            targetTabNew = visibleTabs[j - 1];
-                        } else {
-                            targetTabNew = visibleTabs[j + 1];
+            //targetTab.classList.add('behind');
+            console.log(visibleTabs);
+            console.log(targetTab);
+            if (!targetTab.classList.contains('hide')) {
+                for (let j = 0; j < visibleTabs.length; j++) {
+                    if (visibleTabs[j] === targetTab) {
+                        if (!targetTab.classList.contains('behind')) {
+                            let targetTabNew;
+                            if (j === 0) {
+                                targetTabNew = visibleTabs[j + 1];
+                            } else {
+                                targetTabNew = visibleTabs[j - 1];
+                            }
+                            let layerNameNew = targetTabNew.id.substring(4);
+                            document.getElementById('list-' + layerName).classList.add('hide');
+                            document.getElementById('list-' + layerNameNew).classList.remove('hide');
+                            targetTabNew.classList.remove('behind');
+                            onCenter({name: layerNameNew, id: -1, fly: false});
+                            updateTableHL(layerNameNew, -1);
                         }
-                        let layerNameNew = targetTabNew.id.substring(4);
-                        document.getElementById('list-' + layerName).classList.add('hide');
-                        document.getElementById('list-' + layerNameNew).classList.remove('hide');
-                        targetTabNew.classList.remove('behind');
-                        onCenter({name: layerNameNew, id: -1, fly: false});
-                        updateTableHL(layerNameNew, -1);
                     }
                 }
+            } else {
+                targetTab.classList.add('behind');
             }
+            targetTab.classList.toggle('hide');
         }
-        console.log(layerName)
-        targetTab.classList.toggle('hide');
     }
 
     function tableLoad(data, layerName, sort) {
@@ -370,7 +375,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
     useEffect(() => {
         if (layerVis) {
-            console.log('layerVis')
+            //console.log('layerVis')
             let tabs = document.getElementById('tab-container').children;
             for (let i = 0; i < tabs.length; i++) {
                 if (layerVis[layerList[i]] !== !tabs[i].classList.contains('hide')) {

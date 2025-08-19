@@ -150,6 +150,7 @@ export default function Home(props){
 			...prev,
 			[layerName]: bool
 		}));
+		console.log("layerVis changed")
 	} 
 
 	useEffect(() => {
