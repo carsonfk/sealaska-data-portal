@@ -146,7 +146,6 @@ export default function Home(props){
 	};
 
 	const handleLayerVis = (layerName, bool) => {
-		console.log('layervis')
 		setLayerVis(prev => ({
 			...prev,
 			[layerName]: bool
@@ -245,6 +244,7 @@ export default function Home(props){
 	}, [mapMode]);
 
 	useEffect(() => {
+		console.log(target);
 		if (target.name !== 'none') {
 			setParam('targetLayer', target.name !== 'posts' ? target.name : null);
 		}
@@ -258,7 +258,7 @@ export default function Home(props){
 
 	useEffect(() => { //testing
 		if (layerVis) {
-			console.log(layerVis);
+			
 		}
 	}, [layerVis]);
 

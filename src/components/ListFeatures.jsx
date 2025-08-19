@@ -203,6 +203,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     }
 
     function swapView(target) {
+        console.log('swap!')
         updateTableHL(target.name, target.id);
         if (target.id !== -1) {
             let tabs = document.getElementsByClassName('tab');
@@ -228,6 +229,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     }
 
     function swapViewTab(layerName) {
+        console.log('tab!')
         let tabs = document.getElementsByClassName('tab');
         for (let i = 0; i < tabs.length; i++) {
             if (!tabs[i].classList.contains('behind')) {
@@ -245,9 +247,12 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         document.getElementById('list-' + layerName).classList.remove('hide');
         onCenter({name: layerName, id: -1, fly: false}); // no row is highlighted
         updateTableHL(layerName, -1);
+
+        console.log(layerName)
     }
 
     function swapViewMenu(layerName) {
+        console.log('menu!')
         let visibleTabs = document.querySelectorAll('#tab-container :not(.hide)');
         let targetTab = document.getElementById('tab-' + layerName);
         if (visibleTabs.length < 2) {
@@ -278,6 +283,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
                 }
             }
         }
+        console.log(layerName)
         targetTab.classList.toggle('hide');
     }
 
@@ -364,6 +370,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
     useEffect(() => {
         if (layerVis) {
+            console.log('layerVis')
             let tabs = document.getElementById('tab-container').children;
             for (let i = 0; i < tabs.length; i++) {
                 if (layerVis[layerList[i]] !== !tabs[i].classList.contains('hide')) {

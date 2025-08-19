@@ -448,7 +448,6 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
       input.addEventListener("click", (layer) => {
         console.log('hello world');
         let layerId = layer.target.id;
-        console.log(layerId);
         onLayerVis(layerId, layer.target.checked);
         setParam(layer.target.id, (layer.target.checked === false) ? false : null);
       });
