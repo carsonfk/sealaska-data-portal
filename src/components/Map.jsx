@@ -140,15 +140,15 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
       subtitle.innerHTML = capitalizeFirst(name);
       legendSubgroup.appendChild(subtitle);
       items.forEach((layer, i) =>{
-        const color = colors[i];
-        const item = document.createElement('div');
-        const key = document.createElement('span');
+        let color = colors[i];
+        let item = document.createElement('div');
+        let key = document.createElement('span');
         key.className = 'legend-key';
         key.id = name + '-key';
         key.style.backgroundColor = color;
         key.style.color = color;
 
-        const value = document.createElement('label');
+        let value = document.createElement('label');
         value.innerHTML = `${layer}`;
         item.appendChild(key);
         item.appendChild(value);

@@ -44,7 +44,6 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
     //sorts provided JSON using provided sort
 	const sortData = (data, sort) => {
-        //console.log('hi!')
 		let dataSort = [];
         if (sort === 'newest') {
 			for (let i = data.length - 1; i > -1; i--) {
@@ -53,24 +52,23 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 		} else if (sort === 'oldest') {
 			
         } else if (sort === 'name') {
-			let dataTemp = data;
-			for (let i = 1; i < dataTemp.length; i++) {
-				let key = dataTemp[i];
+		    dataSort = data;
+			for (let i = 1; i < dataSort.length; i++) {
+				let key = dataSort[i];
 				let j = i - 1;
-				while (j >= 0 && dataTemp[j].properties.TaxName.localeCompare(key.properties.TaxName.charAt(0)) === 1) {
-					dataTemp[j + 1] = dataTemp[j];
+				while (j >= 0 && dataSort[j].properties.TaxName.localeCompare(key.properties.TaxName.charAt(0)) === 1) {
+					dataSort[j + 1] = dataSort[j];
 					j--;
 				}
-				dataTemp[j + 1] = key;
+				dataSort[j + 1] = key;
 			}
-            dataSort = dataTemp;
 		} else if (sort === 'name-reverse') {
 	
 		}
 		return dataSort;
 	}
 
-    const tabInit = (layerName, tabContainer) => { // builds a single tab button (consider combining with tableInit)
+    const tabInit = (layerName, tabContainer) => { // builds a single tab button (consider combining with listInit)
         let tab = document.createElement('div');
         tab.id = 'tab-' + layerName;
         tab.className = 'tab interactive-2';
@@ -80,12 +78,8 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
             tab.classList.add('hide');
         } else {
             if (getParam('targetLayer')) {
-                if (layerName === 'posts') {
+                if (layerName === 'posts' || getParam('targetLayer') !== layerName) {
                     tab.classList.add('behind');
-                } else {
-                    if (getParam('targetLayer') !== layerName) {
-                        tab.classList.add('behind');
-                    }
                 }
             } else {
                 if (layerName !== 'posts') {
@@ -102,50 +96,50 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         tabContainer.appendChild(tab);
     }
 
-    const tableInit = (layerName, listContainer) => { // prepares a single table for data (consider combining with tabInit)
-        let testDiv = document.createElement('div');
-        testDiv.id = 'subgroup-' + layerName;
-        testDiv.className = 'subgroup';
+    const listInit = (layerName, listContainer) => { // prepares a single table for data (consider combining with tabInit)
+        let subgroup = document.createElement('div');
+        subgroup.id = 'subgroup-' + layerName;
+        subgroup.className = 'subgroup';
         let title = document.createElement('h3');
         title.className = 'list-title';
         title.innerHTML = capitalizeFirst(layerName);
-        let testP = document.createElement('p');
-        testP.className = 'list-subtitle';
+        let para = document.createElement('p');
+        para.className = 'list-subtitle';
         //let sortButton = document.createElement('button');
 
         let table = document.createElement('table');
         table.id = 'table-' + layerName;
         table.className = 'feature-list';
 
-        testDiv.appendChild(title);
-        testDiv.appendChild(testP);
-        //testDiv.appendChild(sortButton);
-        //testDiv.addEventListener("click", swapViewList);
-        let containerDiv = document.createElement('div');
-        containerDiv.id = 'list-' + layerName;
-        containerDiv.className = 'list'
+        subgroup.appendChild(title);
+        subgroup.appendChild(para);
+        //subgroup.appendChild(sortButton);
+        //subgroup.addEventListener("click", swapViewList);
+        let listDiv = document.createElement('div');
+        listDiv.id = 'list-' + layerName;
+        listDiv.className = 'list'
 
         if (getParam(layerName)) {
-            containerDiv.classList.add('hide');
+            listDiv.classList.add('hide');
         } else {
             if (getParam('targetLayer')) {
                 if (layerName === 'posts') {
-                    containerDiv.classList.add('hide')
+                    listDiv.classList.add('hide')
                 } else {
                     if (getParam('targetLayer') !== layerName) {
-                        containerDiv.classList.add('hide');
+                        listDiv.classList.add('hide');
                     }
                 }
             } else {
                 if (layerName !== 'posts') {
-                    containerDiv.classList.add('hide');
+                    listDiv.classList.add('hide');
                 }
             }
         }
 
-        containerDiv.appendChild(testDiv);
-        containerDiv.appendChild(table);
-        listContainer.appendChild(containerDiv);
+        listDiv.appendChild(subgroup);
+        listDiv.appendChild(table);
+        listContainer.appendChild(listDiv);
     }
 
     const buildTableRow = (rowData, layerName, table) => { // builds one table row
@@ -253,13 +247,11 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         let visibleTabs = document.querySelectorAll('#tab-container :not(.hide)');
         let targetTab = document.getElementById('tab-' + layerName);
         if (visibleTabs.length === 0) { // adding first tab
-            targetTab.classList.remove('behind');
-            targetTab.classList.remove('hide');
+            targetTab.classList.remove('hide', 'behind');
             document.getElementById('list-' + layerName).classList.remove('hide');
             onCenter({name: layerName, id: -1, fly: false});
         } else if (visibleTabs.length === 1 && !targetTab.classList.contains('hide')) { // removing last tab
-            targetTab.classList.add('behind');
-            targetTab.classList.add('hide');
+            targetTab.classList.add('hide', 'behind');
             document.getElementById('list-' + layerName).classList.add('hide');
             onCenter({name: 'none', id: -1, fly: false});   
         } else { // adding or removing any other tab
@@ -307,7 +299,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
     useEffect(() => {
         //onCenter({name: getParam('targetLayer'), id: -1, fly: false});
-    }, [])
+    }, []);
 
     useEffect(() => {
         if (mode === 'view') {
@@ -329,7 +321,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
                         tabInit(layerList[i], tabContainer);
                     }, i * 300);
                 }
-                tableInit(layerList[i], listContainer);
+                listInit(layerList[i], listContainer);
             }
         }
     }, [mode])
@@ -359,29 +351,43 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     //}, [roads, mode]); //fire this whenever the roads features put into the map change or map mode changes
 
     useEffect(() => {
-        if (mode === 'view' && target) {
+        if (target && mode === 'view') {
             //console.log(target);
             swapView(target); //figure out why non-post table hl doesn't refresh on refresh
         };
     }, [target]);
 
     useEffect(() => {
-        //console.log(ratio);
-        let subtitle = document.querySelector('#subgroup-posts > .list-subtitle');
-        subtitle.innerHTML = 'Reviewed: ' + ratio[0] + ' of ' + (ratio[0] + ratio[1]);
-    }, [ratio]);
-
-    useEffect(() => {
         if (layerVis) {
-            //console.log('layerVis')
-            let tabs = document.getElementById('tab-container').children;
-            for (let i = 0; i < tabs.length; i++) {
-                if (layerVis[layerList[i]] !== !tabs[i].classList.contains('hide')) {
-                    swapViewMenu(layerList[i]);
+            if (mode === 'view') {
+                let tabs = document.getElementById('tab-container').children;
+                for (let i = 0; i < tabs.length; i++) {
+                    if (layerVis[layerList[i]] !== !tabs[i].classList.contains('hide')) {
+                        swapViewMenu(layerList[i]);
+                    }
+                }
+            } else {
+                let temp = false;
+                for (let i = 0; i < layerList.length; i++) {
+                    if (layerVis[layerList[i]]) {
+                        onCenter({name: layerList[i], id: -1, fly: false});
+                        temp = true;
+                        break;
+                    }
+                }
+                if (!temp) {
+                    onCenter({name: 'none', id: -1, fly: false});
                 }
             }
         }
     }, [layerVis]);
+
+     useEffect(() => {
+        if (mode === 'view') {
+            document.querySelector('#subgroup-posts > .list-subtitle').innerHTML = 
+                'Reviewed: ' + ratio[0] + ' of ' + (ratio[0] + ratio[1]);
+        }
+    }, [ratio]);
 
     if (mode === 'view') {
         return (

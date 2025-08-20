@@ -204,10 +204,8 @@ export default function Home(props){
 	useEffect(() => {
 		requestStaticLayers(); //puts in requests for all map layers (besides basemap and posts layers)
 
-		let close = document.getElementById("msg-close");
-		close.addEventListener('click', () => {
-			let update = document.getElementById("update");
-			update.classList.toggle("transition");
+		document.getElementById("msg-close").addEventListener('click', () => {
+			document.getElementById("update").classList.toggle("transition");
 		});
 
 		setLayerVis({posts: !getParam('posts'), projects: !getParam('projects'), lands: !getParam('lands'), roads: !getParam('roads')});
@@ -239,8 +237,6 @@ export default function Home(props){
 	useEffect(() => {
 		if (mapMode === 'view') {
 			setTarget({name: (getParam('targetLayer') ? getParam('targetLayer') : 'posts'), id: -1, fly: false});
-		} else {
-			setTarget({name: 'none', id: -1, fly: false});
 		}
 	}, [mapMode]);
 

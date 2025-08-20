@@ -28,11 +28,11 @@ export default function Stats({locations, projects, lands, roads, mode, target})
             console.log('hi!');
             let properties = locations.map(locations => locations.properties);
             let aggregated = properties.reduce((acc, item) => {
-                let temp = months[item.timestamp.date.split('/')[0] - 1]
-                if (acc[temp]) {
-                    acc[temp]++;
+                let monthIndex = months[item.timestamp.date.split('/')[0] - 1]
+                if (acc[monthIndex]) {
+                    acc[monthIndex]++;
                 } else {
-                    acc[temp] = 1;
+                    acc[monthIndex] = 1;
                 }
                 return acc;
             }, {});

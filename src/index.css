@@ -639,7 +639,7 @@ td:nth-child(2) {
 
 /* add-location */
 .add-location-form{
-  border: 3px solid #CD202D;
+  border: 2px solid #CD202D;
   border-radius: 5px;
   padding: 10px 20px;
   margin-top: 10px;
