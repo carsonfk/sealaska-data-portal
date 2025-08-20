@@ -34,7 +34,7 @@ export default function Home(props){
 	const roadsURL = '';
 
 	//returns class to close sidebars
-	function closed(side) {
+	const closed = (side) => {
 		if (side === 'right' && !getParam('left') && window.innerWidth <= 878) {
 			return 'closed';
 		}
@@ -43,7 +43,7 @@ export default function Home(props){
 	}
 
 	//initialize a single sidebar click event
-	function sidebarInit(side) {
+	const sidebarInit = (side) => {
 		let other;
 		(side === "left") ? other = "right" : other = "left";
 		let sidebar = document.getElementsByClassName(side);
@@ -76,8 +76,53 @@ export default function Home(props){
 		});
 	}
 
+	const handleResize = () => { //right sidebar hidden on screen shrink (if left sidebar is visible)
+		windowWidth.current = window.innerWidth;
+		if (windowWidth.current <= 878 && !getParam('left') && !getParam('right')) {
+			let right = document.getElementsByClassName('right');
+			right[0].classList.remove('closed');
+			right[1].classList.remove('closed');
+			setParam('right', false);
+			setSidebars((sidebars) => ({left: sidebars.left, right: !sidebars.right}));
+		}
+	};
+
+    const handleModeSubmit = (selectedMode) => { //from form jsx - this has to do with updating map mode value when the map mode form is submitted
+		if (mapMode !== selectedMode) {
+			setMapMode(selectedMode);
+		}
+	};
+
+    const handleCurrentSelection = ({coordinates: point, origin: component}) => { //from addfeature or map jsx - updates current point selection (will default to empty when mode is set to view)
+		setCurrentSelection({coordinates: point, origin: component});
+    };
+
+	const handleCenter = ({name: layerName, id: layerId, fly: bool}) => { //from listfeatures jsx or map jsx - updates targeted feature
+		if (layerName === 'retain') {
+			setTarget((target) => ({name: target.name, id: layerId, fly: bool}));
+		} else {
+			setTarget({name: layerName, id: layerId, fly: bool});
+		}
+	};
+
+	const handleReset = () => { //from refresh jsx - updates the reset counter
+		setReset((reset) => reset + 1);
+	};
+
+	const handleFormSubmit = () => { //from addfeatureform jsx - returns to view mode
+		setMapMode('view');
+	};
+
+	const handleLayerVis = (layerName, bool) => {
+		setLayerVis(prev => ({
+			...prev,
+			[layerName]: bool
+		}));
+		console.log("layerVis changed")
+	} 
+
 	//requests static layer data from AGOL
-	function requestStaticLayers() {
+	const requestStaticLayers = () => {
 		/*
 		request(projectsURL)
 		.then(response => {
@@ -108,50 +153,53 @@ export default function Home(props){
 		*/
 	}
 
-	const handleResize = () => { //right sidebar hidden on screen shrink (if left sidebar is visible)
-		windowWidth.current = window.innerWidth;
-		if (windowWidth.current <= 878 && !getParam('left') && !getParam('right')) {
-			let right = document.getElementsByClassName('right');
-			right[0].classList.remove('closed');
-			right[1].classList.remove('closed');
-			setParam('right', false);
-			setSidebars((sidebars) => ({left: sidebars.left, right: !sidebars.right}));
+	async function resetLoad() {
+		const db = getDatabase();
+		const locRef = ref(db, "features");
+		const dbFeatures = await get(locRef);
+
+		let publicJSON = []; // create an empty array to add public geoJSON stuff
+		let allJSON = []; // create an empty array to add all geoJSON stuff
+		let localID = 0;
+		dbFeatures.forEach((row) => {
+			// for every feature, create a geoJSON format object and add it to public and/or private array
+			const newLoc = `{"type":"Feature","properties":{"type":"${
+				row.val().type
+				}","details":"${
+				row.val().details
+				}","image":"${
+				row.val().image
+				}","sharing":"${
+				row.val().sharing
+				}","reviewed":"${
+				row.val().reviewed
+				}","account":"${
+				row.val().account
+				}","timestamp":{"date":"${
+					row.val().timestamp.date
+					}","time":"${
+					row.val().timestamp.time
+				}"}},"geometry":{"type":"Point","coordinates":[${
+					row.val().longitude},${
+					row.val().latitude
+				}]},"id": ${localID}}`;
+			if (row.val().sharing === "public") {
+				publicJSON.push(newLoc);
+			}
+			allJSON.push(newLoc);
+			localID++;
+		});
+
+		//sorts parsed JSON and sets it as global data
+		setData(JSON.parse(`[${publicJSON}]`));
+
+		//retains target after a reset
+		if(reset !== 0) {
+			setTimeout(() => {
+				setTarget((target) => ({name: target.name, id: target.id, fly: false}));
+			}, 150);
 		}
-	};
-
-    const handleModeSubmit = (selectedMode) => { //from form jsx - this has to do with updating map mode value when the map mode form is submitted
-		if (mapMode !== selectedMode) {
-			setMapMode(selectedMode);
-		}
-	};
-
-    const handleCurrentSelection = ({coordinates: point, origin: component}) => { //from addfeature or map jsx - updates current point selection (will default to empty when mode is set to view)
-		setCurrentSelection({coordinates: point, origin: component});
-    };
-
-	const handleCenter = ({name: layerName, id: layerId, fly: bool}) => { //from listfeatures jsx or map jsx - updates targeted feature
-		if (layerName === 'retain') {
-			setTarget((target) => ({name: target.name, id: layerId, fly: bool}));
-		} else {
-			setTarget({name: layerName, id: layerId, fly: bool});
-		}
-	};
-
-	const handleReset = () => {
-		setReset((reset) => reset + 1);
-	};
-
-	const handleFormSubmit = () => {
-		setMapMode('view');
-	};
-
-	const handleLayerVis = (layerName, bool) => {
-		setLayerVis(prev => ({
-			...prev,
-			[layerName]: bool
-		}));
-		console.log("layerVis changed")
-	} 
+	}
 
 	useEffect(() => {
 		requestStaticLayers(); //puts in requests for all map layers (besides basemap and posts layers)
@@ -180,56 +228,8 @@ export default function Home(props){
 	}, []);
 	
 	useEffect(()=>{ //this pulls data from the database on inital load and reset
-		async function resetLoad() {
-			const db = getDatabase();
-			const locRef = ref(db, "features");
-			const dbFeatures = await get(locRef);
-
-			let publicJSON = []; // create an empty array to add public geoJSON stuff
-			let allJSON = []; // create an empty array to add all geoJSON stuff
-			let localID = 0;
-			dbFeatures.forEach((row) => {
-				// for every feature, create a geoJSON format object and add it to public and/or private array
-				const newLoc = `{"type":"Feature","properties":{"type":"${
-					row.val().type
-					}","details":"${
-					row.val().details
-					}","image":"${
-					row.val().image
-					}","sharing":"${
-					row.val().sharing
-					}","reviewed":"${
-					row.val().reviewed
-					}","account":"${
-					row.val().account
-					}","timestamp":{"date":"${
-						row.val().timestamp.date
-						}","time":"${
-						row.val().timestamp.time
-					}"}},"geometry":{"type":"Point","coordinates":[${
-						row.val().longitude},${
-						row.val().latitude
-					}]},"id": ${localID}}`;
-				if (row.val().sharing === "public") {
-					publicJSON.push(newLoc);
-				}
-				allJSON.push(newLoc);
-				localID++;
-			});
-
-			//sorts parsed JSON and sets it as global data
-			setData(JSON.parse(`[${publicJSON}]`));
-			
-			//retains target after a reset
-			if(reset !== 0) {
-				setTimeout(() => {
-					setTarget((target) => ({name: target.name, id: target.id, fly: false}));
-				}, 150);
-			}
-		}
 		resetLoad();
 		console.log(reset);
-
 		clearTimeout(resetTimer);
 		setResetTimer(setTimeout(() => {
 			setReset((reset) => reset + 1);
@@ -246,9 +246,7 @@ export default function Home(props){
 
 	useEffect(() => {
 		console.log(target);
-		if (target.name !== 'none') {
-			setParam('targetLayer', target.name !== 'posts' ? target.name : null);
-		}
+		setParam('targetLayer', target.name !== 'posts' && target.name !== 'none' ? target.name : null);
 	}, [target])
 
 	useEffect(() => {
@@ -285,7 +283,7 @@ export default function Home(props){
 					<img id="arrow-right" className="arrow" alt="From pictarts.com" src="https://pictarts.com/21/material/01-vector/m-0027-arrow.png"></img>
 				</div>
 				<div id="options" className={"main-container sidebar right " + closed("right")}>
-					<Refresh onReset={handleReset} reset={reset} locations={data}/>
+					<Refresh reset={reset} locations={data} onReset={handleReset}/>
 					<FilterForm/>
 					<Stats locations={data} mode={mapMode} projects={projectsData} lands={landsData} roads={roadsData} target={target}/>
 				</div>

@@ -8,24 +8,20 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 
 export default function Stats({locations, projects, lands, roads, mode, target}){
     const [chartData, setChartData] = useState(null);
-
     const [monthsAggregated, setMonthsAggregated] = useState(null);
-
     const [areaAggregated, setAreaAggregated] = useState(null);
-
 
     const months = ['Jan', 'Feb', 'Mar', 'Apr',
                     'May', 'Jun', 'Jul', 'Aug',
                     'Sep', 'Oct', 'Nov', 'Dec'];
 
-    ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+    ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
     useEffect(() => {
         if (mode) {
             console.log(mode);
         }
     }, [mode]);
-
 
     useEffect(() => {
         if (locations) {

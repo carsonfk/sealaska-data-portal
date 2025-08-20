@@ -1,12 +1,11 @@
 import React, {useState, useEffect, useRef} from "react";
 import { getTimestampAK } from "../functions";
 
-export default function Refresh({onReset, reset, locations}){
-
-    function refreshAnimation() { //animated refresh icon
+export default function Refresh({reset, locations, onReset}){
+    const refreshAnimation = () => { //animated refresh icon
         let refresh = document.getElementById('refresh');
         let refreshElements = document.getElementById('refresh-container').children;
-        refreshElements[0].classList.toggle('hide');
+        refreshElements[0].classList.toggle('hide'); 
         refreshElements[1].classList.toggle('hide');
         refresh.classList.add('delay');
         refresh.classList.add('rotate');
@@ -16,11 +15,12 @@ export default function Refresh({onReset, reset, locations}){
         }, 200);
     }
 
-    function onSubmit() { //manual refresh
+    /*
+    const onSubmit = () => { //manual refresh
         onReset();
-        //refreshAnimation();
     }
-
+    */
+    
     useEffect(() => {
         refreshAnimation();
         let ts = getTimestampAK();
@@ -42,7 +42,7 @@ export default function Refresh({onReset, reset, locations}){
 
     return (
         <>
-            <button id="refresh" className="icon interactive" type='submit' onClick={onSubmit}></button>
+            <button id="refresh" className="icon interactive" type='submit' onClick={onReset}></button>
             <div id="refresh-container" className="refresh-container">
                 <div className="progress-bar-container hide">
                     <div id="progress-bar" className="progress-bar"></div>

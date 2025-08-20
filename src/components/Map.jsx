@@ -25,7 +25,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   const layerList = ['lands', 'posts'];
 
   //handles flying to provided coordinates
-  function flyTo(coordinates) {
+  const flyTo = (coordinates) => {
     let delta = haversineDistance(Object.values(map.current.getCenter()), coordinates)
     let zoomLevel = map.current.getZoom();
     let flyDuration = 3000 + ((Math.sqrt(zoomLevel * 100) * Math.sqrt(delta / 1000) * 100)); //formula for fly duration
@@ -37,7 +37,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   }
   
   //begins popup construction and fly with or without image
-  function handlePopup(layerName, feature, fly) {
+  const handlePopup = (layerName, feature, fly) => {
     let coordinates;
     if (layerName === 'posts' || layerName === 'projects') { //reconsider once all layers are available
       coordinates = feature.geometry.coordinates;
@@ -85,7 +85,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   }
 
   //constructs a reviewed/unreviewed popup for a post using provided parameters
-  function buildPopupPosts(coordinates, type, details, reviewed, timestamp, img) {
+  const buildPopupPosts = (coordinates, type, details, reviewed, timestamp, img) => {
     if (reviewed) {
       popup
         .setLngLat(coordinates)
@@ -100,7 +100,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   }
 
   //constructs a popup for a land feature using provided parameters
-  function buildPopupLands(coordinates, owner, name, acres) {
+  const buildPopupLands = (coordinates, owner, name, acres) => {
     if (name && name !== undefined && name !== 'Other') {
       popup
         .setLngLat(coordinates)
@@ -115,7 +115,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   }
 
   //initializes menu & legend click event
-  function clickInit(selected, other) {
+  const clickInit = (selected, other) => {
     document.getElementById(selected.id + "-icon").addEventListener("click", () => {
       for (let item of selected.getElementsByClassName('menu-legend-subgroup')) {
         item.classList.toggle("hide");
@@ -129,7 +129,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   }
 
   //if legend subgroup doesnt already exist, builds and adds to legend element
-  function buildLegend(name, items, colors) {
+  const buildLegend = (name, items, colors) => {
     let legend = document.getElementById('legend');
     if (!legend.querySelector('#' + name)) {
       let legendSubgroup = document.createElement('div');
@@ -158,7 +158,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
   }
 
   //update the source of the features on the map
-  function updateSource(localData, source) {
+  const updateSource = (localData, source) => {
     setTimeout(() => {
       if (map.current && map.current.getSource(layerList[0]) !== undefined) {
         map.current.getSource(source).setData({

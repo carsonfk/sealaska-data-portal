@@ -16,7 +16,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onSelect, o
         account: "anon"
     });
 
-    function imageToBase64(img) {
+    const imageToBase64 = (img) => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = () => {
@@ -29,7 +29,7 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onSelect, o
           });
     }
 
-    function updateForm(value) {
+    const updateForm = (value) => {
         return setForm((prev) => {
             return { ...prev, ...value}
         });
@@ -76,7 +76,6 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onSelect, o
             const newLocRef = push(locRef, newLoc);
             updateForm({ latitude: "", longitude: "",
                 type: "", details: "", image: "" });
-            //onEdit(["", ""]);
             document.getElementById('image').value = "";
             onReset();
             submitSwap();

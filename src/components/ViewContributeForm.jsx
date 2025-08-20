@@ -25,6 +25,5 @@ export default function ViewContributeForm( {mode, onSubmit} ) {
     )
 }
 
-
 //style={{ border: "2px solid #CD202D", borderRadius: "6px", padding: "10px", display: "flex", alignItems: "center",
 //justifyContent: "center", background: "#f2f2f2", width: "250px", margin: "auto", marginTop: "10px", marginBottom: "10px"}}

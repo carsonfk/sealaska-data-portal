@@ -12,7 +12,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     const layerList = ['posts', 'projects', 'lands', 'roads'];
 
     //limits provided JSON to prioritized info for list
-    function handleData(data, layerName) {
+    const handleData = (data, layerName) => {
         let returnArr = []
         if (layerName === 'posts') {
             let reviewedCount = 0;
@@ -43,7 +43,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     }
 
     //sorts provided JSON using provided sort
-	function sortData(data, sort) {
+	const sortData = (data, sort) => {
         //console.log('hi!')
 		let dataSort = [];
         if (sort === 'newest') {
@@ -70,7 +70,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 		return dataSort;
 	}
 
-    function tabInit(layerName, tabContainer) { // builds a single tab button (consider combining with tableInit)
+    const tabInit = (layerName, tabContainer) => { // builds a single tab button (consider combining with tableInit)
         let tab = document.createElement('div');
         tab.id = 'tab-' + layerName;
         tab.className = 'tab interactive-2';
@@ -102,7 +102,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         tabContainer.appendChild(tab);
     }
 
-    function tableInit(layerName, listContainer) { // prepares a single table for data (consider combining with tabInit)
+    const tableInit = (layerName, listContainer) => { // prepares a single table for data (consider combining with tabInit)
         let testDiv = document.createElement('div');
         testDiv.id = 'subgroup-' + layerName;
         testDiv.className = 'subgroup';
@@ -148,7 +148,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         listContainer.appendChild(containerDiv);
     }
 
-    function buildTableRow(rowData, layerName, table) { // builds one table row
+    const buildTableRow = (rowData, layerName, table) => { // builds one table row
         let row = table.insertRow(-1);
         row.id = rowData.id;
         let cell1 = row.insertCell(0);
@@ -184,7 +184,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         });
     }
 
-    function updateTableHL(layerName, id) {
+    const updateTableHL = (layerName, id) => {
         let tables = document.getElementsByTagName("table");
         for (let i = 0; i < tables.length; i++) {
             if (tables[i].children[0]) {
@@ -203,7 +203,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         }
     }
 
-    function swapView(target) {
+    const swapView = (target) => {
         //console.log('swap!')
         updateTableHL(target.name, target.id);
         if (target.id !== -1) {
@@ -229,8 +229,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         }
     }
 
-    function swapViewTab(layerName) {
-        //console.log('tab!')
+    const swapViewTab = (layerName) => {
         let tabs = document.getElementsByClassName('tab');
         for (let i = 0; i < tabs.length; i++) {
             if (!tabs[i].classList.contains('behind')) {
@@ -248,11 +247,9 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         document.getElementById('list-' + layerName).classList.remove('hide');
         onCenter({name: layerName, id: -1, fly: false}); // no row is highlighted
         updateTableHL(layerName, -1);
-
-        //console.log(layerName)
     }
 
-    function swapViewMenu(layerName) {
+    const swapViewMenu = (layerName) => {
         let visibleTabs = document.querySelectorAll('#tab-container :not(.hide)');
         let targetTab = document.getElementById('tab-' + layerName);
         if (visibleTabs.length === 0) { // adding first tab
@@ -293,7 +290,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         }
     }
 
-    function tableLoad(data, layerName, sort) {
+    const tableLoad = (data, layerName, sort) => {
         let limit = handleData(data, layerName);
         let sorted = sortData(limit, sort);
         let table = document.getElementById('table-' + layerName); 
