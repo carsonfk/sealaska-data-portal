@@ -93,7 +93,6 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
                 }
             }
         }
-        
 
         tab.addEventListener('click', () => {
             if (tab.classList.contains('behind')) {
@@ -122,7 +121,6 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         let containerDiv = document.createElement('div');
         containerDiv.id = 'list-' + layerName;
         containerDiv.className = 'list'
-        
 
         if (getParam(layerName)) {
             containerDiv.classList.add('hide');
@@ -252,20 +250,20 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     }
 
     function swapViewMenu(layerName) {
-        //console.log('menu!')
         let visibleTabs = document.querySelectorAll('#tab-container :not(.hide)');
         let targetTab = document.getElementById('tab-' + layerName);
-        if (visibleTabs.length < 2) {
-            if (visibleTabs.length === 0) { // adding first tab
-                targetTab.classList.remove('behind');
-                document.getElementById('list-' + layerName).classList.remove('hide');
-                onCenter({name: layerName, id: -1, fly: false});
-                updateTableHL(layerName, -1);
-            }
+        if (visibleTabs.length === 0) { // adding first tab
+            targetTab.classList.remove('behind');
+            targetTab.classList.remove('hide');
+            document.getElementById('list-' + layerName).classList.remove('hide');
+            onCenter({name: layerName, id: -1, fly: false});
+        } else if (visibleTabs.length === 1 && !targetTab.classList.contains('hide')) { // removing last tab
+            targetTab.classList.add('behind');
+            targetTab.classList.add('hide');
+            document.getElementById('list-' + layerName).classList.add('hide');
+            onCenter({name: 'none', id: -1, fly: false});   
         } else { // adding or removing any other tab
             //targetTab.classList.add('behind');
-            console.log(visibleTabs);
-            console.log(targetTab);
             if (!targetTab.classList.contains('hide')) {
                 for (let j = 0; j < visibleTabs.length; j++) {
                     if (visibleTabs[j] === targetTab) {
@@ -362,7 +360,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
     useEffect(() => {
         if (mode === 'view' && target) {
-            console.log(target);
+            //console.log(target);
             swapView(target); //figure out why non-post table hl doesn't refresh on refresh
         };
     }, [target]);
