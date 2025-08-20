@@ -111,12 +111,15 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         title.innerHTML = capitalizeFirst(layerName);
         let testP = document.createElement('p');
         testP.className = 'list-subtitle';
+        //let sortButton = document.createElement('button');
+
         let table = document.createElement('table');
         table.id = 'table-' + layerName;
         table.className = 'feature-list';
 
         testDiv.appendChild(title);
         testDiv.appendChild(testP);
+        //testDiv.appendChild(sortButton);
         //testDiv.addEventListener("click", swapViewList);
         let containerDiv = document.createElement('div');
         containerDiv.id = 'list-' + layerName;

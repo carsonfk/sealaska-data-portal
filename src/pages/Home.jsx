@@ -24,7 +24,7 @@ export default function Home(props){
 	const [reset, setReset] = useState(0);
     const [mapMode, setMapMode] = useState('view');
     const [currentSelection, setCurrentSelection] = useState({coordinates:[], origin: 'none'});
-	const [timerLong, setTimerLong] = useState();
+	const [resetTimer, setResetTimer] = useState();
 	const [timer, setTimer] = useState([]);
 	const [sidebars, setSidebars] = useState();
 	const [layerVis, setLayerVis] = useState(); //{'posts': false, 'projects': false, 'lands': false, 'roads': true}
@@ -230,8 +230,8 @@ export default function Home(props){
 		resetLoad();
 		console.log(reset);
 
-		clearTimeout(timerLong);
-		setTimerLong(setTimeout(() => {
+		clearTimeout(resetTimer);
+		setResetTimer(setTimeout(() => {
 			setReset((reset) => reset + 1);
 		}, 300000));
 	}, [reset]);

@@ -75,7 +75,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
         let name = feature.properties.TaxName;
         let acres = formatNumber(feature.properties.AreaAcres, 2);
         buildPopupLands(coordinates, owner, name, acres);
-      } else if (layerName == 'roads') {
+      } else if (layerName === 'roads') {
 
       }
     }
@@ -728,6 +728,8 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
     updateSource(landsLocations, 'lands');
   }, [landsLocations, styleSwap]); //everytime the landsLocations state or map style is changed
 
+
+
   useEffect(() => {
     if (mode === 'view') { //events added and removed from map in view mode
       //map.current.getCanvas().style.cursor = ""
@@ -782,6 +784,12 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
       }
     }
   }, [mode]);
+
+  useEffect(() => {
+    if(layerVis) {
+      console.log('hi');
+    }
+  }, [layerVis]);
 
   return (
     <>
