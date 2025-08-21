@@ -87,6 +87,16 @@ export default function Home(props){
 		}
 	};
 
+	const targetFirstLayer = () => { //updates target to the first visible layer
+		let layers = Object.keys(layerVis);
+		for (let i = 0; i < layers.length; i++) {
+			if (layerVis[layers[i]]) {
+				setTarget({name: layers[i], id: -1, fly: false});
+				break;
+			}
+		}
+	}
+
     const handleModeSubmit = (selectedMode) => { //from form jsx - this has to do with updating map mode value when the map mode form is submitted
 		if (mapMode !== selectedMode) {
 			setMapMode(selectedMode);
@@ -237,6 +247,8 @@ export default function Home(props){
 	useEffect(() => {
 		if (mapMode === 'view') {
 			setTarget({name: (getParam('targetLayer') ? getParam('targetLayer') : 'posts'), id: -1, fly: false});
+		} else {
+			targetFirstLayer();
 		}
 	}, [mapMode]);
 
@@ -253,7 +265,7 @@ export default function Home(props){
 
 	useEffect(() => { //testing
 		if (layerVis) {
-			
+			targetFirstLayer();
 		}
 	}, [layerVis]);
 

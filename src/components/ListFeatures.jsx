@@ -198,7 +198,6 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     }
 
     const swapView = (target) => {
-        //console.log('swap!')
         updateTableHL(target.name, target.id);
         if (target.id !== -1) {
             let tabs = document.getElementsByClassName('tab');
@@ -220,6 +219,8 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
                     document.getElementById('list-' + target.name).classList.remove('hide');
                 }
             }
+        } else {
+            console.log('lelele');
         }
     }
 
@@ -314,6 +315,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
             }
 
             for (let i = 0; i < layerList.length; i++) { //initializes associated tabs and lists simultaneously
+                /*
                 if (i === 0) {
                     tabInit(layerList[i], tabContainer);
                 } else {
@@ -321,6 +323,9 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
                         tabInit(layerList[i], tabContainer);
                     }, i * 300);
                 }
+                */
+
+                tabInit(layerList[i], tabContainer);
                 listInit(layerList[i], listContainer);
             }
         }
@@ -352,7 +357,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
     useEffect(() => {
         if (target && mode === 'view') {
-            //console.log(target);
+            console.log(target);
             swapView(target); //figure out why non-post table hl doesn't refresh on refresh
         };
     }, [target]);
@@ -367,6 +372,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
                     }
                 }
             } else {
+                /*
                 let temp = false;
                 for (let i = 0; i < layerList.length; i++) {
                     if (layerVis[layerList[i]]) {
@@ -378,6 +384,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
                 if (!temp) {
                     onCenter({name: 'none', id: -1, fly: false});
                 }
+                */
             }
         }
     }, [layerVis]);

@@ -97,7 +97,9 @@ export default function Stats({locations, projects, lands, roads, mode, target})
     }, [target, monthsAggregated, areaAggregated]);
 
 
-    if (!chartData) return <p>Return to View mode for statistics</p>;
+    if (mode === 'contribute') return <p>Return to View mode for statistics</p>;
+
+    if (!chartData) return <p>Testing</p>
     
     return (
         <>
