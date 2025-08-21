@@ -77,14 +77,8 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         if (getParam(layerName)) {
             tab.classList.add('hide');
         } else {
-            if (getParam('targetLayer')) {
-                if (layerName === 'posts' || getParam('targetLayer') !== layerName) {
-                    tab.classList.add('behind');
-                }
-            } else {
-                if (layerName !== 'posts') {
-                    tab.classList.add('behind');
-                }
+            if ((getParam('targetLayer') && getParam('targetLayer') !== layerName) || !getParam('targetLayer')) {
+                tab.classList.add('behind');
             }
         }
 
@@ -122,18 +116,8 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         if (getParam(layerName)) {
             listDiv.classList.add('hide');
         } else {
-            if (getParam('targetLayer')) {
-                if (layerName === 'posts') {
-                    listDiv.classList.add('hide')
-                } else {
-                    if (getParam('targetLayer') !== layerName) {
-                        listDiv.classList.add('hide');
-                    }
-                }
-            } else {
-                if (layerName !== 'posts') {
-                    listDiv.classList.add('hide');
-                }
+            if ((getParam('targetLayer') && getParam('targetLayer') !== layerName) || !getParam('targetLayer')) {
+                listDiv.classList.add('hide');
             }
         }
 

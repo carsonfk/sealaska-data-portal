@@ -246,7 +246,7 @@ export default function Home(props){
 
 	useEffect(() => {
 		if (mapMode === 'view') {
-			setTarget({name: (getParam('targetLayer') ? getParam('targetLayer') : 'posts'), id: -1, fly: false});
+			setTarget({name: getParam('targetLayer'), id: -1, fly: false});
 		} else {
 			targetFirstLayer();
 		}
@@ -254,7 +254,7 @@ export default function Home(props){
 
 	useEffect(() => {
 		console.log(target);
-		setParam('targetLayer', target.name !== 'posts' && target.name !== 'none' ? target.name : null);
+		setParam('targetLayer', target.name !== 'none' ? target.name : null);
 	}, [target])
 
 	useEffect(() => {

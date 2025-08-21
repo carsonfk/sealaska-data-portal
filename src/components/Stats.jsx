@@ -70,7 +70,7 @@ export default function Stats({locations, projects, lands, roads, mode, target})
                 ]
             });
         } else if (target.name === 'projects') {
-
+            setChartData(null);
         } else if (target.name === 'lands') {
             setChartData({
                 labels: [],
@@ -90,12 +90,11 @@ export default function Stats({locations, projects, lands, roads, mode, target})
 
             //add pie chart for native land ownership pcts
         } else if (target.name === 'roads') {
-
+            setChartData(null);
         } else if (target.name === 'none') {
             setChartData(null);
         }
     }, [target, monthsAggregated, areaAggregated]);
-
 
     if (mode === 'contribute') return <p>Return to View mode for statistics</p>;
 
