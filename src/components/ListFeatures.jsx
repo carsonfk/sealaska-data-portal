@@ -84,9 +84,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
         tab.addEventListener('click', () => {
             if (tab.classList.contains('behind')) {
-                swapViewTest(layerName);
                 onCenter({name: layerName, id: -1, fly: false}); // no row is highlighted
-                updateTableHL(layerName, -1);
             }
         });
         tabContainer.appendChild(tab);
@@ -183,37 +181,8 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         }
     }
 
-    const swapView = (target) => {
-        updateTableHL(target.name, target.id);
-
-        /*
-        if (target.id !== -1) {
-            console.log('not -1')
-            let tabs = document.getElementsByClassName('tab');
-            if (document.getElementById('tab-' + target.name).classList.contains('behind')) {
-                for (let i = 0; i < tabs.length; i++) {
-                    if (!tabs[i].classList.contains('behind')) {
-                        tabs[i].classList.add('behind');
-                    }
-                    document.getElementById('tab-' + target.name).classList.remove('behind');
-                }
-            }
-
-            let lists = document.getElementsByClassName('list');
-            if (document.getElementById('list-' + target.name).classList.contains('hide')) {
-                for (let i = 0; i < lists.length; i++) {
-                    if (!lists[i].classList.contains('hide')) {
-                        lists[i].classList.add('hide');
-                    }
-                    document.getElementById('list-' + target.name).classList.remove('hide');
-                }
-            }
-        }
-        */
-    }
-
-    const swapViewTest = (layerName) => {
-        console.log("hahahahaahah")
+    const swapView = (layerName) => { //table view swaps originating from change in target
+        updateTableHL(layerName, -1);
         let tabs = document.getElementsByClassName('tab');
         for (let i = 0; i < tabs.length; i++) {
             if (!tabs[i].classList.contains('behind')) {
@@ -231,7 +200,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         document.getElementById('list-' + layerName).classList.remove('hide');
     }
 
-    const swapViewMenu = (layerName) => {
+    const swapViewMenu = (layerName) => { // table view swaps originating from change in visible layers
         let visibleTabs = document.querySelectorAll('#tab-container :not(.hide)');
         let targetTab = document.getElementById('tab-' + layerName);
         if (visibleTabs.length === 0) { // adding first tab
@@ -344,12 +313,9 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
     useEffect(() => {
         if (target && mode === 'view') {
-            //console.log(target);
-            //swapView(target); //figure out why non-post table hl doesn't refresh on refresh
             if (target.name !== 'none') {
                 console.log("working!!");
-                updateTableHL(target.name, target.id);
-                swapViewTest(target.name);
+                swapView(target.name, target.id);
             }
         };
     }, [target]);

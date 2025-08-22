@@ -271,7 +271,9 @@ export default function Home(props){
 
 	useEffect(() => { //testing
 		if (layerVis) {
-			targetFirstLayer();
+			if ((mapMode === 'view' && target.name === 'none') || mapMode === 'contribute') {
+				targetFirstLayer();
+			} 
 		}
 	}, [layerVis]);
 

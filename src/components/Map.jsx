@@ -325,7 +325,6 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
     }
   }, [locations]); //fire this whenever the features put into the map change
 
-
   useEffect(() => {
     if (lands) {
       setLandsLocations(lands);
