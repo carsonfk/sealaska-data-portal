@@ -25,7 +25,6 @@ export default function Stats({locations, projects, lands, roads, mode, target})
 
     useEffect(() => {
         if (locations) {
-            console.log('hi!');
             let properties = locations.map(locations => locations.properties);
             let aggregated = properties.reduce((acc, item) => {
                 let monthIndex = months[item.timestamp.date.split('/')[0] - 1]
@@ -58,41 +57,43 @@ export default function Stats({locations, projects, lands, roads, mode, target})
 
     useEffect(() => {
     // Example: Fetch data from a custom API
-        if (target.name === 'posts') {
-            setChartData({
-                labels : months,
-                datasets: [
-                    {
-                    label: '# of Posts',
-                    data: monthsAggregated,
-                    backgroundColor: 'rgb(75, 192, 192)',
-                    }
-                ]
-            });
-        } else if (target.name === 'projects') {
-            setChartData(null);
-        } else if (target.name === 'lands') {
-            setChartData({
-                labels: [],
-                datasets: [
-                    {
-                    label: 'Area (Acres)',
-                    data: areaAggregated,
-                    backgroundColor: ['rgb(250, 100, 100)',
-                                      'rgb(200, 100, 250)',
-                                      'rgb(255, 255, 255)',
-                                      'rgb(100, 250, 100)',
-                                      'rgb(250, 250, 100)',
-                                      'rgb(100, 150, 250)']
-                    }
-                ]
-            });
+        if (target) {
+            if (target.name === 'posts') {
+                setChartData({
+                    labels : months,
+                    datasets: [
+                        {
+                        label: '# of Posts',
+                        data: monthsAggregated,
+                        backgroundColor: 'rgb(75, 192, 192)',
+                        }
+                    ]
+                });
+            } else if (target.name === 'projects') {
+                setChartData(null);
+            } else if (target.name === 'lands') {
+                setChartData({
+                    labels: [],
+                    datasets: [
+                        {
+                        label: 'Area (Acres)',
+                        data: areaAggregated,
+                        backgroundColor: ['rgb(250, 100, 100)',
+                                        'rgb(200, 100, 250)',
+                                        'rgb(255, 255, 255)',
+                                        'rgb(100, 250, 100)',
+                                        'rgb(250, 250, 100)',
+                                        'rgb(100, 150, 250)']
+                        }
+                    ]
+                });
 
-            //add pie chart for native land ownership pcts
-        } else if (target.name === 'roads') {
-            setChartData(null);
-        } else if (target.name === 'none') {
-            setChartData(null);
+                //add pie chart for native land ownership pcts
+            } else if (target.name === 'roads') {
+                setChartData(null);
+            } else if (target.name === 'none') {
+                setChartData(null);
+            }
         }
     }, [target, monthsAggregated, areaAggregated]);
 

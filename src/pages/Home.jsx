@@ -18,7 +18,7 @@ export default function Home(props){
 	const [projectsData, setProjectsData] = useState();
 	const [landsData, setLandsData] = useState();
 	const [roadsData, setRoadsData] = useState();
-	const [target, setTarget] = useState({name: 'none', id: -1, fly: false});
+	const [target, setTarget] = useState();
 	//const [filter, setFilter] = useState('null')
 	//const [sort, setSort] = useState('newest');
 	const [reset, setReset] = useState(0);
@@ -90,7 +90,6 @@ export default function Home(props){
 	const targetFirstLayer = () => { //updates target to the first visible layer, if available
 		let layers = Object.keys(layerVis);
 		let visible = Object.values(layerVis).filter(value => value === true);
-		console.log(visible.length);
 		if (visible.length !== 0) {
 			for (let i = 0; i < layers.length; i++) {
 				if (layerVis[layers[i]]) {
@@ -113,12 +112,10 @@ export default function Home(props){
 		setCurrentSelection({coordinates: point, origin: component});
     };
 
-	const handleCenter = ({name: layerName, id: layerId, fly: bool}) => { //from listfeatures jsx or map jsx - updates targeted feature
-		if (layerName === 'retain') {
-			setTarget((target) => ({name: target.name, id: layerId, fly: bool}));
-		} else {
-			setTarget({name: layerName, id: layerId, fly: bool});
-		}
+	const handleCenter = (value) => { //from listfeatures jsx or map jsx - updates targeted feature
+		setTarget((prev) => {
+            return { ...prev, ...value}
+        });
 	};
 
 	const handleReset = () => { //from refresh jsx - updates the reset counter
@@ -217,7 +214,6 @@ export default function Home(props){
 	}
 
 	useEffect(() => {
-		console.log('mapmode');
 		if (mapMode === 'view' && getParam('targetLayer')) {
 			setTarget({name: getParam('targetLayer'), id: -1, fly: false});
 		} else if (mapMode === 'contribute') {
@@ -227,14 +223,15 @@ export default function Home(props){
 
 	useEffect(() => {
 		console.log(target);
-		let val = target.name !== 'none' ? target.name : null;
-		if (getParam('targetLayer') !== val) {
-			setParam('targetLayer', val);
+		if (target) {
+			let val = target.name !== 'none' ? target.name : null;
+			if (getParam('targetLayer') !== val) {
+				setParam('targetLayer', val);
+			}
 		}
 	}, [target]);
 
 	useEffect(() => {
-		console.log('hi');
 		document.getElementById("msg-close").addEventListener('click', () => {
 			document.getElementById("update").classList.toggle("transition");
 		});
@@ -275,9 +272,7 @@ export default function Home(props){
 
 	useEffect(() => { //testing
 		if (layerVis) {
-			if ((mapMode === 'view' && target.name === 'none') || mapMode === 'contribute') {
-				targetFirstLayer();
-			}
+			targetFirstLayer();
 		}
 	}, [layerVis]);
 

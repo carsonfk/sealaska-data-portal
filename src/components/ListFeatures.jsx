@@ -108,7 +108,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         subgroup.appendChild(title);
         subgroup.appendChild(para);
         //subgroup.appendChild(sortButton);
-        //subgroup.addEventListener("click", swapViewList);
+        //subgroup.addEventListener("click", swapView);
         let listDiv = document.createElement('div');
         listDiv.id = 'list-' + layerName;
         listDiv.className = 'list'
@@ -144,7 +144,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         } else if (layerName === 'roads') {
 
         }
-        row.addEventListener("click", (e) => {
+        row.addEventListener("click", (e) => { //code for when visible row is clicked
             let currentRow = e.target.parentNode;
             for (let child of table.children[0].children) {
                 if (child.classList.contains("hl")) {
@@ -155,9 +155,9 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
             }
             currentRow.classList.toggle("hl");
             if (currentRow.classList.contains("hl")) {
-                onCenter({name: layerName, id: parseInt(currentRow.id), fly: true}); // sends current highlighted row id
+                onCenter({id: parseInt(currentRow.id), fly: true}); // sends current highlighted row id
             } else {
-                onCenter({name: layerName, id: -1, fly: false}); // no row is highlighted
+                onCenter({id: -1, fly: false}); // no row is highlighted
             }
         });
     }
@@ -181,8 +181,8 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
         }
     }
 
-    const swapView = (layerName) => { //table view swaps originating from change in target
-        updateTableHL(layerName, -1);
+    const swapView = (layerName, id) => { //table view swaps originating from change in target
+        updateTableHL(layerName, id);
         let tabs = document.getElementsByClassName('tab');
         for (let i = 0; i < tabs.length; i++) {
             if (!tabs[i].classList.contains('behind')) {
@@ -255,10 +255,6 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     }
 
     useEffect(() => {
-        //onCenter({name: getParam('targetLayer'), id: -1, fly: false});
-    }, []);
-
-    useEffect(() => {
         if (mode === 'view') {
             let tabContainer = document.getElementById('tab-container');
             if (tabContainer.childElementCount !== 0) {
@@ -314,36 +310,18 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
     useEffect(() => {
         if (target && mode === 'view') {
             if (target.name !== 'none') {
-                console.log("working!!");
                 swapView(target.name, target.id);
             }
         };
     }, [target]);
 
     useEffect(() => {
-        if (layerVis) {
-            console.log('layerVis');
-            if (mode === 'view') {
-                let tabs = document.getElementById('tab-container').children;
-                for (let i = 0; i < tabs.length; i++) {
-                    if (layerVis[layerList[i]] !== !tabs[i].classList.contains('hide')) {
-                        swapViewMenu(layerList[i]);
-                    }
+        if (layerVis && mode === 'view') {
+            let tabs = document.getElementById('tab-container').children;
+            for (let i = 0; i < tabs.length; i++) {
+                if (layerVis[layerList[i]] !== !tabs[i].classList.contains('hide')) {
+                    swapViewMenu(layerList[i]);
                 }
-            } else {
-                /*
-                let temp = false;
-                for (let i = 0; i < layerList.length; i++) {
-                    if (layerVis[layerList[i]]) {
-                        onCenter({name: layerList[i], id: -1, fly: false});
-                        temp = true;
-                        break;
-                    }
-                }
-                if (!temp) {
-                    onCenter({name: 'none', id: -1, fly: false});
-                }
-                */
             }
         }
     }, [layerVis]);

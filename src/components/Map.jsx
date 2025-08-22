@@ -253,7 +253,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
             }
           });
         }
-        onCenter({name: 'retain', id: -1, fly: false});
+        onCenter({id: -1, fly: false});
         popup.remove();
       }
     }
