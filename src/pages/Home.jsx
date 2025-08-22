@@ -87,9 +87,10 @@ export default function Home(props){
 		}
 	};
 
-	const targetFirstLayer = () => { //updates target to the first visible layer
+	const targetFirstLayer = () => { //updates target to the first visible layer, if available
 		let layers = Object.keys(layerVis);
 		let visible = Object.values(layerVis).filter(value => value === true);
+		console.log(visible.length);
 		if (visible.length !== 0) {
 			for (let i = 0; i < layers.length; i++) {
 				if (layerVis[layers[i]]) {
@@ -226,7 +227,10 @@ export default function Home(props){
 
 	useEffect(() => {
 		console.log(target);
-		setParam('targetLayer', target.name !== 'none' ? target.name : null);
+		let val = target.name !== 'none' ? target.name : null;
+		if (getParam('targetLayer') !== val) {
+			setParam('targetLayer', val);
+		}
 	}, [target]);
 
 	useEffect(() => {
@@ -273,7 +277,7 @@ export default function Home(props){
 		if (layerVis) {
 			if ((mapMode === 'view' && target.name === 'none') || mapMode === 'contribute') {
 				targetFirstLayer();
-			} 
+			}
 		}
 	}, [layerVis]);
 
