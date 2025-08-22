@@ -43,7 +43,6 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onSelect, o
                 const file = event.target.files[0];
                 try {
                     const base64String = await imageToBase64(file);
-                    console.log('Base64 string:', base64String);
                     updateForm({ image: base64String });
 
                 } catch (error) {
@@ -67,12 +66,10 @@ export default function AddFeatureForm( {mode, selectionCoordinates, onSelect, o
 
     async function onSubmit(e) {
         e.preventDefault();
-        console.log(getTimestampAK());
         if (form.latitude !== "" && form.longitude !== "" && form.type !== "" && form.details !== "") {
             const db = getDatabase();
             const locRef = ref(db, "features");
             const newLoc = { ...form, timestamp: getTimestampAK()};
-            console.log(newLoc);
             const newLocRef = push(locRef, newLoc);
             updateForm({ latitude: "", longitude: "",
                 type: "", details: "", image: "" });

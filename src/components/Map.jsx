@@ -26,7 +26,7 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
 
   //handles flying to provided coordinates
   const flyTo = (coordinates) => {
-    let delta = haversineDistance(Object.values(map.current.getCenter()), coordinates)
+    let delta = haversineDistance(Object.values(map.current.getCenter()), coordinates);
     let zoomLevel = map.current.getZoom();
     let flyDuration = 3000 + ((Math.sqrt(zoomLevel * 100) * Math.sqrt(delta / 1000) * 100)); //formula for fly duration
     map.current.flyTo({center: [coordinates[0], coordinates[1]],

@@ -84,7 +84,9 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
         tab.addEventListener('click', () => {
             if (tab.classList.contains('behind')) {
-                swapViewTab(layerName);
+                swapViewTest(layerName);
+                onCenter({name: layerName, id: -1, fly: false}); // no row is highlighted
+                updateTableHL(layerName, -1);
             }
         });
         tabContainer.appendChild(tab);
@@ -183,7 +185,10 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
     const swapView = (target) => {
         updateTableHL(target.name, target.id);
+
+        /*
         if (target.id !== -1) {
+            console.log('not -1')
             let tabs = document.getElementsByClassName('tab');
             if (document.getElementById('tab-' + target.name).classList.contains('behind')) {
                 for (let i = 0; i < tabs.length; i++) {
@@ -203,12 +208,12 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
                     document.getElementById('list-' + target.name).classList.remove('hide');
                 }
             }
-        } else {
-            console.log('lelele');
         }
+        */
     }
 
-    const swapViewTab = (layerName) => {
+    const swapViewTest = (layerName) => {
+        console.log("hahahahaahah")
         let tabs = document.getElementsByClassName('tab');
         for (let i = 0; i < tabs.length; i++) {
             if (!tabs[i].classList.contains('behind')) {
@@ -224,8 +229,6 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
             }
         }
         document.getElementById('list-' + layerName).classList.remove('hide');
-        onCenter({name: layerName, id: -1, fly: false}); // no row is highlighted
-        updateTableHL(layerName, -1);
     }
 
     const swapViewMenu = (layerName) => {
@@ -317,7 +320,7 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
     useEffect(() => {
         if (locations && mode === 'view') {
-            tableLoad(locations, 'posts', 'newest')
+            tableLoad(locations, 'posts', 'newest');
         }
     }, [locations, mode]); //fire this whenever the post features put into the map change or map mode changes
 
@@ -341,13 +344,19 @@ export default function ListFeatures( {locations, projects, lands, roads, mode, 
 
     useEffect(() => {
         if (target && mode === 'view') {
-            console.log(target);
-            swapView(target); //figure out why non-post table hl doesn't refresh on refresh
+            //console.log(target);
+            //swapView(target); //figure out why non-post table hl doesn't refresh on refresh
+            if (target.name !== 'none') {
+                console.log("working!!");
+                updateTableHL(target.name, target.id);
+                swapViewTest(target.name);
+            }
         };
     }, [target]);
 
     useEffect(() => {
         if (layerVis) {
+            console.log('layerVis');
             if (mode === 'view') {
                 let tabs = document.getElementById('tab-container').children;
                 for (let i = 0; i < tabs.length; i++) {

@@ -88,7 +88,6 @@ export default function Home(props){
 	};
 
 	const targetFirstLayer = () => { //updates target to the first visible layer
-		console.log(layerVis);
 		let layers = Object.keys(layerVis);
 		let visible = Object.values(layerVis).filter(value => value === true);
 		if (visible.length !== 0) {
@@ -134,7 +133,6 @@ export default function Home(props){
 			...prev,
 			[layerName]: bool
 		}));
-		console.log("layerVis changed")
 	} 
 
 	//requests static layer data from AGOL
@@ -218,8 +216,21 @@ export default function Home(props){
 	}
 
 	useEffect(() => {
-		requestStaticLayers(); //puts in requests for all map layers (besides basemap and posts layers)
+		console.log('mapmode');
+		if (mapMode === 'view' && getParam('targetLayer')) {
+			setTarget({name: getParam('targetLayer'), id: -1, fly: false});
+		} else if (mapMode === 'contribute') {
+			targetFirstLayer();
+		}
+	}, [mapMode]);
 
+	useEffect(() => {
+		console.log(target);
+		setParam('targetLayer', target.name !== 'none' ? target.name : null);
+	}, [target]);
+
+	useEffect(() => {
+		console.log('hi');
 		document.getElementById("msg-close").addEventListener('click', () => {
 			document.getElementById("update").classList.toggle("transition");
 		});
@@ -237,6 +248,8 @@ export default function Home(props){
 		sidebarInit('left');
 		sidebarInit('right');
 
+		requestStaticLayers(); //puts in requests for all map layers (besides basemap and posts layers)
+
 		window.addEventListener("resize", handleResize);
    		return () => window.removeEventListener("resize", handleResize);
 	}, []);
@@ -251,26 +264,13 @@ export default function Home(props){
 	}, [reset]);
 
 	useEffect(() => {
-		if (mapMode === 'view') {
-			setTarget({name: getParam('targetLayer'), id: -1, fly: false});
-		} else {
-			targetFirstLayer();
-		}
-	}, [mapMode]);
-
-	useEffect(() => {
-		console.log(target);
-		setParam('targetLayer', target.name !== 'none' ? target.name : null);
-	}, [target]);
-
-	useEffect(() => {
 		if (data) {
 			stateTimer(timer, setTimer, 7000, 'update', 'transition');
 		}
 	}, [data]);
 
 	useEffect(() => { //testing
-		if (layerVis && mapMode === 'contribute') {
+		if (layerVis) {
 			targetFirstLayer();
 		}
 	}, [layerVis]);
