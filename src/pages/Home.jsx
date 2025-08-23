@@ -114,8 +114,8 @@ export default function Home(props){
 
 	const handleCenter = (value) => { //from listfeatures jsx or map jsx - updates targeted feature
 		setTarget((prev) => {
-            return { ...prev, ...value}
-        });
+			return { ...prev, ...value}
+		});
 	};
 
 	const handleReset = () => { //from refresh jsx - updates the reset counter
@@ -222,8 +222,8 @@ export default function Home(props){
 	}, [mapMode]);
 
 	useEffect(() => {
-		console.log(target);
 		if (target) {
+			console.log(target);
 			let val = target.name !== 'none' ? target.name : null;
 			if (getParam('targetLayer') !== val) {
 				setParam('targetLayer', val);

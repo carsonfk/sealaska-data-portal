@@ -461,7 +461,7 @@ img {
   flex-direction: column;
   bottom: 0;
   max-width: 350px;
-  overflow-y: auto;
+  overflow-x: hidden;
   color: black;
   z-index:2;
   padding: 10px;
@@ -474,7 +474,6 @@ img {
 /* features sidebar */
 #features {
   left: 0;
-  
 }
 
 #features.closed {

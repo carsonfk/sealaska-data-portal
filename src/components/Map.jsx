@@ -384,15 +384,20 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
 
   useEffect(() => {
     mapboxgl.accessToken =
-    "pk.eyJ1IjoiY2Fyc29uZmsiLCJhIjoiY204bm05M3RjMDF6eTJvb3Nmc2F1dGwwOSJ9.iEJSiX7ONPMwdkYmqWifHQ";
+    'pk.eyJ1IjoiY2Fyc29uZmsiLCJhIjoiY204bm05M3RjMDF6eTJvb3Nmc2F1dGwwOSJ9.iEJSiX7ONPMwdkYmqWifHQ';
     if (map.current) return; // initialize map only once
 
-    var style;
-    getParam("mapStyle") ? style = "mapbox://styles/mapbox/" + 
-      getParam("mapStyle") : style = "mapbox://styles/mapbox/satellite-streets-v12";
+    var style = getParam('mapStyle');
+    if (!style) {
+      style = 'satellite-streets-v12'
+    } else if (style === 'buildings') {
+      style = 'standard'
+    }
+    var styleUrl = 'mapbox://styles/mapbox/' + style;
+
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: style,
+      style: styleUrl,
       center: [lng, lat],
       zoom: zoom
     });
@@ -422,16 +427,21 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
         }
       }
       input.addEventListener("click", (basemap) => {
-        let basemapId = basemap.target.id;
-        if (!map.current.style.globalId.includes(basemapId)) {
-          setStyleSwap(basemapId);
-          if (basemapId === 'satellite-streets-v12') {
-            map.current.setStyle('mapbox://styles/mapbox/satellite-streets-v12');
+        let style2 = basemap.target.id;
+        if (!map.current.style.globalId.includes(style2)) {
+          console.log(style2);
+          setStyleSwap(style2);
+          if (style2 === 'satellite-streets-v12') {
             setParam('mapStyle', null);
           } else {
-            map.current.setStyle('mapbox://styles/mapbox/' + basemapId);
-            setParam('mapStyle', basemapId);
+            if (style2 === 'standard') {
+              setParam('mapStyle', 'buildings');
+            } else {
+              setParam('mapStyle', style2);
+            }
           }
+
+          map.current.setStyle('mapbox://styles/mapbox/' + style2);
 
           if (input.classList.contains("light")) {
             mapElement.classList.add("light");
@@ -483,9 +493,10 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
     });
 
     map.current.on("style.load", () => {
-      if (map.current.getStyle().name.includes("Outdoors") || map.current.getStyle().name.includes("Satellite")) {
+      console.log();
+      if (!map.current.getStyle().name || map.current.getStyle().name.includes("Outdoors") || map.current.getStyle().name.includes("Satellite")) {
         //custom atmosphere styling for outdoor map
-        if (map.current.getStyle().name.includes("Outdoors")) {
+        if (!map.current.getStyle().name || map.current.getStyle().name.includes("Outdoors")) {
           map.current.setFog({
             'color': 'rgb(247, 193, 193)', // Pink fog / lower atmosphere
             'high-color': 'rgb(36, 92, 223)', // Blue sky / upper atmosphere
@@ -814,6 +825,10 @@ export default function Map( {locations, projects, lands, roads, mode, target, s
             <div className="interactive menu-item">
               <input id="light-v11" className="light" type="radio" name="rtoggle" value="light" defaultChecked={getParam('mapStyle') === "light-v11"}/>
               <label for="light-v11">Light</label>
+            </div>
+            <div className="interactive menu-item">
+              <input id="standard" className="light" type="radio" name="rtoggle" value="standard" defaultChecked={getParam('mapStyle') === "buildings"}/>
+              <label for="standard">Buildings</label>
             </div>
           </div>
           <div id="layer-menu" className="flex-vertical menu-legend-subgroup hide">
